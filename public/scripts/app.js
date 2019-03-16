@@ -4,6 +4,70 @@ const RAINY = 2;
 const OVERCAST = 3;
 const SNOWY = 4;
 
+var data = [
+    {
+      name: "Coachella",
+      date: "12/05/2019",
+      image: "http://google.io/picture.jpeg",
+      organiser: "93729347234",
+      location: "Los Angeles",
+      posts: [
+        {
+          text: "Lol I just lost my cap, anybody seen it?",
+          image: "http://borja.leiva/image.jpeg",
+          author: "borjadotai",
+          date: "12/05/2019 - 17:30",
+          location: "Los Angeles - 3rd Area",
+          comments: [
+            {
+              author: "hasanasim",
+              text: "Yo yo I saw it in Michelles crib"
+            },
+            {
+              author: "michelle23",
+              text: "Yeah its here! Come get it."
+            }
+          ]
+        },
+        {
+          text:
+            "What time is Travis playing at? Completely lost track of time...",
+          image: "http://borja.leiva/image.jpeg",
+          author: "hasanasim",
+          date: "12/05/2019 - 14:30",
+          location: "Los Angeles - 6th Area",
+          comments: [
+            {
+              author: "charliePie",
+              text: "Duuuuude he already played, you missed it..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: "SheffieldFest",
+      date: "12/06/2019",
+      image: "http://google.io/picture.jpeg",
+      organiser: "93729347235",
+      location: "Sheffield",
+      posts: [
+        {
+          text: "Yoooo! Here watching Drake in the diamond, looking gooooood!",
+          image: "http://borja.leiva/image.jpeg",
+          author: "charliePie",
+          date: "12/05/2019 - 15:30",
+          location: "Sheffield - The Diamond",
+          comments: [
+            {
+              author: "borjadotai",
+              text: "I know right? Pretty sick!"
+            }
+          ]
+        }
+      ]
+    }
+];
 
 /**
  * called by the HTML onload
@@ -48,8 +112,52 @@ function loadData(){
  */
 function retrieveAllCitiesData(cityList, date){
     refreshCityList();
-    for (index in cityList)
-        loadCityData(cityList[index], date);
+    //for (index in cityList)
+        //console.log(cityList[index]);
+        //loadCityData(cityList[index], date);
+
+    for (index in data)
+        //console.log(data[index].name);
+        loadEventData(data[index].name);
+    
+}
+
+/**
+ * given one city and a date, it queries the server via Ajax to get the latest
+ * weather forecast for that city
+ * if the request to the server fails, it shows the data stored in the database
+ * @param event
+ * @param date
+ */
+function loadEventData(name){
+    const input = JSON.stringify({eventname: name});
+    $.ajax({
+        url: '/event_data',
+        data: input,
+        contentType: 'application/json',
+        type: 'POST',
+        success: function (dataR) {
+            console.log("success")
+            // no need to JSON parse the result, as we are using
+            // dataType:json, so JQuery knows it and unpacks the
+            // object for us before returning it
+            addToResults(dataR);
+            storeCachedEventData(dataR.eventname, dataR);
+            if (document.getElementById('offline_div')!=null)
+                    document.getElementById('offline_div').style.display='none';
+        },
+        // the request to the server has failed. Let's show the cached data
+        error: function (xhr, status, error) {
+            showOfflineWarning();
+            getCachedEventData(event);
+            const dvv= document.getElementById('offline_div');
+            if (dvv!=null)
+                    dvv.style.display='block';
+        }
+    });
+    // hide the list of cities if currently shown
+    if (document.getElementById('city_list')!=null)
+        document.getElementById('city_list').style.display = 'none';
 }
 
 /**

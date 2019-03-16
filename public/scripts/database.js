@@ -11,10 +11,16 @@
  *  }
  *}
  */
+
+
 var dbPromise;
+var dbPromise2;
 
 const FORECAST_DB_NAME= 'db_forecasts_1';
 const FORECAST_STORE_NAME= 'store_forecasts';
+
+const MANIFEST_DB_NAME= 'manifest_db'
+const MANIFEST_STORE_NAME = 'store_manifest'
 
 /**
  * it inits the database
@@ -26,6 +32,14 @@ function initDatabase(){
             forecastDB.createIndex('location', 'location', {unique: false, multiEntry: true});
         }
     });
+
+    dbPromise2 = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
+        if (!upgradeDb.objectStoreNames.contains(MANIFEST_STORE_NAME)) {
+            var events = upgradeDb.createObjectStore(MANIFEST_STORE_NAME, {keyPath: 'id', autoIncrement: true});
+            events.createIndex('name', 'name', {unique: false, multiEntry: true});
+        }
+    });
+
 }
 /**
  * it saves the forecasts for a city in localStorage
@@ -49,6 +63,22 @@ function storeCachedData(city, forecastObject) {
     else localStorage.setItem(city, JSON.stringify(forecastObject));
 }
 
+function storeCachedEventData(event, eventObject) {
+    console.log('inserting: '+JSON.stringify(eventObject));
+    if (dbPromise2) {
+        dbPromise2.then(async db => {
+            var tx = db.transaction(FORECAST_STORE_NAME, 'readwrite');
+            var store = tx.objectStore(FORECAST_STORE_NAME);
+            await store.put(eventObject);
+            return tx.complete;
+        }).then(function () {
+            console.log('added item to the store! '+ JSON.stringify(eventObject));
+        }).catch(function (error) {
+            localStorage.setItem(event, JSON.stringify(eventObject));
+        });
+    }
+    else localStorage.setItem(event, JSON.stringify(eventObject));
+}
 
 /**
  * it retrieves the forecasts data for a city from the database
@@ -80,6 +110,42 @@ function getCachedData(city, date) {
         });
     } else {
         const value = localStorage.getItem(city);
+        if (value == null)
+            addToResults( {city: city, date: date});
+        else addToResults(value);
+    }
+}
+
+/**
+ * it retrieves the forecasts data for a city from the database
+ * @param city
+ * @param date
+ * @returns {*}
+ */
+function getCachedEventData(event) {
+    if (dbPromise2) {
+        dbPromise2.then(function (db) {
+            console.log('fetching: '+event);
+            var tx = db.transaction(db.objectStoreNames);
+            var store = tx.objectStore(MANIFEST_STORE_NAME);
+            var index = store.index('name');
+            return index.getAll(IDBKeyRange.only(event));
+        }).then(function (readingsList) {
+            if (readingsList && readingsList.length>0){
+                var max;
+                for (var elem of readingsList)
+                    if (!max || elem.date>max.date)
+                        max= elem;
+                if (max) addToResults(max);
+            } else {
+                const value = localStorage.getItem(event);
+                if (value == null)
+                    addToResults({event: event});
+                else addToResults(value);
+            }
+        });
+    } else {
+        const value = localStorage.getItem(event);
         if (value == null)
             addToResults( {city: city, date: date});
         else addToResults(value);
