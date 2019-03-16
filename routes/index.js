@@ -6,6 +6,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Weather Forecast' });
 });
 
+/* GET event page */
+router.get('/events/:eventId', function (req, res) {
+  res.render('events', { id: req.params.eventId} );
+})
+
 /**
  *  POST the data about the weather.
  *  parameters in body:
