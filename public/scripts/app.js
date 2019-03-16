@@ -113,11 +113,9 @@ function loadData(){
 function retrieveAllCitiesData(cityList, date){
     refreshCityList();
     //for (index in cityList)
-        //console.log(cityList[index]);
         //loadCityData(cityList[index], date);
 
     for (index in data)
-        //console.log(data[index].name);
         loadEventData(data[index].name);
     
 }
@@ -229,11 +227,11 @@ function addToResults(dataR) {
         // rather than assigning innerHTML
         row.innerHTML = "<div class='card-block'>" +
             "<div class='row'>" +
-            "<div class='col-xs-2'><h4 class='card-title'>" + dataR.location + "</h4></div>" +
-            "<div class='col-xs-2'>" + getForecast(dataR.forecast) + "</div>" +
-            "<div class='col-xs-2'>" + getTemperature(dataR) + "</div>" +
-            "<div class='col-xs-2'>" + getPrecipitations(dataR) + "</div>" +
-            "<div class='col-xs-2'>" + getWind(dataR) + "</div>" +
+            "<div class='col-xs-2'><h4 class='card-title'>" + dataR + "</h4></div>" +
+            //"<div class='col-xs-2'>" + getForecast(dataR.forecast) + "</div>" +
+            //"<div class='col-xs-2'>" + getTemperature(dataR) + "</div>" +
+            //"<div class='col-xs-2'>" + getPrecipitations(dataR) + "</div>" +
+            //"<div class='col-xs-2'>" + getWind(dataR) + "</div>" +
             "<div class='col-xs-2'></div></div></div>";
     }
 }

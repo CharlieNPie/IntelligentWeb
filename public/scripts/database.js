@@ -186,6 +186,12 @@ function getTemperature(dataR) {
     else return dataR.temperature;
 }
 
+function getEventName(dataR) {
+    if (dataR.eventname == null && dataR.eventname === undefined)
+        return "unavailable";
+    else return dataR.eventname;
+}
+
 
 /**
  * the server returns the forecast as a n integer. Here we find out the
