@@ -45,10 +45,9 @@ function loadData(){
  * @param cityList the list of the cities the user has requested
  * @param date the date for the forecasts (not in use)
  */
-function retrieveAllCitiesData(eventsList, date){
-    //refreshCityList();
-    //for (index in cityList)
-    //    loadCityData(cityList[index], date);
+function retrieveAllCitiesData(eventsList){
+    refreshCityList();
+    console.log(eventsList);
 
     for (index in eventsList)
         loadEventData(eventsList[index]);
@@ -193,7 +192,7 @@ function selectCity(city, date) {
 
 function selectEvent(event) {
   var eventList=JSON.parse(localStorage.getItem('events'));
-  if (eventList==null) eventlist=[];
+  if (eventList==null) eventList=[];
   eventList.push(event);
   eventList = removeDuplicates(eventList);
   localStorage.setItem('events', JSON.stringify(eventList));
