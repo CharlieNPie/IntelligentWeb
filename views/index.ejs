@@ -21,7 +21,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather PWA</title>
+    <title>Events PWA</title>
     <link rel="stylesheet" href="/styles/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="styles/inline.css">
 
@@ -41,7 +41,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="/scripts/bootstrap.min.js"></script>
 </head>
-<body onload="initWeatherForecasts()">
+<body onload="initEvents()">
 <div class="container" style="width: 100%">
     <div class="row">
         <div class="col-xs-10"><h1><%= title %></h1></div>
@@ -60,6 +60,7 @@
                 <div class="list-group pop_up_list" id='city_list' style="display:none">
                     <button class="list-group-item " onclick="selectEvent('SheffieldFest');">Sheffield Fest</button>
                     <button class="list-group-item " onclick="selectEvent('Coachella');">Coachella</button>
+                    <button class="list-group-item " onclick="selectEvent('Tomorrowland');">Tomorrowland</button>
                 </div>
 
             </div>

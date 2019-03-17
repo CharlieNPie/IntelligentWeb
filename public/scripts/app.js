@@ -1,14 +1,73 @@
-const CLOUDY = 0;
-const CLEAR = 1;
-const RAINY = 2;
-const OVERCAST = 3;
-const SNOWY = 4;
+var data = [
+    {
+      name: "Coachella",
+      date: "12/05/2019",
+      image: "http://google.io/picture.jpeg",
+      organiser: "93729347234",
+      location: "Los Angeles",
+      posts: [
+        {
+          text: "Lol I just lost my cap, anybody seen it?",
+          image: "http://borja.leiva/image.jpeg",
+          author: "borjadotai",
+          date: "12/05/2019 - 17:30",
+          location: "Los Angeles - 3rd Area",
+          comments: [
+            {
+              author: "hasanasim",
+              text: "Yo yo I saw it in Michelles crib"
+            },
+            {
+              author: "michelle23",
+              text: "Yeah its here! Come get it."
+            }
+          ]
+        },
+        {
+          text:
+            "What time is Travis playing at? Completely lost track of time...",
+          image: "http://borja.leiva/image.jpeg",
+          author: "hasanasim",
+          date: "12/05/2019 - 14:30",
+          location: "Los Angeles - 6th Area",
+          comments: [
+            {
+              author: "charliePie",
+              text: "Duuuuude he already played, you missed it..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: "SheffieldFest",
+      date: "12/06/2019",
+      image: "http://google.io/picture.jpeg",
+      organiser: "93729347235",
+      location: "Sheffield",
+      posts: [
+        {
+          text: "Yoooo! Here watching Drake in the diamond, looking gooooood!",
+          image: "http://borja.leiva/image.jpeg",
+          author: "charliePie",
+          date: "12/05/2019 - 15:30",
+          location: "Sheffield - The Diamond",
+          comments: [
+            {
+              author: "borjadotai",
+              text: "I know right? Pretty sick!"
+            }
+          ]
+        }
+      ]
+    }
+  ];
 
 /**
  * called by the HTML onload
  * showing any cached forecast data and declaring the service worker
  */
-function initWeatherForecasts() {
+function initEvents() {
     loadData();
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
@@ -46,12 +105,9 @@ function loadData(){
  * @param date the date for the forecasts (not in use)
  */
 function retrieveAllCitiesData(eventsList){
-    refreshCityList();
-    console.log(eventsList);
-
+    refreshList();
     for (index in eventsList)
-        loadEventData(eventsList[index]);
-    
+        loadEventData(eventsList[index]); 
 }
 
 /**
@@ -81,43 +137,6 @@ function loadEventData(name){
         error: function (xhr, status, error) {
             showOfflineWarning();
             getCachedEventData(name);
-            const dvv= document.getElementById('offline_div');
-            if (dvv!=null)
-                    dvv.style.display='block';
-        }
-    });
-    // hide the list of cities if currently shown
-    if (document.getElementById('city_list')!=null)
-        document.getElementById('city_list').style.display = 'none';
-}
-
-/**
- * given one city and a date, it queries the server via Ajax to get the latest
- * weather forecast for that city
- * if the request to the server fails, it shows the data stored in the database
- * @param city
- * @param date
- */
-function loadCityData(city, date){
-    const input = JSON.stringify({location: city, date: date});
-    $.ajax({
-        url: '/weather_data',
-        data: input,
-        contentType: 'application/json',
-        type: 'POST',
-        success: function (dataR) {
-            // no need to JSON parse the result, as we are using
-            // dataType:json, so JQuery knows it and unpacks the
-            // object for us before returning it
-            addToResults(dataR);
-            //storeCachedData(dataR.location, dataR);
-            if (document.getElementById('offline_div')!=null)
-                    document.getElementById('offline_div').style.display='none';
-        },
-        // the request to the server has failed. Let's show the cached data
-        error: function (xhr, status, error) {
-            showOfflineWarning();
-            getCachedData(city, date);
             const dvv= document.getElementById('offline_div');
             if (dvv!=null)
                     dvv.style.display='block';
@@ -169,7 +188,7 @@ function addToResults(dataR) {
 /**
  * it removes all forecasts from the result div
  */
-function refreshCityList(){
+function refreshEventList(){
     if (document.getElementById('results')!=null)
         document.getElementById('results').innerHTML='';
 }
@@ -181,15 +200,6 @@ function refreshCityList(){
  * @param city
  * @param date
  */
-function selectCity(city, date) {
-    var cityList=JSON.parse(localStorage.getItem('cities'));
-    if (cityList==null) cityList=[];
-    cityList.push(city);
-    cityList = removeDuplicates(cityList);
-    localStorage.setItem('cities', JSON.stringify(cityList));
-    retrieveAllCitiesData(cityList, date);
-}
-
 function selectEvent(event) {
   var eventList=JSON.parse(localStorage.getItem('events'));
   if (eventList==null) eventList=[];
@@ -242,16 +252,15 @@ function showCityList() {
 }
 
 
-
 /**
- * Given a list of cities, it removes any duplicates
- * @param cityList
+ * Given a list of events, it removes any duplicates
+ * @param eventList
  * @returns {Array}
  */
-function removeDuplicates(cityList) {
+function removeDuplicates(eventList) {
     // remove any duplicate
        var uniqueNames=[];
-       $.each(cityList, function(i, el){
+       $.each(eventList, function(i, el){
            if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
        });
        return uniqueNames;
