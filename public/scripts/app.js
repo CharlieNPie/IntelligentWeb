@@ -4,71 +4,6 @@ const RAINY = 2;
 const OVERCAST = 3;
 const SNOWY = 4;
 
-var data = [
-    {
-      name: "Coachella",
-      date: "12/05/2019",
-      image: "http://google.io/picture.jpeg",
-      organiser: "93729347234",
-      location: "Los Angeles",
-      posts: [
-        {
-          text: "Lol I just lost my cap, anybody seen it?",
-          image: "http://borja.leiva/image.jpeg",
-          author: "borjadotai",
-          date: "12/05/2019 - 17:30",
-          location: "Los Angeles - 3rd Area",
-          comments: [
-            {
-              author: "hasanasim",
-              text: "Yo yo I saw it in Michelles crib"
-            },
-            {
-              author: "michelle23",
-              text: "Yeah its here! Come get it."
-            }
-          ]
-        },
-        {
-          text:
-            "What time is Travis playing at? Completely lost track of time...",
-          image: "http://borja.leiva/image.jpeg",
-          author: "hasanasim",
-          date: "12/05/2019 - 14:30",
-          location: "Los Angeles - 6th Area",
-          comments: [
-            {
-              author: "charliePie",
-              text: "Duuuuude he already played, you missed it..."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: "SheffieldFest",
-      date: "12/06/2019",
-      image: "http://google.io/picture.jpeg",
-      organiser: "93729347235",
-      location: "Sheffield",
-      posts: [
-        {
-          text: "Yoooo! Here watching Drake in the diamond, looking gooooood!",
-          image: "http://borja.leiva/image.jpeg",
-          author: "charliePie",
-          date: "12/05/2019 - 15:30",
-          location: "Sheffield - The Diamond",
-          comments: [
-            {
-              author: "borjadotai",
-              text: "I know right? Pretty sick!"
-            }
-          ]
-        }
-      ]
-    }
-];
-
 /**
  * called by the HTML onload
  * showing any cached forecast data and declaring the service worker
@@ -99,9 +34,9 @@ function initWeatherForecasts() {
  * the server (or failing that) from the database
  */
 function loadData(){
-    var cityList=JSON.parse(localStorage.getItem('cities'));
-    cityList=removeDuplicates(cityList);
-    retrieveAllCitiesData(cityList, new Date().getTime());
+    var eventList=JSON.parse(localStorage.getItem('events'));
+    eventList=removeDuplicates(eventList);
+    retrieveAllCitiesData(eventList, new Date().getTime());
 }
 
 /**
@@ -110,13 +45,13 @@ function loadData(){
  * @param cityList the list of the cities the user has requested
  * @param date the date for the forecasts (not in use)
  */
-function retrieveAllCitiesData(cityList, date){
+function retrieveAllCitiesData(eventsList, date){
     refreshCityList();
-    //for (index in cityList)
-        //loadCityData(cityList[index], date);
+    for (index in cityList)
+        loadCityData(cityList[index], date);
 
-    for (index in data)
-        loadEventData(data[index].name);
+    for (index in eventsList)
+        loadEventData(eventsList[index]);
     
 }
 
