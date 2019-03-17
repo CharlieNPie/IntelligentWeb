@@ -85,8 +85,8 @@ function initEvents() {
     else {
         console.log('This browser doesn\'t support IndexedDB');
     }
-    for (index in data)
-        storeCachedEventData(data[index]);
+    //for (index in data)
+        //storeCachedEventData(data[index]);
     loadData();
 }
 
@@ -98,7 +98,7 @@ function loadData(){
     pullFromDatabase();
     var eventsList=JSON.parse(localStorage.getItem('events'));
     eventsList=removeDuplicates(eventsList);
-    retrieveAllCitiesData(eventsList, new Date().getTime());
+    //retrieveAllCitiesData(eventsList, new Date().getTime());
 }
 
 /**
@@ -212,12 +212,34 @@ function selectEvent(event) {
   retrieveAllCitiesData(eventList);
 }
 
-function createEvent() {
+/* function for when new data entry is made */
+function newEvent() {
     var formArray= $("form").serializeArray();
     var data={};
     for (index in formArray){
         data[formArray[index].name]= formArray[index].value;
     }
+    sendAjaxQuery('/create_event', data);
+    event.preventDefault();
+}
+
+/* send request to server */
+function sendAjaxQuery(url, data) {
+    $.ajax({
+        url: url ,
+        data: data,
+        dataType: 'json',
+        type: 'POST',
+        success: function (response) {
+            addToResults(response);
+            storeCachedEventData(response);
+            if (document.getElementById('offline_div')!=null)
+                    document.getElementById('offline_div').style.display='none';
+        },
+        error: function (xhr, status, error) {
+            alert('Error detected: ' + error.message);
+        }
+    });
 }
 
 
@@ -257,7 +279,7 @@ function hideOfflineWarning(){
 /**
  * it shows the city list in the browser
  */
-function showCityList() {
+function showEventList() {
     if (document.getElementById('city_list')!=null)
         document.getElementById('city_list').style.display = 'block';
 }

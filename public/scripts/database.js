@@ -66,6 +66,9 @@ function pullFromDatabase() {
             }
         });
     }
+    else {
+        console.log("need to do this as well");
+    }
 }
 
 /**
