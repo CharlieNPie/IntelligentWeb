@@ -36,7 +36,7 @@ function initDatabase(){
     dbPromise2 = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
         if (!upgradeDb.objectStoreNames.contains(MANIFEST_STORE_NAME)) {
             var events = upgradeDb.createObjectStore(MANIFEST_STORE_NAME, {keyPath: 'id', autoIncrement: true});
-            events.createIndex('name', 'name', {unique: false, multiEntry: true});
+            events.createIndex('name', 'name', {unique: true, multiEntry: true});
         }
     });
 
