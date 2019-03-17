@@ -36,7 +36,7 @@ function initDatabase(){
     dbPromise2 = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
         if (!upgradeDb.objectStoreNames.contains(MANIFEST_STORE_NAME)) {
             var events = upgradeDb.createObjectStore(MANIFEST_STORE_NAME, {keyPath: 'id', autoIncrement: true});
-            events.createIndex('eventname', 'eventname', {unique: false, multiEntry: true});
+            events.createIndex('name', 'name', {unique: false, multiEntry: true});
         }
     });
 
@@ -129,7 +129,7 @@ function getCachedEventData(event) {
             console.log('fetching: '+event);
             var tx = db.transaction(db.objectStoreNames);
             var store = tx.objectStore(MANIFEST_STORE_NAME);
-            var index = store.index('eventname');
+            var index = store.index('name');
             return index.getAll(IDBKeyRange.only(event));
         }).then(function (readingsList) {
             if (readingsList && readingsList.length>0){
@@ -188,9 +188,9 @@ function getTemperature(dataR) {
 }
 
 function getEventName(dataR) {
-    if (dataR.eventname == null && dataR.eventname === undefined)
+    if (dataR.name == null && dataR.name === undefined)
         return "unavailable";
-    else return dataR.eventname;
+    else return dataR.name;
 }
 
 

@@ -63,7 +63,7 @@ function retrieveAllCitiesData(eventsList, date){
  * @param date
  */
 function loadEventData(name){
-    const input = JSON.stringify({eventname: name});
+    const input = JSON.stringify({name: name});
     $.ajax({
         url: '/event_data',
         data: input,
