@@ -27,7 +27,7 @@ router.post('/weather_data', function(req, res, next) {
 
 
 router.post('/event_data', function(req, res, next) {
-    const event= getEvent(req.body.eventname);
+    const event= getEvent(req.body.name)
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(event));
 });
