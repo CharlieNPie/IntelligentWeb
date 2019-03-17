@@ -55,6 +55,22 @@ function storeCachedEventData(eventObject) { // need to add actual eventobject a
     else localStorage.setItem(eventObject.name, JSON.stringify(eventObject));
 }
 
+function pullFromDatabase() {
+    if (dbPromise2) {
+        dbPromise2.then(function (db) {
+            return db.transaction(db.objectStoreNames).objectStore(MANIFEST_STORE_NAME).getAll();
+        }).then(function (allData) {
+            if (allData && allData.length>0){
+                for (var elem of allData)
+                    addToResults(elem);
+            }
+            else {
+                console.log("Unhandled")
+            }
+        });
+    }
+}
+
 /**
  * it retrieves the forecasts data for a city from the database
  * @param city

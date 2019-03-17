@@ -68,7 +68,6 @@ var data = [
  * showing any cached forecast data and declaring the service worker
  */
 function initEvents() {
-    loadData();
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
             .register('./service-worker.js')
@@ -86,6 +85,9 @@ function initEvents() {
     else {
         console.log('This browser doesn\'t support IndexedDB');
     }
+    for (index in data)
+        storeCachedEventData(data[index]);
+    loadData();
 }
 
 /**
@@ -93,6 +95,7 @@ function initEvents() {
  * the server (or failing that) from the database
  */
 function loadData(){
+    pullFromDatabase();
     var eventsList=JSON.parse(localStorage.getItem('events'));
     eventsList=removeDuplicates(eventsList);
     retrieveAllCitiesData(eventsList, new Date().getTime());
@@ -105,7 +108,7 @@ function loadData(){
  * @param date the date for the forecasts (not in use)
  */
 function retrieveAllCitiesData(eventsList){
-    refreshList();
+    refreshEventList();
     for (index in eventsList)
         loadEventData(eventsList[index]); 
 }
@@ -207,6 +210,14 @@ function selectEvent(event) {
   eventList = removeDuplicates(eventList);
   localStorage.setItem('events', JSON.stringify(eventList));
   retrieveAllCitiesData(eventList);
+}
+
+function createEvent() {
+    var formArray= $("form").serializeArray();
+    var data={};
+    for (index in formArray){
+        data[formArray[index].name]= formArray[index].value;
+    }
 }
 
 

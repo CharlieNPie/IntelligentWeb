@@ -44,8 +44,8 @@
 <body onload="initEvents()">
 <div class="container" style="width: 100%">
     <div class="row">
-        <div class="col-xs-10"><h1><%= title %></h1></div>
-        <div class="col-xs-2">
+        <div class="col-xs-9"><h1><%= title %></h1></div>
+        <div class="col-xs-3">
             <div class="form-group">
                 <h1>
                     <button class="btn btn-primary btn-lg buttonField roundishShape " id="swap_button"
@@ -58,9 +58,18 @@
                     </button>
                 </h1>
                 <div class="list-group pop_up_list" id='city_list' style="display:none">
-                    <button class="list-group-item " onclick="selectEvent('SheffieldFest');">Sheffield Fest</button>
+                    <form id=“new-event" onsubmit="createEvent()">
+                        Name:
+                        <input type="text" name="name" id="name" value="Big Festival"><br>
+                        Location:
+                        <input type="text" name="location" id="location" value="Mars"><br>
+                        Date:
+                        <input type="date" name="date" id="date" value="2019-12-12"><br>
+                        <input type="submit" name="g" value="Submit" id="g">
+                    </form>
+                    <!----<button class="list-group-item " onclick="selectEvent('SheffieldFest');">Sheffield Fest</button>
                     <button class="list-group-item " onclick="selectEvent('Coachella');">Coachella</button>
-                    <button class="list-group-item " onclick="selectEvent('Tomorrowland');">Tomorrowland</button>
+                    <button class="list-group-item " onclick="selectEvent('Tomorrowland');">Tomorrowland</button>-->
                 </div>
 
             </div>
