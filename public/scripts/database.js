@@ -36,7 +36,7 @@ function initDatabase(){
     dbPromise2 = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
         if (!upgradeDb.objectStoreNames.contains(MANIFEST_STORE_NAME)) {
             var events = upgradeDb.createObjectStore(MANIFEST_STORE_NAME, {keyPath: 'id', autoIncrement: true});
-            events.createIndex('name', 'name', {unique: false, multiEntry: true});
+            events.createIndex('eventname', 'eventname', {unique: false, multiEntry: true});
         }
     });
 
@@ -63,21 +63,21 @@ function storeCachedData(city, forecastObject) {
     else localStorage.setItem(city, JSON.stringify(forecastObject));
 }
 
-function storeCachedEventData(event, eventObject) {
+function storeCachedEventData(eventObject) { // need to add actual eventobject as per above
     console.log('inserting: '+JSON.stringify(eventObject));
     if (dbPromise2) {
         dbPromise2.then(async db => {
-            var tx = db.transaction(FORECAST_STORE_NAME, 'readwrite');
-            var store = tx.objectStore(FORECAST_STORE_NAME);
+            var tx = db.transaction(MANIFEST_STORE_NAME, 'readwrite');
+            var store = tx.objectStore(MANIFEST_STORE_NAME);
             await store.put(eventObject);
             return tx.complete;
         }).then(function () {
             console.log('added item to the store! '+ JSON.stringify(eventObject));
         }).catch(function (error) {
-            localStorage.setItem(event, JSON.stringify(eventObject));
+            localStorage.setItem(eventObject, JSON.stringify(eventObject));
         });
     }
-    else localStorage.setItem(event, JSON.stringify(eventObject));
+    else localStorage.setItem(eventObject, JSON.stringify(eventObject));
 }
 
 /**
@@ -128,7 +128,7 @@ function getCachedEventData(event) {
             console.log('fetching: '+event);
             var tx = db.transaction(db.objectStoreNames);
             var store = tx.objectStore(MANIFEST_STORE_NAME);
-            var index = store.index('name');
+            var index = store.index('eventname');
             return index.getAll(IDBKeyRange.only(event));
         }).then(function (readingsList) {
             if (readingsList && readingsList.length>0){

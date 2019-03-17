@@ -135,19 +135,18 @@ function loadEventData(name){
         contentType: 'application/json',
         type: 'POST',
         success: function (dataR) {
-            console.log("success")
             // no need to JSON parse the result, as we are using
             // dataType:json, so JQuery knows it and unpacks the
             // object for us before returning it
             addToResults(dataR);
-            storeCachedEventData(dataR.eventname, dataR);
+            storeCachedEventData(dataR);
             if (document.getElementById('offline_div')!=null)
                     document.getElementById('offline_div').style.display='none';
         },
         // the request to the server has failed. Let's show the cached data
         error: function (xhr, status, error) {
             showOfflineWarning();
-            getCachedEventData(event);
+            getCachedEventData(name);
             const dvv= document.getElementById('offline_div');
             if (dvv!=null)
                     dvv.style.display='block';
@@ -228,10 +227,6 @@ function addToResults(dataR) {
         row.innerHTML = "<div class='card-block'>" +
             "<div class='row'>" +
             "<div class='col-xs-2'><h4 class='card-title'>" + dataR + "</h4></div>" +
-            //"<div class='col-xs-2'>" + getForecast(dataR.forecast) + "</div>" +
-            //"<div class='col-xs-2'>" + getTemperature(dataR) + "</div>" +
-            //"<div class='col-xs-2'>" + getPrecipitations(dataR) + "</div>" +
-            //"<div class='col-xs-2'>" + getWind(dataR) + "</div>" +
             "<div class='col-xs-2'></div></div></div>";
     }
 }
@@ -259,6 +254,15 @@ function selectCity(city, date) {
     cityList = removeDuplicates(cityList);
     localStorage.setItem('cities', JSON.stringify(cityList));
     retrieveAllCitiesData(cityList, date);
+}
+
+function selectEvent(event) {
+  var eventList=JSON.parse(localStorage.getItem('events'));
+  if (eventList==null) eventlist=[];
+  eventList.push(event);
+  eventList = removeDuplicates(eventList);
+  localStorage.setItem('events', JSON.stringify(eventList));
+  retrieveAllCitiesData(eventList);
 }
 
 

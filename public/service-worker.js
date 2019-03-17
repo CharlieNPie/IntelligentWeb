@@ -83,7 +83,7 @@ self.addEventListener('activate', function (e) {
  */
 self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
-    var dataUrl = '/weather_data';
+    var dataUrl = '/event_data';
     //if the request is '/weather_data', post to the server
     if (event.request.url.indexOf(dataUrl) > -1) {
         /*
