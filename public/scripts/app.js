@@ -111,9 +111,9 @@ function loadData(){
  * @param date the date for the forecasts (not in use)
  */
 function retrieveAllCitiesData(cityList, date){
-    refreshCityList();
+    //refreshCityList();
     //for (index in cityList)
-        //loadCityData(cityList[index], date);
+    //    loadCityData(cityList[index], date);
 
     for (index in data)
         loadEventData(data[index].name);
@@ -176,7 +176,7 @@ function loadCityData(city, date){
             // dataType:json, so JQuery knows it and unpacks the
             // object for us before returning it
             addToResults(dataR);
-            storeCachedData(dataR.location, dataR);
+            //storeCachedData(dataR.location, dataR);
             if (document.getElementById('offline_div')!=null)
                     document.getElementById('offline_div').style.display='none';
         },

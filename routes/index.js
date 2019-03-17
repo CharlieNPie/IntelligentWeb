@@ -27,7 +27,7 @@ router.post('/weather_data', function(req, res, next) {
 
 
 router.post('/event_data', function(req, res, next) {
-    const event= req.body.eventname;
+    const event= getEvent(req.body.eventname);
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(event));
 });
@@ -57,6 +57,15 @@ class WeatherForecast{
     this.wind= wind;
     this.precipitations= precipitations;
   }
+}
+class Event {
+  constructor(name){
+    this.name = name;
+  }
+}
+function getEvent(name){
+  return new Event(
+    name);
 }
 
 /**
