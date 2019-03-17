@@ -11,10 +11,7 @@
  *  }
  *}
  */
-
-
 var dbPromise;
-var dbPromise2;
 
 const MANIFEST_DB_NAME= 'manifest_db'
 const MANIFEST_STORE_NAME = 'store_manifest'
@@ -23,7 +20,7 @@ const MANIFEST_STORE_NAME = 'store_manifest'
  * it inits the database
  */
 function initDatabase(){
-    dbPromise2 = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
+    dbPromise = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
         if (!upgradeDb.objectStoreNames.contains(MANIFEST_STORE_NAME)) {
             var events = upgradeDb.createObjectStore(MANIFEST_STORE_NAME, {keyPath: 'id', autoIncrement: true});
             events.createIndex('name', 'name', {unique: false, multiEntry: true});
@@ -40,8 +37,8 @@ function initDatabase(){
  */
 function storeCachedEventData(eventObject) { // need to add actual eventobject as per above
     console.log('inserting: '+JSON.stringify(eventObject));
-    if (dbPromise2) {
-        dbPromise2.then(async db => {
+    if (dbPromise) {
+        dbPromise.then(async db => {
             var tx = db.transaction(MANIFEST_STORE_NAME, 'readwrite');
             var store = tx.objectStore(MANIFEST_STORE_NAME);
             await store.put(eventObject);
@@ -56,8 +53,8 @@ function storeCachedEventData(eventObject) { // need to add actual eventobject a
 }
 
 function pullFromDatabase() {
-    if (dbPromise2) {
-        dbPromise2.then(function (db) {
+    if (dbPromise) {
+        dbPromise.then(function (db) {
             return db.transaction(db.objectStoreNames).objectStore(MANIFEST_STORE_NAME).getAll();
         }).then(function (allData) {
             if (allData && allData.length>0){
@@ -78,8 +75,8 @@ function pullFromDatabase() {
  * @returns {*}
  */
 function getCachedEventData(event) {
-    if (dbPromise2) {
-        dbPromise2.then(function (db) {
+    if (dbPromise) {
+        dbPromise.then(function (db) {
             console.log('fetching: '+event);
             var tx = db.transaction(db.objectStoreNames);
             var store = tx.objectStore(MANIFEST_STORE_NAME);
