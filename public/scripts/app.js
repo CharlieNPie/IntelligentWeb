@@ -34,9 +34,9 @@ function initWeatherForecasts() {
  * the server (or failing that) from the database
  */
 function loadData(){
-    var eventList=JSON.parse(localStorage.getItem('events'));
-    eventList=removeDuplicates(eventList);
-    retrieveAllCitiesData(eventList, new Date().getTime());
+    var eventsList=JSON.parse(localStorage.getItem('events'));
+    eventsList=removeDuplicates(eventsList);
+    retrieveAllCitiesData(eventsList, new Date().getTime());
 }
 
 /**
@@ -46,9 +46,9 @@ function loadData(){
  * @param date the date for the forecasts (not in use)
  */
 function retrieveAllCitiesData(eventsList, date){
-    refreshCityList();
-    for (index in cityList)
-        loadCityData(cityList[index], date);
+    //refreshCityList();
+    //for (index in cityList)
+    //    loadCityData(cityList[index], date);
 
     for (index in eventsList)
         loadEventData(eventsList[index]);
@@ -111,7 +111,7 @@ function loadCityData(city, date){
             // dataType:json, so JQuery knows it and unpacks the
             // object for us before returning it
             addToResults(dataR);
-            storeCachedData(dataR.location, dataR);
+            //storeCachedData(dataR.location, dataR);
             if (document.getElementById('offline_div')!=null)
                     document.getElementById('offline_div').style.display='none';
         },

@@ -64,6 +64,7 @@ function storeCachedData(city, forecastObject) {
 }
 
 function storeCachedEventData(eventObject) { // need to add actual eventobject as per above
+    console.log(eventObject);
     console.log('inserting: '+JSON.stringify(eventObject));
     if (dbPromise2) {
         dbPromise2.then(async db => {
