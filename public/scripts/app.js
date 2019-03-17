@@ -161,7 +161,7 @@ function addToResults(dataR) {
         // rather than assigning innerHTML
         row.innerHTML = "<div class='card-block'>" +
             "<div class='row'>" +
-            "<div class='col-xs-2'><h4 class='card-title'>" + dataR + "</h4></div>" +
+            "<div class='col-xs-2'><h4 class='card-title'>" + dataR.name + "</h4></div>" +
             "<div class='col-xs-2'></div></div></div>";
     }
 }
