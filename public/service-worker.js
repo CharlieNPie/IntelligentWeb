@@ -83,7 +83,7 @@ self.addEventListener('activate', function (e) {
  */
 self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
-    var dataUrl = '/event_data';
+    var dataUrl = '/create_event';
     //if the request is '/weather_data', post to the server
     if (event.request.url.indexOf(dataUrl) > -1) {
         /*
@@ -115,6 +115,7 @@ self.addEventListener('fetch', function (event) {
             event.waitUntil(async function () {
                 const networkResponse = await networkResponsePromise;
                 await cache.put(event.request, networkResponse.clone());
+                console.log(event.request);
             }());
 
             // Returned the cached response if we have one, otherwise return the network response.

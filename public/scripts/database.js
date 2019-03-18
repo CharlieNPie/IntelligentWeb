@@ -61,9 +61,6 @@ function pullFromDatabase() {
                 for (var elem of allData)
                     addToResults(elem);
             }
-            else {
-                console.log("Unhandled")
-            }
         });
     }
     else {

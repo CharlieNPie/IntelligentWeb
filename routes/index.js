@@ -11,13 +11,6 @@ router.get('/events/:eventId', function (req, res) {
   res.render('events', { id: req.params.eventId} );
 })
 
-/* POST new event */
-router.post('/new_event', function(req, res, next){
-  const event = getEvent(req.body.name, req.body.date, req.body.location);
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(data));
-})
-
 /**
  *  POST the data about the event.
  *  parameters in body:

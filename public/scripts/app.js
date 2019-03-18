@@ -85,9 +85,9 @@ function initEvents() {
     else {
         console.log('This browser doesn\'t support IndexedDB');
     }
+    loadData();
     //for (index in data)
         //storeCachedEventData(data[index]);
-    loadData();
 }
 
 /**
@@ -95,59 +95,8 @@ function initEvents() {
  * the server (or failing that) from the database
  */
 function loadData(){
-    pullFromDatabase();
-    var eventsList=JSON.parse(localStorage.getItem('events'));
-    eventsList=removeDuplicates(eventsList);
-    //retrieveAllCitiesData(eventsList, new Date().getTime());
-}
-
-/**
- * it cycles through the list of cities and requests the data from the server for each
- * city
- * @param cityList the list of the cities the user has requested
- * @param date the date for the forecasts (not in use)
- */
-function retrieveAllCitiesData(eventsList){
     refreshEventList();
-    for (index in eventsList)
-        loadEventData(eventsList[index]); 
-}
-
-/**
- * given one city and a date, it queries the server via Ajax to get the latest
- * weather forecast for that city
- * if the request to the server fails, it shows the data stored in the database
- * @param event
- * @param date
- */
-function loadEventData(name){
-    const input = JSON.stringify({name: name});
-    $.ajax({
-        url: '/event_data',
-        data: input,
-        contentType: 'application/json',
-        type: 'POST',
-        success: function (dataR) {
-            // no need to JSON parse the result, as we are using
-            // dataType:json, so JQuery knows it and unpacks the
-            // object for us before returning it
-            addToResults(dataR);
-            storeCachedEventData(dataR);
-            if (document.getElementById('offline_div')!=null)
-                    document.getElementById('offline_div').style.display='none';
-        },
-        // the request to the server has failed. Let's show the cached data
-        error: function (xhr, status, error) {
-            showOfflineWarning();
-            getCachedEventData(name);
-            const dvv= document.getElementById('offline_div');
-            if (dvv!=null)
-                    dvv.style.display='block';
-        }
-    });
-    // hide the list of cities if currently shown
-    if (document.getElementById('city_list')!=null)
-        document.getElementById('city_list').style.display = 'none';
+    pullFromDatabase();
 }
 
 
@@ -180,6 +129,8 @@ function addToResults(dataR) {
         row.classList.add('bg-faded');
         // the following is far from ideal. we should really create divs using javascript
         // rather than assigning innerHTML
+        const cardBlock = document.createElement("div");
+        console.log(cardBlock);
         row.innerHTML = "<div class='card-block'>" +
             "<div class='row'>" +
             "<div class='col-xs-2'><h4 class='card-title'>" + dataR.name + "</h4></div>" +
@@ -187,32 +138,7 @@ function addToResults(dataR) {
     }
 }
 
-
-/**
- * it removes all forecasts from the result div
- */
-function refreshEventList(){
-    if (document.getElementById('results')!=null)
-        document.getElementById('results').innerHTML='';
-}
-
-
-/**
- * it enables selecting the city from the drop down menu
- * it saves the selected city in the database so that it can be retrieved next time
- * @param city
- * @param date
- */
-function selectEvent(event) {
-  var eventList=JSON.parse(localStorage.getItem('events'));
-  if (eventList==null) eventList=[];
-  eventList.push(event);
-  eventList = removeDuplicates(eventList);
-  localStorage.setItem('events', JSON.stringify(eventList));
-  retrieveAllCitiesData(eventList);
-}
-
-/* function for when new data entry is made */
+/* function for when new event entry is made */
 function newEvent() {
     var formArray= $("form").serializeArray();
     var data={};
@@ -237,11 +163,17 @@ function sendAjaxQuery(url, data) {
                     document.getElementById('offline_div').style.display='none';
         },
         error: function (xhr, status, error) {
-            alert('Error detected: ' + error.message);
+            showOfflineWarning();
+            var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
+            offlineEventList.push(data);
+            newEventList = offlineEventList;
+            localStorage.setItem("offline_events", JSON.stringify(newEventList));
+            const dvv= document.getElementById('offline_div');
+            if (dvv!=null)
+                    dvv.style.display='block';
         }
     });
 }
-
 
 
 /**
@@ -250,6 +182,7 @@ function sendAjaxQuery(url, data) {
  */
 window.addEventListener('offline', function(e) {
     // Queue up events for server.
+    localStorage.setItem("offline_events", JSON.stringify([]));
     console.log("You are offline");
     showOfflineWarning();
 }, false);
@@ -261,6 +194,11 @@ window.addEventListener('online', function(e) {
     // Resync data with server.
     console.log("You are online");
     hideOfflineWarning();
+    var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
+    for (index in offlineEventList) {
+        sendAjaxQuery('create_event', offlineEventList[index]);
+    }
+    localStorage.clear();
     loadData();
 }, false);
 
@@ -279,22 +217,15 @@ function hideOfflineWarning(){
 /**
  * it shows the city list in the browser
  */
-function showEventList() {
+function showEventForm() {
     if (document.getElementById('city_list')!=null)
         document.getElementById('city_list').style.display = 'block';
 }
 
-
 /**
- * Given a list of events, it removes any duplicates
- * @param eventList
- * @returns {Array}
+ * refreshes div section
  */
-function removeDuplicates(eventList) {
-    // remove any duplicate
-       var uniqueNames=[];
-       $.each(eventList, function(i, el){
-           if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-       });
-       return uniqueNames;
+function refreshEventList(){
+    if (document.getElementById('results')!=null)
+        document.getElementById('results').innerHTML='';
 }
