@@ -98,6 +98,7 @@ function loadData(){
     refreshEventList();
     pullFromDatabase();
 }
+
 function loadEvent(id){
   initDatabase();
   getDataById(id);
@@ -186,8 +187,8 @@ function sendAjaxQuery(url, data) {
         dataType: 'json',
         type: 'POST',
         success: function (response) {
-            addToResults(response);
             storeCachedEventData(response);
+            location.reload();
             if (document.getElementById('offline_div')!=null)
                     document.getElementById('offline_div').style.display='none';
         },
