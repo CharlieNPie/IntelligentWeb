@@ -125,20 +125,22 @@ function loadEvent(id){
 function addToResults(dataR) {
     if (document.getElementById('results') != null) {
         const row = document.createElement('div');
+        id= String(dataR.id);
+        row.setAttribute('class','event');
         // appending a new row
         document.getElementById('results').appendChild(row);
         // formatting the row by applying css classes
         row.classList.add('card');
         row.classList.add('my_card');
         row.classList.add('bg-faded');
+        row.classList.add(String(id));
         // the following is far from ideal. we should really create divs using javascript
         // rather than assigning innerHTML
-        const cardBlock = document.createElement("div");
-        id= String(dataR.id);
-        row.innerHTML = "<div class='card-block'>" +
+        event = "<div class='card-block'>" +
             "<div class='row'>" +
             "<div class='col-xs-2'><h4 class='card-title'><a id="+id+ " href=/events/"+id + " onClick=test(this)>" + dataR.name + "</a></h4></div>" +
             "<div class='col-xs-2'></div></div></div>";
+        $('.'+id+'.card.my_card.bg-faded').append(event);
     }
 }
 
@@ -148,21 +150,17 @@ function addToEvent(dataR) {
       // appending a new row
       document.getElementById('eventData').appendChild(row);
       // formatting the row by applying css classes
-      row.classList.add('card');
-      row.classList.add('my_card');
-      row.classList.add('bg-faded');
       // the following is far from ideal. we should really create divs using javascript
       // rather than assigning innerHTML
       const cardBlock = document.createElement("div");
-      console.log(cardBlock);
       var i;
       posts = "";
       for (i=0;i<dataR.posts.length;i++){
         posts = posts +"<br> "+ String(dataR.posts[i].author) + "<br> " + String(dataR.posts[i].text);
       }
-      row.innerHTML =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
+      event =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
          "<br> Organiser is " + dataR.organiser + posts;
-        
+      $('.event').append(event);
     }
 }
 function test(data){
