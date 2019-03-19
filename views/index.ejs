@@ -1,88 +1,122 @@
-<!--
- Copyright 2016 Google Inc.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
-
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events PWA</title>
-    <link rel="stylesheet" href="/styles/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="styles/inline.css">
-
-    <!-- TODO add manifest here -->
-    <link rel="manifest" href="/manifest.json">
-    <!-- Add to home screen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Weather PWA">
-    <link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
-    <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
-    <meta name="msapplication-TileColor" content="#2F3BA2">
-
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <title>Manifest</title>
     <script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/idb.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link href="/styles/styles.css" rel="stylesheet" />
+  </head>
 
-    <!-- Latest compiled JavaScript -->
-    <script src="/scripts/bootstrap.min.js"></script>
-</head>
-<body onload="initEvents()">
-<div class="container" style="width: 100%">
-    <div class="row">
-        <div class="col-xs-9"><h1><%= title %></h1></div>
-        <div class="col-xs-3">
-            <div class="form-group">
-                <h1>
-                    <button class="btn btn-primary btn-lg buttonField roundishShape " id="swap_button"
-                            onclick="loadData()">
-                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                    </button>
-                    <button class="btn btn-primary btn-lg buttonField roundishShape " id="swap_button"
-                            onclick="showEventForm()">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </button>
-                </h1>
-                <div class="list-group pop_up_list" id='city_list' style="display:none">
-                    <form id=“new-event" onsubmit="newEvent()">
-                        Name:
-                        <input type="text" name="name" id="name" value="Big Festival"><br>
-                        Location:
-                        <input type="text" name="location" id="location" value="Mars"><br>
-                        Date:
-                        <input type="date" name="date" id="date" value="2019-12-12"><br>
-                        <input type="submit" name="g" value="Submit" id="g">
-                    </form>
-                </div>
-
-            </div>
-        </div>
+  <body onload="initEvents()" class="d-flex flex-column h-100">
+    <div class="nav">
+      <span>ManiFest</span>
     </div>
-    <div class="offline_div" id="offline_div" style="display: none">You are offline</div>
-</div>
-<div id="results" style="text-align: center">
 
-</div>
-</div>
-</div>
+    <main role="main" class="flex-shrink-0">
+      <div class="offline_div" id="offline_div" style="display: none">
+        You are offline
+      </div>
+      <div class="top-container">
+        <div class="row">
+          <img
+            src="https://blog.malwarebytes.com/wp-content/uploads/2018/10/shutterstock_612941954-900x506.jpg"
+            class="e-image"
+          />
+        </div>
+      </div>
+      <div class="section">
+        <div class="st-title">
+          Trending
+        </div>
+        <div class="st-galery" id="events">
+          <a href="../event/event.html">
+            <img
+              src="https://datatransmission.co/wp-content/uploads/2018/06/festival-720x394.jpg"
+              class="st-image"
+            />
+            <span class="sti-title">Name</span>
+          </a>
+        </div>
+      </div>
+      <div class="section">
+        <div class="st-title">
+          Near you
+        </div>
+        <div class="st-galery">
+          <img
+            src="https://datatransmission.co/wp-content/uploads/2018/06/festival-720x394.jpg"
+            )
+            class="st-image"
+          />
+        </div>
+      </div>
+      <div class="section">
+        <div class="st-title">
+          Past events
+        </div>
+        <div class="st-galery">
+          <div
+            style="background: 
+            linear-gradient(
+              rgba(0, 0, 0, 0.4),
+              rgba(0, 0, 0, 0.4)
+            ),
+            url(https://datatransmission.co/wp-content/uploads/2018/06/festival-720x394.jpg);
+          background-size: cover;"
+            class="st-image"
+          >
+            ShefFest
+          </div>
+          <div
+            style="background: 
+            linear-gradient(
+              rgba(0, 0, 0, 0.4),
+              rgba(0, 0, 0, 0.4)
+            ),
+            url(https://datatransmission.co/wp-content/uploads/2018/06/festival-720x394.jpg);
+          background-size: cover;"
+            class="st-image"
+          >
+            ShefFest
+          </div>
+        </div>
+      </div>
+      <div class="empty"></div>
+    </main>
 
-</div>
-<script src="/scripts/app.js"></script>
-<script src="/scripts/database.js"></script>
-
-</body>
+    <footer class="footer mt-auto py-3 ft-color ft-stick">
+      <div class="container ft-layout">
+        <img
+          src="https://image.flaticon.com/icons/svg/131/131057.svg"
+          class="menu-button"
+        />
+        <img
+          src="https://image.flaticon.com/icons/svg/149/149309.svg"
+          class="menu-button"
+        />
+        <img
+          src="https://image.flaticon.com/icons/svg/159/159719.svg"
+          class="menu-button"
+        />
+        <img
+          src="https://image.flaticon.com/icons/svg/149/149452.svg"
+          class="menu-button"
+        />
+      </div>
+    </footer>
+    <script src="/scripts/app.js"></script>
+    <script src="/scripts/database.js"></script>
+  </body>
 </html>
