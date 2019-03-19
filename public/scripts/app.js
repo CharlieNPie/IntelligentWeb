@@ -133,7 +133,6 @@ function addToResults(dataR) {
         // the following is far from ideal. we should really create divs using javascript
         // rather than assigning innerHTML
         const cardBlock = document.createElement("div");
-        console.log(cardBlock);
         id= String(dataR.id);
         row.innerHTML = "<div class='card-block'>" +
             "<div class='row'>" +
