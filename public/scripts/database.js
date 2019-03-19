@@ -52,6 +52,7 @@ function storeCachedEventData(eventObject) { // need to add actual eventobject a
     else localStorage.setItem(eventObject.name, JSON.stringify(eventObject));
 }
 
+/* pulls all objects from database and adds them to the homepage */
 function pullFromDatabase() {
     if (dbPromise) {
         dbPromise.then(function (db) {
@@ -103,8 +104,14 @@ function getDataById(id) {
     }
 }
 
+/* return name of data object */
 function getEventName(dataR) {
     if (dataR.name == null && dataR.name === undefined)
         return "unavailable";
     else return dataR.name;
+}
+
+
+function getEditFormData() {
+    console.log("");
 }

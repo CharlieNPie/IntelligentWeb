@@ -134,10 +134,11 @@ function addToResults(dataR) {
         // the following is far from ideal. we should really create divs using javascript
         // rather than assigning innerHTML
         const cardBlock = document.createElement("div");
+        cardBlock.className = "card-block";
         id= String(dataR.id);
         row.innerHTML = "<div class='card-block'>" +
             "<div class='row'>" +
-            "<div class='col-xs-2'><h4 class='card-title'><a id="+id+ " href=/events/"+id + " onClick=test(this)>" + dataR.name + "</a></h4></div>" +
+            "<div class='col-xs-2'><h4 class='card-title'><a id="+id+ " href=/events/"+id + ">" + dataR.name + "</a></h4></div>" +
             "<div class='col-xs-2'></div></div></div>";
     }
 }
@@ -154,7 +155,6 @@ function addToEvent(dataR) {
       // the following is far from ideal. we should really create divs using javascript
       // rather than assigning innerHTML
       const cardBlock = document.createElement("div");
-      console.log(cardBlock);
       var i;
       posts = "";
       for (i=0;i<dataR.posts.length;i++){
@@ -165,9 +165,8 @@ function addToEvent(dataR) {
         
     }
 }
-function test(data){
-  console.log(String(data.id));
-}
+
+
 /* function for when new event entry is made */
 function newEvent() {
     var formArray= $("form").serializeArray();
