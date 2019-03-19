@@ -98,7 +98,10 @@ function loadData(){
     refreshEventList();
     pullFromDatabase();
 }
-
+function loadEvent(id){
+  initDatabase();
+  getDataById(id);
+}
 
 ///////////////////////// INTERFACE MANAGEMENT ////////////
 
@@ -131,13 +134,40 @@ function addToResults(dataR) {
         // rather than assigning innerHTML
         const cardBlock = document.createElement("div");
         console.log(cardBlock);
+        id= String(dataR.id);
         row.innerHTML = "<div class='card-block'>" +
             "<div class='row'>" +
-            "<div class='col-xs-2'><h4 class='card-title'>" + dataR.name + "</h4></div>" +
+            "<div class='col-xs-2'><h4 class='card-title'><a id="+id+ " href=/events/"+id + " onClick=test(this)>" + dataR.name + "</a></h4></div>" +
             "<div class='col-xs-2'></div></div></div>";
     }
 }
 
+function addToEvent(dataR) {
+  if (document.getElementById('eventData') != null) {
+      const row = document.createElement('div');
+      // appending a new row
+      document.getElementById('eventData').appendChild(row);
+      // formatting the row by applying css classes
+      row.classList.add('card');
+      row.classList.add('my_card');
+      row.classList.add('bg-faded');
+      // the following is far from ideal. we should really create divs using javascript
+      // rather than assigning innerHTML
+      const cardBlock = document.createElement("div");
+      console.log(cardBlock);
+      var i;
+      posts = "";
+      for (i=0;i<dataR.posts.length;i++){
+        posts = posts +"<br> "+ String(dataR.posts[i].author) + "<br> " + String(dataR.posts[i].text);
+      }
+      row.innerHTML =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
+         "<br> Organiser is " + dataR.organiser + posts;
+        
+    }
+}
+function test(data){
+  console.log(String(data.id));
+}
 /* function for when new event entry is made */
 function newEvent() {
     var formArray= $("form").serializeArray();

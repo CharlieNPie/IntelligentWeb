@@ -103,10 +103,42 @@ function getCachedEventData(event) {
         else addToResults(value);
     }
 }
+function getDataById(id) {
+    if (dbPromise) {
+        dbPromise.then(function (db) {
+           // console.log(String(id));
+            console.log('fetching: '+event);
+            var tx = db.transaction(db.objectStoreNames);
+            var store = tx.objectStore(MANIFEST_STORE_NAME);
+            var index = store.index('name');
+            return store.getAll(IDBKeyRange.only(parseInt(id)));
+        }).then(function (readingsList) {
+            console.log(readingsList);
+            if (readingsList && readingsList.length>0){
+                var max;
+                for (var elem of readingsList)
+                    if (!max || elem.date>max.date)
+                        max= elem;
+                if (max) addToEvent(max);
+            } else {
+                const value = localStorage.getItem(event);
+                console.log(value);
+                if (value == null)
+                    addToResults({event: event});
+                else addToResults(value);
+            }
+        });
+    } else {
+        const value = localStorage.getItem(event);
+        console.log(value);
+        if (value == null)
+            addToResults( {city: city, date: date});
+        else addToResults(value);
+    }
+}
 
 function getEventName(dataR) {
     if (dataR.name == null && dataR.name === undefined)
         return "unavailable";
     else return dataR.name;
 }
-

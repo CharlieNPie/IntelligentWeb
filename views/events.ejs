@@ -18,14 +18,15 @@
     <link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
     <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#2F3BA2">
-
+    <script src="/scripts/app.js"></script>
+    <script src="/scripts/database.js"></script>
     <script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/idb.js"></script>
 
     <!-- Latest compiled JavaScript -->
     <script src="/scripts/bootstrap.min.js"></script>
 </head>
-<body onload="initEvents()">
-
+<body onload='loadEvent("<%= id %>")'>
+        <div id="eventData" style="text-align: center">
 </body>
 </html>
