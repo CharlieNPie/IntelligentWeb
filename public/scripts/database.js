@@ -73,7 +73,6 @@ function pullFromDatabase() {
 function getDataById(id) {
     if (dbPromise) {
         dbPromise.then(function (db) {
-           // console.log(String(id));
             console.log('fetching: '+event);
             var tx = db.transaction(db.objectStoreNames);
             var store = tx.objectStore(MANIFEST_STORE_NAME);
@@ -104,6 +103,16 @@ function getDataById(id) {
     }
 }
 
+function getDataObject(id) {
+    if (dbPromise) {
+        dbPromise.then(function (db) {
+            return db.transaction(db.objectStoreNames).objectStore(MANIFEST_STORE_NAME).getAll(IDBKeyRange.only(parseInt(id)));
+        }).then(function(dataObject) {
+            console.log(dataObject[0]);
+        })
+    }
+}
+
 /* return name of data object */
 function getEventName(dataR) {
     if (dataR.name == null && dataR.name === undefined)
@@ -111,7 +120,3 @@ function getEventName(dataR) {
     else return dataR.name;
 }
 
-
-function getEditFormData() {
-    console.log("");
-}

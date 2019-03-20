@@ -26,10 +26,10 @@
     <!-- Latest compiled JavaScript -->
     <script src="/scripts/bootstrap.min.js"></script>
 </head>
-<body>
+<body onload='editEvent("<%= id %>")'>
     <div class="container" style="width: 100%">
             <h1><%= title %></h1>
-            <form id=“new-event" onsubmit="newEvent()">
+            <form id=“new-event" onsubmit="">
                 Name:
                 <input type="text" name="name" id="name" value="Big Festival"><br>
                 Location:
