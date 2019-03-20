@@ -3,13 +3,13 @@ var data = [
     name: "Coachella",
     date: "12/05/2019",
     image:
-      "https://datatransmission.co/wp-content/uploads/2018/06/festival-720x394.jpg",
+      "https://i.imgur.com/Qp3tTtH.jpg",
     organiser: "93729347234",
     location: "Los Angeles",
     posts: [
       {
         text: "Lol I just lost my cap, anybody seen it?",
-        image: "http://borja.leiva/image.jpeg",
+        image: "https://i.imgur.com/jJHdo4D.jpg",
         author: "borjadotai",
         date: "12/05/2019 - 17:30",
         location: "Los Angeles - 3rd Area",
@@ -27,7 +27,7 @@ var data = [
       {
         text:
           "What time is Travis playing at? Completely lost track of time...",
-        image: "http://borja.leiva/image.jpeg",
+        image: "https://i.imgur.com/jJHdo4D.jpg",
         author: "hasanasim",
         date: "12/05/2019 - 14:30",
         location: "Los Angeles - 6th Area",
@@ -43,13 +43,13 @@ var data = [
   {
     name: "SheffieldFest",
     date: "12/06/2019",
-    image: "http://google.io/picture.jpeg",
+    image: "https://i.imgur.com/jJHdo4D.jpg",
     organiser: "93729347235",
     location: "Sheffield",
     posts: [
       {
         text: "Yoooo! Here watching Drake in the diamond, looking gooooood!",
-        image: "http://borja.leiva/image.jpeg",
+        image: "https://i.imgur.com/jJHdo4D.jpg",
         author: "charliePie",
         date: "12/05/2019 - 15:30",
         location: "Sheffield - The Diamond",
@@ -86,6 +86,8 @@ function initEvents() {
     console.log("This browser doesn't support IndexedDB");
   }
   loadData();
+  //for (index in data)
+    //storeCachedEventData(data[index]);
 }
 
 /**
@@ -119,17 +121,17 @@ function loadEvent(id) {
  *}
  */
 function addToResults(data) {
-  console.log("borja", data);
   if (document.getElementById("events") != null) {
     const row = document.createElement("div");
     document.getElementById("events").appendChild(row);
     row.innerHTML =
-      "<a href={`./events/${data.id}`}>" +
-      "<img src={`data.image`} class='st-image' />" +
+      "<a href=/events/"+data.id +">" +
+      "<img src='"+ data.image +"' "+"class='st-image' />" +
       "<span class='sti-title'>" +
       data.name +
       "</span>" +
       "</a>";
+      console.log(row);
   }
 }
 
@@ -262,6 +264,6 @@ function showEventForm() {
  * refreshes div section
  */
 function refreshEventList() {
-  if (document.getElementById("results") != null)
-    document.getElementById("results").innerHTML = "";
+  if (document.getElementById("events") != null)
+    document.getElementById("events").innerHTML = "";
 }

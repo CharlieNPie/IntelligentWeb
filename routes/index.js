@@ -10,7 +10,9 @@ router.get('/', function(req, res, next) {
 router.get('/events/:eventId', function (req, res) {
   res.render('events', { id: req.params.eventId} );
 })
-
+router.get('/event',function(req,res){
+  res.render('event',{id:req.params.eventId});
+})
 /**
  *  POST the data about the event.
  *  parameters in body:
