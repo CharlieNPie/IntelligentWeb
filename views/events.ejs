@@ -28,5 +28,8 @@
 </head>
 <body onload='loadEvent("<%= id %>")'>
         <div id="eventData" class="event" style="text-align: center"></div>
+        <form action="/events/<%= id %>/edit">
+            <input type="submit" value="Edit Event" />
+        </form>
 </body>
 </html>

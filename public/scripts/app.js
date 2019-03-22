@@ -87,7 +87,7 @@ function initEvents() {
     }
     loadData();
     //for (index in data)
-        //storeCachedEventData(data[index]);
+    //    storeCachedEventData(data[index]);
 }
 
 /**
@@ -205,8 +205,10 @@ function sendAjaxQuery(url, data) {
 /* function for editing event data */
 function editEvent(id) {
   initDatabase();
-  const eventData = getDataObject(id);
-  console.log(eventData);
+  var retrievedEvent = getDataObject(id);
+  retrievedEvent.then(function (data) {
+    console.log(data[0]);
+  })
 }
 
 

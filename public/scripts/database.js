@@ -105,10 +105,8 @@ function getDataById(id) {
 
 function getDataObject(id) {
     if (dbPromise) {
-        dbPromise.then(function (db) {
+        return dbPromise.then(function (db) {
             return db.transaction(db.objectStoreNames).objectStore(MANIFEST_STORE_NAME).getAll(IDBKeyRange.only(parseInt(id)));
-        }).then(function(dataObject) {
-            console.log(dataObject[0]);
         })
     }
 }
