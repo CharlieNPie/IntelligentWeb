@@ -2,13 +2,15 @@ var data = [
   {
     name: "Coachella",
     date: "12/05/2019",
-    image:
-      "https://i.imgur.com/Qp3tTtH.jpg",
+    image: "https://i.imgur.com/Qp3tTtH.jpg",
     organiser: "93729347234",
     location: "Los Angeles",
     posts: [
       {
+        id: "1",
         text: "Lol I just lost my cap, anybody seen it?",
+        avatar:
+          "https://tinyfac.es/data/avatars/7D3FA6C0-83C8-4834-B432-6C65ED4FD4C3-500w.jpeg",
         image: "https://i.imgur.com/jJHdo4D.jpg",
         author: "borjadotai",
         date: "12/05/2019 - 17:30",
@@ -25,8 +27,10 @@ var data = [
         ]
       },
       {
+        id: "2",
         text:
           "What time is Travis playing at? Completely lost track of time...",
+        avatar: "https://randomuser.me/api/portraits/women/44.jpg",
         image: "https://i.imgur.com/jJHdo4D.jpg",
         author: "hasanasim",
         date: "12/05/2019 - 14:30",
@@ -48,7 +52,10 @@ var data = [
     location: "Sheffield",
     posts: [
       {
+        id: "3",
         text: "Yoooo! Here watching Drake in the diamond, looking gooooood!",
+        avatar:
+          "https://tinyfac.es/data/avatars/7D3FA6C0-83C8-4834-B432-6C65ED4FD4C3-500w.jpeg",
         image: "https://i.imgur.com/jJHdo4D.jpg",
         author: "charliePie",
         date: "12/05/2019 - 15:30",
@@ -86,8 +93,7 @@ function initEvents() {
     console.log("This browser doesn't support IndexedDB");
   }
   loadData();
-  //for (index in data)
-    //storeCachedEventData(data[index]);
+  for (index in data) storeCachedEventData(data[index]);
 }
 
 /**
@@ -103,72 +109,114 @@ function loadEvent(id) {
   getDataById(id);
 }
 
-///////////////////////// INTERFACE MANAGEMENT ////////////
-
-/**
- * given the forecast data returned by the server,
- * it adds a row of weather forecasts to the results div
- * @param dataR the data returned by the server:
- * class WeatherForecast{
- *  constructor (location, date, forecast, temperature, wind, precipitations) {
- *    this.location= location;
- *    this.date= date,
- *    this.forecast=forecast;
- *    this.temperature= temperature;
- *    this.wind= wind;
- *    this.precipitations= precipitations;
- *  }
- *}
- */
 function addToResults(data) {
   if (document.getElementById("events") != null) {
     const row = document.createElement("div");
     document.getElementById("events").appendChild(row);
     row.innerHTML =
-      "<a href=/events/"+data.id +">" +
-      "<img src='"+ data.image +"' "+"class='st-image' />" +
+      "<a href=/events/" +
+      data.id +
+      ">" +
+      "<img src='" +
+      data.image +
+      "' " +
+      "class='st-image' />" +
       "<span class='sti-title'>" +
       data.name +
       "</span>" +
       "</a>";
-      console.log(row);
+    console.log(row);
   }
 }
 
-function addToEvent(dataR) {
-  if (document.getElementById("eventData") != null) {
-    const row = document.createElement("div");
-    // appending a new row
-    document.getElementById("eventData").appendChild(row);
-    // formatting the row by applying css classes
-    row.classList.add("card");
-    row.classList.add("my_card");
-    row.classList.add("bg-faded");
-    // the following is far from ideal. we should really create divs using javascript
-    // rather than assigning innerHTML
-    const cardBlock = document.createElement("div");
-    console.log(cardBlock);
-    var i;
-    posts = "";
-    for (i = 0; i < dataR.posts.length; i++) {
-      posts =
-        posts +
-        "<br> " +
-        String(dataR.posts[i].author) +
-        "<br> " +
-        String(dataR.posts[i].text);
-    }
-    row.innerHTML =
-      dataR.id +
-      " <br>Name is " +
-      dataR.name +
-      "<br>Location is " +
-      dataR.location +
-      "<br> Organiser is " +
-      dataR.organiser +
-      posts;
-  }
+function addToEvent(data) {
+  console.log("borja", data);
+  $("#eventName").html(data.name);
+  var image = "<img" + " src='" + data.image + "'" + " class='e-image'" + "/>";
+  $("#eventImage").html(image);
+  data.posts.map(post => {
+    var post =
+      "<div class='post'>" +
+      "<div class='ps-user'>" +
+      "<img src='" +
+      post.avatar +
+      "' class='ps-avatar' />" +
+      "<span class='ps-username'>" +
+      post.author +
+      "</span>" +
+      "</div>" +
+      "<img src='" +
+      post.image +
+      "' class='ps-photo' />" +
+      "<div class='ps-menu'>" +
+      "<div id='heart-" +
+      post.id +
+      "'>" +
+      "<img src='https://image.flaticon.com/icons/svg/126/126471.svg' onClick='handleLike(" +
+      post.id +
+      ")' class='psm-button' />" +
+      "</div>" +
+      "<a href='#'>" +
+      "<img src='https://img.icons8.com/ios/50/000000/topic.png' class='psm-button' />" +
+      "</a>" +
+      "</div>" +
+      "<div class='ps-content'>" +
+      "<b>" +
+      post.author +
+      ": </b>" +
+      post.text +
+      "</div>" +
+      "<div class='ps-details'>" +
+      "<span>" +
+      post.date +
+      "</span>" +
+      "<b> See more </b>" +
+      "</div>" +
+      "</div>";
+    $("#posts").append(post);
+  });
 }
+
+const handleLike = id => {
+  let liked = JSON.parse(localStorage.getItem("liked"));
+  console.log(liked);
+  if (liked === null) {
+    localStorage.setItem("liked", JSON.stringify([id]));
+    const newHeart =
+      "<img id='heart-" +
+      id +
+      "' src='/images/like.png' onClick='handleLike(" +
+      id +
+      ")' class='psm-button' />";
+    $(`#heart-${id}`).html(newHeart);
+    console.log("change color of heart");
+  } else {
+    if (liked.includes(id)) {
+      const newHeart =
+        "<img id='heart-" +
+        id +
+        "' src='https://image.flaticon.com/icons/svg/126/126471.svg' onClick='handleLike(" +
+        id +
+        ")' class='psm-button' />";
+      $(`#heart-${id}`).html(newHeart);
+      let newLiked = liked.filter(e => e !== id);
+      localStorage.setItem("liked", JSON.stringify(newLiked));
+      console.log("change color back to black");
+    } else {
+      const newHeart =
+        "<img id='heart-" +
+        id +
+        "' src='/images/like.png' onClick='handleLike(" +
+        id +
+        ")' class='psm-button' />";
+      $(`#heart-${id}`).html(newHeart);
+      let newLiked = liked;
+      newLiked.push(id);
+      localStorage.setItem("liked", JSON.stringify(newLiked));
+    }
+  }
+};
+
 function test(data) {
   console.log(String(data.id));
 }
