@@ -1,7 +1,7 @@
 var data = [
     {
       name: "Coachella",
-      date: "12/05/2019",
+      date: "2019-05-12",
       image: "http://google.io/picture.jpeg",
       organiser: "93729347234",
       location: "Los Angeles",
@@ -41,7 +41,7 @@ var data = [
     },
     {
       name: "SheffieldFest",
-      date: "12/06/2019",
+      date: "2019-06-12",
       image: "http://google.io/picture.jpeg",
       organiser: "93729347235",
       location: "Sheffield",
@@ -87,7 +87,7 @@ function initEvents() {
     }
     loadData();
     //for (index in data)
-    //    storeCachedEventData(data[index]);
+        //storeCachedEventData(data[index]);
 }
 
 /**
@@ -144,25 +144,7 @@ function addToResults(dataR) {
     }
 }
 
-function addToEvent(dataR) {
-  if (document.getElementById('eventData') != null) {
-      const row = document.createElement('div');
-      // appending a new row
-      document.getElementById('eventData').appendChild(row);
-      // formatting the row by applying css classes
-      // the following is far from ideal. we should really create divs using javascript
-      // rather than assigning innerHTML
-      const cardBlock = document.createElement("div");
-      var i;
-      posts = "";
-      for (i=0;i<dataR.posts.length;i++){
-        posts = posts +"<br> "+ String(dataR.posts[i].author) + "<br> " + String(dataR.posts[i].text);
-      }
-      event =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
-         "<br> Organiser is " + dataR.organiser + posts;
-      $('.event').append(event);
-    }
-}
+
 
 
 /* function for when new event entry is made */
@@ -172,12 +154,12 @@ function newEvent() {
     for (index in formArray){
         data[formArray[index].name]= formArray[index].value;
     }
-    sendAjaxQuery('/create_event', data);
+    sendNewEventQuery('/create_event', data);
     event.preventDefault();
 }
 
 /* send request to server */
-function sendAjaxQuery(url, data) {
+function sendNewEventQuery(url, data) {
     $.ajax({
         url: url ,
         data: data,
@@ -202,15 +184,81 @@ function sendAjaxQuery(url, data) {
     });
 }
 
-/* function for editing event data */
-function editEvent(id) {
+/**
+ * 
+ * ADDING/EDITING/DELETING EVENTS 
+ *
+ */
+
+/* ADDING EVENT PAGE */
+function addToEvent(dataR) {
+  if (document.getElementById('eventData') != null) {
+      var i;
+      posts = "";
+      for (i=0;i<dataR.posts.length;i++){
+        posts = posts +"<br> "+ String(dataR.posts[i].author) + "<br> " + String(dataR.posts[i].text);
+      }
+      event =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
+         "<br> Organiser is " + dataR.organiser + posts;
+      $('.event').append(event);
+    }
+}
+
+/* SHOW EVENT DATA FIELDS */
+function listEventDetails(id) {
   initDatabase();
   var retrievedEvent = getDataObject(id);
   retrievedEvent.then(function (data) {
-    console.log(data[0]);
+    dataObject = data[0];
+    document.getElementById("name").value = String(dataObject.name);
+    document.getElementById("location").value = String(dataObject.location);
+    document.getElementById("date").value = String(dataObject.date);
   })
 }
 
+/* SEND REQUEST TO UPDATE EVENT DATA */
+function updateEvent(id) {
+  var formArray= $("form").serializeArray();
+  var newData={};
+  for (index in formArray){
+      newData[formArray[index].name]= formArray[index].value;
+  }
+  sendUpdateEventQuery('/update_event', newData, id);
+  event.preventDefault();
+}
+
+/* AJAX QUERY FOR UPDATING EVENT */
+function sendUpdateEventQuery(url, data, id) {
+  $.ajax({
+    url: url ,
+    data: data,
+    dataType: 'json',
+    type: 'POST',
+    success: function (response) {
+      setDataObject(response, id);
+      //location.reload();
+      if (document.getElementById('offline_div')!=null)
+              document.getElementById('offline_div').style.display='none';
+    },
+    error: function (xhr, status, error) {
+      showOfflineWarning();
+      var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
+      offlineEventList.push(data);
+      newEventList = offlineEventList;
+      localStorage.setItem("offline_events", JSON.stringify(newEventList));
+      const dvv= document.getElementById('offline_div');
+      if (dvv!=null)
+              dvv.style.display='block';
+    }
+  });
+}
+
+
+/**
+ * 
+ * OTHER JAVASCRIPT
+ * 
+ */
 
 /**
  * When the client gets off-line, it shows an off line warning to the user
@@ -233,7 +281,7 @@ window.addEventListener('online', function(e) {
     hideOfflineWarning();
     var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
     for (index in offlineEventList) {
-        sendAjaxQuery('create_event', offlineEventList[index]);
+        sendNewEventQuery('create_event', offlineEventList[index]);
     }
     localStorage.clear();
     loadData();

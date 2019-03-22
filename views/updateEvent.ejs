@@ -26,16 +26,17 @@
     <!-- Latest compiled JavaScript -->
     <script src="/scripts/bootstrap.min.js"></script>
 </head>
-<body onload='editEvent("<%= id %>")'>
+<body onload='listEventDetails("<%= id %>")'>
     <div class="container" style="width: 100%">
             <h1><%= title %></h1>
-            <form id=“new-event" onsubmit="">
+            <form id=“new-event" onsubmit='updateEvent("<%= id %>")'>
                 Name:
-                <input type="text" name="name" id="name" value="Big Festival"><br>
+                <input type="text" name="name" id="name" value=""><br>
                 Location:
-                <input type="text" name="location" id="location" value="Mars"><br>
+                <input type="text" name="location" id="location" value=""><br>
                 Date:
-                <input type="date" name="date" id="date" value="2019-12-12"><br>
+                <input type="date" name="date" id="date" value=""><br>
+
                 <input type="submit" name="g" value="Submit" id="g">
             </form>  
             <div class="offline_div" id="offline_div" style="display: none">You are offline</div>

@@ -35,7 +35,7 @@ function initDatabase(){
  * @param city
  * @param forecastObject
  */
-function storeCachedEventData(eventObject) { // need to add actual eventobject as per above
+function storeCachedEventData(eventObject) { 
     console.log('inserting: '+JSON.stringify(eventObject));
     if (dbPromise) {
         dbPromise.then(async db => {
@@ -46,7 +46,7 @@ function storeCachedEventData(eventObject) { // need to add actual eventobject a
         }).then(function () {
             console.log('added item to the store! '+ JSON.stringify(eventObject));
         }).catch(function (error) {
-            console.log("Tried everything to catch this and gave up")
+            console.log("Could not add item to store.")
         });
     }
     else localStorage.setItem(eventObject.name, JSON.stringify(eventObject));
@@ -103,10 +103,35 @@ function getDataById(id) {
     }
 }
 
+/* GETS DATA OBJECT GIVEN ITS ID */
 function getDataObject(id) {
     if (dbPromise) {
         return dbPromise.then(function (db) {
-            return db.transaction(db.objectStoreNames).objectStore(MANIFEST_STORE_NAME).getAll(IDBKeyRange.only(parseInt(id)));
+            var objectStores = db.transaction(db.objectStoreNames);
+            var selectId = objectStores.objectStore(MANIFEST_STORE_NAME).getAll(IDBKeyRange.only(parseInt(id)));
+            return selectId;
+        })
+    }
+}
+
+/* SETS NEW VALUES FOR DATA OBJECT IN DB GIVEN ITS ID */
+function setDataObject(data, id) {
+    if (dbPromise) {
+        return dbPromise.then(function (db) {
+            var objectStores = db.transaction(db.objectStoreNames);
+            var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
+            var oldData = selectId.getAll(IDBKeyRange.only(parseInt(id)));
+            return oldData;
+        }).then(function (oldData) {
+            var objectToEdit = oldData[0];
+            objectToEdit.name = data.name;
+            objectToEdit.location = data.location;
+            objectToEdit.data = data.date;
+            return dbPromise.then(function (db) {
+                var transaction = db.transaction(db.objectStoreNames, "readwrite");
+                var objectstore = transaction.objectStore(MANIFEST_STORE_NAME);
+                objectstore.put(objectToEdit);
+            });
         })
     }
 }

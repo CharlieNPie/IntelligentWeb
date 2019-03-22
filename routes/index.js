@@ -28,6 +28,16 @@ router.post('/create_event', function(req, res, next) {
     res.send(JSON.stringify(event));
 });
 
+
+/**
+ * POST data that updates the event details
+ */
+router.post('/update_event', function(req, res, next){
+  updatedEvent = req.body;
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(updatedEvent));
+})
+
 /**
  *
  * @constructor
