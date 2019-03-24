@@ -28,6 +28,13 @@
 </head>
 <body onload='loadEvent("<%= id %>")'>
         <div id="eventData" class="event" style="text-align: center"></div>
+        
+        <form id=“addPost" class="addPost" onsubmit="newPost('<%= id %>')">
+            Text:
+            <input type="text" size="35" name="text" id="text" value="Man im tripping balls im seeing some shit!"><br>
+            <input type="submit" name="g" value="Submit" id="g">
+        </form>
+
         <form action="/events/<%= id %>/edit">
             <input type="submit" value="Edit Event" />
         </form>

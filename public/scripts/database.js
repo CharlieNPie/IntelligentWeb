@@ -143,3 +143,22 @@ function getEventName(dataR) {
     else return dataR.name;
 }
 
+/* ADD POST OBJECTS TO AN EVENT */
+function addPostObject(postObject, id){
+    if(dbPromise){
+        return dbPromise.then(function (db){
+            var tx = db.transaction(db.objectStoreNames);
+            var store = tx.objectStore(MANIFEST_STORE_NAME);
+            var eventObject = store.getAll(parseInt(id));
+            return eventObject
+        }).then(function(eventObject){
+            var event = eventObject[0]
+            event.posts.push(postObject);
+            return dbPromise.then(function (db){
+                var tx = db.transaction(db.objectStoreNames,"readwrite");
+                var store = tx.objectStore(MANIFEST_STORE_NAME);
+                store.put(event);
+            });
+        })
+    }
+}

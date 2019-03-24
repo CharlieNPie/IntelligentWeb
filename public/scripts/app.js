@@ -102,6 +102,11 @@ function loadData(){
 function loadEvent(id){
   initDatabase();
   getDataById(id);
+  $(function(){
+    $('.addPost').on('submit', function(event){
+        event.preventDefault();
+    });
+});
 }
 
 ///////////////////////// INTERFACE MANAGEMENT ////////////
@@ -183,6 +188,49 @@ function sendNewEventQuery(url, data) {
         }
     });
 }
+
+
+/**
+ * 
+ * ADDING POSTS TO EVENTS 
+ */
+
+ /* send request to server */
+function sendAjaxPostQuery(url, data, id) {
+  $.ajax({
+      url: url ,
+      data: data,
+      dataType: 'json',
+      type: 'POST',
+      success: function (response) {
+          addPostObject(response,id);
+          //location.reload();
+          if (document.getElementById('offline_div')!=null)
+                  document.getElementById('offline_div').style.display='none';
+      },
+      error: function (xhr, status, error) {
+          showOfflineWarning();
+          var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
+          offlineEventList.push(data);
+          newEventList = offlineEventList;
+          localStorage.setItem("offline_events", JSON.stringify(newEventList));
+          const dvv= document.getElementById('offline_div');
+          if (dvv!=null)
+                  dvv.style.display='block';
+      }
+  });
+}
+function newPost(id){
+  var formArray=$("form").serializeArray();
+  var data = {};
+  for (index in formArray){
+    data[formArray[index].name]= formArray[index].value;
+  }
+  sendAjaxPostQuery('/create_post', data,id);
+}
+
+
+
 
 /**
  * 

@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const uuidv1 = require('uuid/v1');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -28,6 +29,14 @@ router.post('/create_event', function(req, res, next) {
     res.send(JSON.stringify(event));
 });
 
+/**
+ * POST data used to add posts to an event
+ */
+router.post('/create_post', function(req, res, next) {
+  const post= getPost(req.body.text);
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(post));
+});
 
 /**
  * POST data that updates the event details
@@ -54,6 +63,21 @@ class Event {
 }
 function getEvent(name, date, location) {
   return new Event(name, date, null, null, location, []);
+}
+
+class Post {
+  constructor(id,author, comments, date, image, location, text){
+    this.author = author;
+    this.comments = comments;
+    this.date = date;
+    this.image = image;
+    this.location = location;
+    this.text = text;
+    this.id = id;
+  }
+}
+function getPost(text){
+  return new Post(uuidv1(),"HasanAsim",[],new Date(),null,null,text);
 }
 
 module.exports = router;
