@@ -79,7 +79,6 @@ function getDataById(id) {
             var index = store.index('name');
             return store.getAll(IDBKeyRange.only(parseInt(id)));
         }).then(function (readingsList) {
-            console.log(readingsList);
             if (readingsList && readingsList.length>0){
                 var max;
                 for (var elem of readingsList)
@@ -132,6 +131,17 @@ function setDataObject(data, id) {
                 var objectstore = transaction.objectStore(MANIFEST_STORE_NAME);
                 objectstore.put(objectToEdit);
             });
+        })
+    }
+}
+
+/* DELETES OBJECT FROM DATABASE */
+function deleteObject(id) {
+    if (dbPromise) {
+        return dbPromise.then(function (db) {
+            var objectStores = db.transaction(db.objectStoreNames, "readwrite");
+            var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
+            selectId.delete(IDBKeyRange.only(parseInt(id)));
         })
     }
 }

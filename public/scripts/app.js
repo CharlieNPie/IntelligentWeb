@@ -301,6 +301,11 @@ function sendUpdateEventQuery(url, data, id) {
   });
 }
 
+/* DELETE ITEM FROM DATABASE */
+function deleteEvent(id) {
+  deleteObject(id);
+}
+
 
 /**
  * 

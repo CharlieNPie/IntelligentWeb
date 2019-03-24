@@ -38,5 +38,8 @@
         <form action="/events/<%= id %>/edit">
             <input type="submit" value="Edit Event" />
         </form>
+        <form action="/">
+            <input type="submit" onclick="deleteEvent('<%= id %>')" value="Delete Event" />
+        </form>
 </body>
 </html>
