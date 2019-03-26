@@ -1,6 +1,8 @@
 var data = [
   {
     name: "Coachella",
+    description:
+      "The most exclusive festival you will find in this city. Happening only once every 10 years.",
     date: "12/05/2019",
     image: "https://i.imgur.com/Qp3tTtH.jpg",
     organiser: "93729347234",
@@ -46,6 +48,8 @@ var data = [
   },
   {
     name: "SheffieldFest",
+    description:
+      "The most exclusive festival you will find in this city. Happening only once every 10 years.",
     date: "12/06/2019",
     image: "https://i.imgur.com/jJHdo4D.jpg",
     organiser: "93729347235",
@@ -93,8 +97,7 @@ function initEvents() {
     console.log("This browser doesn't support IndexedDB");
   }
   loadData();
-  //for (index in data)
-  //    storeCachedEventData(data[index]);
+  for (index in data) storeCachedEventData(data[index]);
 }
 
 /**
@@ -138,6 +141,7 @@ function addToResults(data) {
 function addToEvent(data) {
   console.log("borja", data);
   $("#eventName").html(data.name);
+  $("#eventDescription").html(data.description);
   var image = "<img" + " src='" + data.image + "'" + " class='e-image'" + "/>";
   $("#eventImage").html(image);
   data.posts.map(post => {

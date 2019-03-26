@@ -30,7 +30,12 @@
         />
       </a>
       <span id="eventName"></span>
-      <p></p>
+      <a href="/events/<%= id %>/edit">
+        <img
+          src="https://image.flaticon.com/icons/svg/1159/1159633.svg"
+          class="back-button"
+        />
+      </a>
     </div>
 
     <main role="main" class="flex-shrink-0">
@@ -39,16 +44,6 @@
         <div class="row text-center">
           <p class="e-details" id="eventDescription"></p>
         </div>
-        <form action="/events/<%= id %>/edit">
-          <input type="submit" value="Edit Event" />
-        </form>
-        <form action="/">
-          <input
-            type="submit"
-            onclick="deleteEvent('<%= id %>')"
-            value="Delete Event"
-          />
-        </form>
       </div>
 
       <div class="menu">

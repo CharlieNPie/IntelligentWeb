@@ -39,6 +39,14 @@
 
                 <input type="submit"  class="submit" value="Submit" id="g">
             </form>  
+            <h2>or delete it</h2>
+            <form action="/">
+                <input
+                  type="submit"
+                  onclick="deleteEvent('<%= id %>')"
+                  value="Delete Event"
+                />
+              </form>
             <div class="offline_div" id="offline_div" style="display: none">You are offline</div>
         </div>
 </body>
