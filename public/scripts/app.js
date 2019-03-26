@@ -242,7 +242,7 @@ function addToEvent(dataR) {
       posts = "";
       for (i=0;i<dataR.posts.length;i++){
         posts = posts +"<br><div class='panel panel-default'><div class='panel-body'>"+ String(dataR.posts[i].author) 
-          + "<br> " + String(dataR.posts[i].text) + "</div></div>";
+          + "<br> " + String(dataR.posts[i].text) + "<br><a href='"+window.location.href+"/posts/"+String(dataR.posts[i].id) + "'>" + String(dataR.posts[i].id) + "</a></div></div>";
       }
       event =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
          "<br> Organiser is " + dataR.organiser + posts;
