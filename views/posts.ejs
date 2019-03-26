@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events PWA</title>
+    <title>ManiFest</title>
     <link rel="stylesheet" href="/styles/bootstrap.min.css">
     <link rel="stylesheet" href="/styles/inline.css">
 
@@ -26,20 +26,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="/scripts/bootstrap.min.js"></script>
 </head>
-<body onload='listEventDetails("<%= id %>")'>
-    <div class="container" style="width: 100%">
-            <h1><%= title %></h1>
-            <form id=“new-event" onsubmit='updateEvent("<%= id %>")'>
-                Name:
-                <input type="text" name="name" id="name" value=""><br>
-                Location:
-                <input type="text" name="location" id="location" value=""><br>
-                Date:
-                <input type="date" name="date" id="date" value=""><br>
-
-                <input type="submit"  class="submit" value="Submit" id="g">
-            </form>  
-            <div class="offline_div" id="offline_div" style="display: none">You are offline</div>
-        </div>
+<body onload='loadPost("<%=eventId %>", "<%= postId %>")'>
+    <div class="post"></div>
 </body>
 </html>

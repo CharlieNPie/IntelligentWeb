@@ -29,7 +29,6 @@ function initDatabase() {
  * @param forecastObject
  */
 function storeCachedEventData(eventObject) {
-  // need to add actual eventobject as per above
   console.log("inserting: " + JSON.stringify(eventObject));
   if (dbPromise) {
     dbPromise
@@ -43,7 +42,7 @@ function storeCachedEventData(eventObject) {
         console.log("added item to the store! " + JSON.stringify(eventObject));
       })
       .catch(function(error) {
-        console.log("Tried everything to catch this and gave up");
+        console.log("Could not add item to store.");
       });
   } else localStorage.setItem(eventObject.name, JSON.stringify(eventObject));
 }
@@ -79,7 +78,6 @@ function getDataById(id) {
         return store.getAll(IDBKeyRange.only(parseInt(id)));
       })
       .then(function(readingsList) {
-        console.log(readingsList);
         if (readingsList && readingsList.length > 0) {
           var max;
           for (var elem of readingsList)
@@ -100,13 +98,66 @@ function getDataById(id) {
   }
 }
 
-function getDataObject(id) {
+/* GETS EVENT OBJECT GIVEN ITS ID */
+function getEventObject(id) {
   if (dbPromise) {
     return dbPromise.then(function(db) {
-      return db
-        .transaction(db.objectStoreNames)
+      var objectStores = db.transaction(db.objectStoreNames);
+      var selectId = objectStores
         .objectStore(MANIFEST_STORE_NAME)
         .getAll(IDBKeyRange.only(parseInt(id)));
+      return selectId;
+    });
+  }
+}
+
+/* GETS POST OBJECT GIVEN ITS ID */
+function getPostObject(eventId, postId) {
+  if (dbPromise) {
+    var eventObject = getEventObject(eventId);
+    return eventObject.then(function(eventObj) {
+      var postList = eventObj[0].posts;
+      var post = postList.find(function(element) {
+        if (element.id == postId) {
+          return element;
+        }
+      });
+      return post;
+    });
+  }
+}
+
+/* SETS NEW VALUES FOR DATA OBJECT IN DB GIVEN ITS ID */
+function setDataObject(data, id) {
+  if (dbPromise) {
+    return dbPromise
+      .then(function(db) {
+        var objectStores = db.transaction(db.objectStoreNames);
+        var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
+        var oldData = selectId.getAll(IDBKeyRange.only(parseInt(id)));
+        return oldData;
+      })
+      .then(function(oldData) {
+        var objectToEdit = oldData[0];
+        objectToEdit.name = data.name;
+        objectToEdit.location = data.location;
+        objectToEdit.data = data.date;
+        return dbPromise.then(function(db) {
+          var transaction = db.transaction(db.objectStoreNames, "readwrite");
+          var objectstore = transaction.objectStore(MANIFEST_STORE_NAME);
+          objectstore.put(objectToEdit);
+        });
+      });
+  }
+}
+
+/* DELETES OBJECT FROM DATABASE */
+function deleteObject(id) {
+  if (dbPromise) {
+    return dbPromise.then(function(db) {
+      var objectStores = db.transaction(db.objectStoreNames, "readwrite");
+      var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
+      selectId.delete(IDBKeyRange.only(parseInt(id)));
     });
   }
 }
@@ -115,4 +166,26 @@ function getDataObject(id) {
 function getEventName(dataR) {
   if (dataR.name == null && dataR.name === undefined) return "unavailable";
   else return dataR.name;
+}
+
+/* ADD POST OBJECTS TO AN EVENT */
+function addPostObject(postObject, id) {
+  if (dbPromise) {
+    return dbPromise
+      .then(function(db) {
+        var tx = db.transaction(db.objectStoreNames);
+        var store = tx.objectStore(MANIFEST_STORE_NAME);
+        var eventObject = store.getAll(parseInt(id));
+        return eventObject;
+      })
+      .then(function(eventObject) {
+        var event = eventObject[0];
+        event.posts.push(postObject);
+        return dbPromise.then(function(db) {
+          var tx = db.transaction(db.objectStoreNames, "readwrite");
+          var store = tx.objectStore(MANIFEST_STORE_NAME);
+          store.put(event);
+        });
+      });
+  }
 }

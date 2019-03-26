@@ -108,6 +108,11 @@ function loadData() {
 function loadEvent(id) {
   initDatabase();
   getDataById(id);
+  $(function(){
+    $('.addPost').on('submit', function(event){
+        event.preventDefault();
+    });
+});
 }
 
 function addToResults(data) {
@@ -218,20 +223,6 @@ const handleLike = id => {
   }
 };
 
-function test(data) {
-  console.log(String(data.id));
-}
-/* function for when new event entry is made */
-function newEvent() {
-  var formArray = $("form").serializeArray();
-  var data = {};
-  for (index in formArray) {
-    data[formArray[index].name] = formArray[index].value;
-  }
-  sendAjaxQuery("/create_event", data);
-  event.preventDefault();
-}
-
 /* send request to server */
 function sendAjaxQuery(url, data) {
   $.ajax({
@@ -255,16 +246,162 @@ function sendAjaxQuery(url, data) {
       if (dvv != null) dvv.style.display = "block";
     }
   });
+
+
+/* function for when new event entry is made */
+function newEvent() {
+    var formArray= $("form").serializeArray();
+    var data={};
+    for (index in formArray){
+        data[formArray[index].name]= formArray[index].value;
+    }
+    sendNewEventQuery('/create_event', data);
+    event.preventDefault();
 }
 
-/* function for editing event data */
-function editEvent(id) {
-  initDatabase();
-  var retrievedEvent = getDataObject(id);
-  retrievedEvent.then(function(data) {
-    console.log(data[0]);
+/* send request to server */
+function sendNewEventQuery(url, data) {
+    $.ajax({
+        url: url ,
+        data: data,
+        dataType: 'json',
+        type: 'POST',
+        success: function (response) {
+            storeCachedEventData(response);
+            location.reload();
+            if (document.getElementById('offline_div')!=null)
+                    document.getElementById('offline_div').style.display='none';
+        },
+        error: function (xhr, status, error) {
+            showOfflineWarning();
+            var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
+            offlineEventList.push(data);
+            newEventList = offlineEventList;
+            localStorage.setItem("offline_events", JSON.stringify(newEventList));
+            const dvv= document.getElementById('offline_div');
+            if (dvv!=null)
+                    dvv.style.display='block';
+        }
+    });
+}
+
+
+/**
+ * 
+ * ADDING POSTS TO EVENTS 
+ */
+
+ /* send request to server */
+function sendAjaxPostQuery(url, data, id) {
+  $.ajax({
+      url: url ,
+      data: data,
+      dataType: 'json',
+      type: 'POST',
+      success: function (response) {
+          addPostObject(response,id);
+          //location.reload();
+          if (document.getElementById('offline_div')!=null)
+                  document.getElementById('offline_div').style.display='none';
+      },
+      error: function (xhr, status, error) {
+          showOfflineWarning();
+          var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
+          offlineEventList.push(data);
+          newEventList = offlineEventList;
+          localStorage.setItem("offline_events", JSON.stringify(newEventList));
+          const dvv= document.getElementById('offline_div');
+          if (dvv!=null)
+                  dvv.style.display='block';
+      }
   });
 }
+function newPost(id){
+  var formArray=$("form").serializeArray();
+  var data = {};
+  for (index in formArray){
+    data[formArray[index].name]= formArray[index].value;
+  }
+  sendAjaxPostQuery('/create_post', data,id);
+}
+
+/* SHOW EVENT DATA FIELDS */
+function listEventDetails(id) {
+  initDatabase();
+  var retrievedEvent = getEventObject(id);
+  retrievedEvent.then(function (data) {
+    dataObject = data[0];
+    document.getElementById("name").value = String(dataObject.name);
+    document.getElementById("location").value = String(dataObject.location);
+    document.getElementById("date").value = String(dataObject.date);
+  })
+}
+
+/* SEND REQUEST TO UPDATE EVENT DATA */
+function updateEvent(id) {
+  var formArray= $("form").serializeArray();
+  var newData={};
+  for (index in formArray){
+      newData[formArray[index].name]= formArray[index].value;
+  }
+  sendUpdateEventQuery('/update_event', newData, id);
+  event.preventDefault();
+}
+
+/* AJAX QUERY FOR UPDATING EVENT */
+function sendUpdateEventQuery(url, data, id) {
+  $.ajax({
+    url: url ,
+    data: data,
+    dataType: 'json',
+    type: 'POST',
+    success: function (response) {
+      setDataObject(response, id);
+      //location.reload();
+      if (document.getElementById('offline_div')!=null)
+              document.getElementById('offline_div').style.display='none';
+    },
+    error: function (xhr, status, error) {
+      showOfflineWarning();
+      var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
+      offlineEventList.push(data);
+      newEventList = offlineEventList;
+      localStorage.setItem("offline_events", JSON.stringify(newEventList));
+      const dvv= document.getElementById('offline_div');
+      if (dvv!=null)
+              dvv.style.display='block';
+    }
+  });
+}
+
+/* DELETE ITEM FROM DATABASE */
+function deleteEvent(id) {
+  deleteObject(id);
+}
+
+/**
+ * 
+ * POST PAGES
+ * 
+ */
+
+ /* LOADING POST PAGE */
+
+ function loadPost(eventId, postId) {
+   initDatabase();
+   var postPromise = getPostObject(eventId, postId);
+   postPromise.then(function (postData) {
+    post =  postData.id+" <br>Author is " +postData.author+ "<br>Date is " + postData.date + "<br>" + postData.text;
+    $('.post').append(post);
+   })
+ }
+
+
+/**
+ * 
+ * OTHER JAVASCRIPT
+ * 
+ */
 
 /**
  * When the client gets off-line, it shows an off line warning to the user
@@ -292,7 +429,7 @@ window.addEventListener(
     hideOfflineWarning();
     var offlineEventList = JSON.parse(localStorage.getItem("offline_events"));
     for (index in offlineEventList) {
-      sendAjaxQuery("create_event", offlineEventList[index]);
+        sendNewEventQuery('create_event', offlineEventList[index]);
     }
     localStorage.clear();
     loadData();
@@ -321,7 +458,7 @@ function showEventForm() {
 /**
  * refreshes div section
  */
-function refreshEventList() {
-  if (document.getElementById("events") != null)
-    document.getElementById("events").innerHTML = "";
+function refreshEventList(){
+    if (document.getElementById('results')!=null)
+        document.getElementById('results').innerHTML='';
 }
