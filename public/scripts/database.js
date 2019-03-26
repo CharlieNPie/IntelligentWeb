@@ -48,6 +48,7 @@ function storeCachedEventData(eventObject) {
   } else localStorage.setItem(eventObject.name, JSON.stringify(eventObject));
 }
 
+/* pulls all objects from database and adds them to the homepage */
 function pullFromDatabase() {
   if (dbPromise) {
     dbPromise
@@ -67,45 +68,10 @@ function pullFromDatabase() {
   }
 }
 
-/**
- * it retrieves the forecasts data for a city from the database
- * @param city
- * @param date
- * @returns {*}
- */
-function getCachedEventData(event) {
-  if (dbPromise) {
-    dbPromise
-      .then(function(db) {
-        console.log("fetching: " + event);
-        var tx = db.transaction(db.objectStoreNames);
-        var store = tx.objectStore(MANIFEST_STORE_NAME);
-        var index = store.index("name");
-        return index.getAll(IDBKeyRange.only(event));
-      })
-      .then(function(readingsList) {
-        if (readingsList && readingsList.length > 0) {
-          var max;
-          for (var elem of readingsList)
-            if (!max || elem.date > max.date) max = elem;
-          if (max) addToResults(max);
-        } else {
-          const value = localStorage.getItem(event);
-          if (value == null) addToResults({ event: event });
-          else addToResults(value);
-        }
-      });
-  } else {
-    const value = localStorage.getItem(event);
-    if (value == null) addToResults({ city: city, date: date });
-    else addToResults(value);
-  }
-}
 function getDataById(id) {
   if (dbPromise) {
     dbPromise
       .then(function(db) {
-        // console.log(String(id));
         console.log("fetching: " + event);
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
@@ -134,6 +100,18 @@ function getDataById(id) {
   }
 }
 
+function getDataObject(id) {
+  if (dbPromise) {
+    return dbPromise.then(function(db) {
+      return db
+        .transaction(db.objectStoreNames)
+        .objectStore(MANIFEST_STORE_NAME)
+        .getAll(IDBKeyRange.only(parseInt(id)));
+    });
+  }
+}
+
+/* return name of data object */
 function getEventName(dataR) {
   if (dataR.name == null && dataR.name === undefined) return "unavailable";
   else return dataR.name;

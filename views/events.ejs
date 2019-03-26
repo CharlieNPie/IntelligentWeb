@@ -39,6 +39,9 @@
         <div class="row text-center">
           <p class="e-details" id="eventDescription"></p>
         </div>
+        <form action="/events/<%= id %>/edit">
+          <input type="submit" value="Edit Event" />
+        </form>
       </div>
 
       <div class="menu">
@@ -52,40 +55,7 @@
             class="menu-button"
         /></a>
       </div>
-      <div id="posts">
-        <div class="post">
-          <div class="ps-user">
-            <img
-              src="https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
-              class="ps-avatar"
-            />
-            <span class="ps-username">borjadotai</span>
-          </div>
-          <img
-            src="https://pbs.twimg.com/media/CuzGVGhW8AAyKg1.jpg"
-            class="ps-photo"
-          />
-          <div class="ps-menu">
-            <img
-              src="https://image.flaticon.com/icons/svg/126/126471.svg"
-              class="psm-button"
-            />
-            <a href="../post/post.html"
-              ><img
-                src="https://img.icons8.com/ios/50/000000/topic.png"
-                class="psm-button"
-            /></a>
-          </div>
-          <div class="ps-content">
-            <b>borjadotai: </b>Hey there this is a fake text that I am writting
-            here because I need some text lol.
-          </div>
-          <div class="ps-details">
-            <span>14 Jan</span>
-            <b>See more</b>
-          </div>
-        </div>
-      </div>
+      <div id="posts"></div>
       <div class="empty"></div>
     </main>
 

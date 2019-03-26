@@ -93,7 +93,8 @@ function initEvents() {
     console.log("This browser doesn't support IndexedDB");
   }
   loadData();
-  for (index in data) storeCachedEventData(data[index]);
+  //for (index in data)
+  //    storeCachedEventData(data[index]);
 }
 
 /**
@@ -239,8 +240,8 @@ function sendAjaxQuery(url, data) {
     dataType: "json",
     type: "POST",
     success: function(response) {
-      addToResults(response);
       storeCachedEventData(response);
+      location.reload();
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
@@ -253,6 +254,15 @@ function sendAjaxQuery(url, data) {
       const dvv = document.getElementById("offline_div");
       if (dvv != null) dvv.style.display = "block";
     }
+  });
+}
+
+/* function for editing event data */
+function editEvent(id) {
+  initDatabase();
+  var retrievedEvent = getDataObject(id);
+  retrievedEvent.then(function(data) {
+    console.log(data[0]);
   });
 }
 
