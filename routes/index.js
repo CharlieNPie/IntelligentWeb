@@ -19,7 +19,7 @@ router.get("/events/:eventId/edit", function(req, res) {
 
 /* GET post page */
 router.get("/events/:eventId/posts/:postId", function(req, res) {
-  res.render("posts", {
+  res.render("post", {
     eventId: req.params.eventId,
     postId: req.params.postId
   });

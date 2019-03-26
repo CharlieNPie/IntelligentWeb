@@ -122,6 +122,7 @@ function getPostObject(eventId, postId) {
           return element;
         }
       });
+      console.log("post", post);
       return post;
     });
   }

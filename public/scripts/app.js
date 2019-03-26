@@ -20,11 +20,16 @@ var data = [
         comments: [
           {
             author: "hasanasim",
-            text: "Yo yo I saw it in Michelles crib"
+            avatar:
+              "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg",
+            text: "Yo yo I saw it in Michelles crib",
+            date: "15 Jan"
           },
           {
             author: "michelle23",
-            text: "Yeah its here! Come get it."
+            avatar: "https://randomuser.me/api/portraits/men/17.jpg",
+            text: "Yeah its here! Come get it.",
+            date: "17 Jan"
           }
         ]
       },
@@ -390,16 +395,27 @@ function deleteEvent(id) {
 function loadPost(eventId, postId) {
   initDatabase();
   var postPromise = getPostObject(eventId, postId);
-  postPromise.then(function(postData) {
-    post =
-      postData.id +
-      " <br>Author is " +
-      postData.author +
-      "<br>Date is " +
-      postData.date +
-      "<br>" +
-      postData.text;
-    $(".post").append(post);
+  postPromise.then(function({ comments }) {
+    comments.map(comment => {
+      console.log(comment);
+      let post =
+        "<div class='comment'>" +
+        "<img src='" +
+        comment.avatar +
+        "' class='ps-avatar' />" +
+        "<div class='ps-text'>" +
+        "<span class='ps-username'><b>" +
+        comment.author +
+        " </b> " +
+        comment.text +
+        "</span>" +
+        "<p class='ps-date'>" +
+        comment.date +
+        "</p>" +
+        "</div>" +
+        "</div>";
+      $("#posts").append(post);
+    });
   });
 }
 
