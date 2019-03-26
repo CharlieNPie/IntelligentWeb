@@ -17,9 +17,12 @@ router.get('/events/:eventId/edit', function (req, res) {
   res.render('updateEvent', { id: req.params.eventId, title: "Edit Event" })
 });
 
+/* GET post page */
 router.get('/events/:eventId/posts/:postId', function (req, res) {
   res.render('posts', {eventId: req.params.eventId, postId: req.params.postId})
 });
+
+
 
 /**
  *  POST the data about the event.

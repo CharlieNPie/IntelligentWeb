@@ -242,7 +242,8 @@ function addToEvent(dataR) {
       posts = "";
       for (i=0;i<dataR.posts.length;i++){
         posts = posts +"<br><div class='panel panel-default'><div class='panel-body'>"+ String(dataR.posts[i].author) 
-          + "<br> " + String(dataR.posts[i].text) + "<br><a href='"+window.location.href+"/posts/"+String(dataR.posts[i].id) + "'>" + String(dataR.posts[i].id) + "</a></div></div>";
+          + "<br> " + String(dataR.posts[i].text) + "<br><a href='"+window.location.href+"/posts/"+String(dataR.posts[i].id)
+           + "'>" + String(dataR.posts[i].id) + "</a></div></div>";
       }
       event =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
          "<br> Organiser is " + dataR.organiser + posts;
@@ -253,7 +254,7 @@ function addToEvent(dataR) {
 /* SHOW EVENT DATA FIELDS */
 function listEventDetails(id) {
   initDatabase();
-  var retrievedEvent = getDataObject(id);
+  var retrievedEvent = getEventObject(id);
   retrievedEvent.then(function (data) {
     dataObject = data[0];
     document.getElementById("name").value = String(dataObject.name);
@@ -312,8 +313,13 @@ function deleteEvent(id) {
 
  /* LOADING POST PAGE */
 
- function loadPost(id) {
-   console.log("here");
+ function loadPost(eventId, postId) {
+   initDatabase();
+   var postPromise = getPostObject(eventId, postId);
+   postPromise.then(function (postData) {
+    post =  postData.id+" <br>Author is " +postData.author+ "<br>Date is " + postData.date + "<br>" + postData.text;
+    $('.post').append(post);
+   })
  }
 
 

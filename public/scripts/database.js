@@ -103,7 +103,7 @@ function getDataById(id) {
 }
 
 /* GETS EVENT OBJECT GIVEN ITS ID */
-function getDataObject(id) {
+function getEventObject(id) {
     if (dbPromise) {
         return dbPromise.then(function (db) {
             var objectStores = db.transaction(db.objectStoreNames);
@@ -111,6 +111,24 @@ function getDataObject(id) {
             return selectId;
         })
     }
+}
+
+/* GETS POST OBJECT GIVEN ITS ID */
+function getPostObject(eventId, postId) {
+    if (dbPromise) {
+        var eventObject =  getEventObject(eventId);
+        return eventObject.then(function (eventObj) {
+            var postList = eventObj[0].posts;
+            var post = postList.find(function(element) {
+                if (element.id == postId) {
+                    return element;
+                }
+            })
+            return post;
+    })
+
+    }
+    
 }
 
 /* SETS NEW VALUES FOR DATA OBJECT IN DB GIVEN ITS ID */
