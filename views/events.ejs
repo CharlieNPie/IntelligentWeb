@@ -2,36 +2,23 @@
 <html lang="en" class="h-100">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link
-      rel="canonical"
-      href="https://weather-pwa-sample.firebaseapp.com/final/"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta name="description" content="" />
     <title>Manifest</title>
-    <link rel="stylesheet" href="/styles/bootstrap.min.css" />
-    <link rel="stylesheet" href="/styles/inline.css" />
-    <link href="/styles/event.css" rel="stylesheet" />
-    <link rel="manifest" href="/manifest.json" />
-    <!-- Add to home screen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="ManiFest" />
-    <link rel="apple-touch-icon" href="images/icons/icon-152x152.png" />
-    <meta
-      name="msapplication-TileImage"
-      content="images/icons/icon-144x144.png"
-    />
-    <meta name="msapplication-TileColor" content="#2F3BA2" />
-    <script src="/scripts/app.js"></script>
-    <script src="/scripts/database.js"></script>
     <script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/idb.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link href="/styles/event.css" rel="stylesheet" />
+    <script src="/scripts/app.js"></script>
+    <script src="/scripts/database.js"></script>
   </head>
 
   <body onload='loadEvent("<%= id %>")' class="d-flex flex-column h-100">
