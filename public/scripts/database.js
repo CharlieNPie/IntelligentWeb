@@ -217,3 +217,36 @@ function addCommentObject(commentObject, eventId, postId) {
       });
   }
 }
+function getDataByName(name) {
+  if (dbPromise) {
+    dbPromise
+      .then(function(db) {
+        console.log("fetching: " + event);
+        var tx = db.transaction(db.objectStoreNames);
+        var store = tx.objectStore(MANIFEST_STORE_NAME);
+        var index = store.index("name");
+        console.log(name);
+        return index.getAll(IDBKeyRange.only(name));
+      })
+      .then(function(readingsList) {
+        if (readingsList && readingsList.length > 0) {
+          var max;
+          for (var elem of readingsList)
+            if (!max || elem.date > max.date) max = elem;
+          if (max) addToSearch(max);
+        } else {
+          const value = localStorage.getItem(event);
+          console.log(readingsList);
+          console.log(value);
+          if (value != null){
+            addToSearch(value)
+          };
+        }
+      });
+  } else {
+    const value = localStorage.getItem(event);
+    console.log(value);
+    if (value == null) addToResults({ city: city, date: date });
+    else addToResults(value);
+  }
+}

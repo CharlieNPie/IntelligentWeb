@@ -65,12 +65,13 @@
     </script>
   </head>
 
-  <body class="d-flex flex-column h-100">
+  <body class="d-flex flex-column h-100" onload="initExplore()"> 
     <div class="nav">
-      <input class="search" />
-      <input type="text" name="datefilter" placeholder="Date" class="date" />
+        <input class="search" id="search"/>
+        <input type="text" name="datefilter" placeholder="Date" class="date" />
+        <div class="st-galery" id="searchResults"></div>
     </div>
-
+    
     <main role="main" class="flex-shrink-0">
       <div class="map" id="map_canvas"></div>
     </main>

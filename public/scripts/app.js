@@ -143,6 +143,22 @@ function addToResults(data) {
   }
 }
 
+function addToSearch(data){
+  if (document.getElementById("searchResults") != null) {
+    const row = document.createElement("div");
+    document.getElementById("searchResults").appendChild(row);
+    row.innerHTML =
+    "<a href=/events/" +
+    data.id +
+    ">" +
+    "<span class='sti-title'>" +
+    data.name +
+    "</span>" +
+    "</a>";
+    console.log(row);
+  }
+}
+
 function addToEvent(data) {
   console.log("borja", data);
   $("#eventName").html(data.name);
@@ -529,4 +545,15 @@ function showEventForm() {
 function refreshEventList() {
   if (document.getElementById("results") != null)
     document.getElementById("results").innerHTML = "";
+}
+
+function initExplore(){
+  initDatabase();
+  $('.search').keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+      getDataByName($('#search').val());
+    }
+    event.stopPropagation();
+  });
 }
