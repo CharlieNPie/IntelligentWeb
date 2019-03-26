@@ -401,7 +401,53 @@ function loadPost(eventId, postId) {
       postData.text;
     $(".post").append(post);
   });
+  $('.addComment').on('submit', function(event){
+    event.preventDefault();
+  });
 }
+
+
+function sendAjaxCommentQuery(url, data, eventId,postId) {
+  $.ajax({
+      url: url ,
+      data: data,
+      dataType: 'json',
+      type: 'POST',
+      success: function (response) {
+          addCommentObject(response,eventId,postId);
+          //location.reload();
+          if (document.getElementById('offline_div')!=null)
+                  document.getElementById('offline_div').style.display='none';
+      },
+      error: function (xhr, status, error) {
+          showOfflineWarning();
+          var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
+          offlineEventList.push(data);
+          newEventList = offlineEventList;
+          localStorage.setItem("offline_events", JSON.stringify(newEventList));
+          const dvv= document.getElementById('offline_div');
+          if (dvv!=null)
+                  dvv.style.display='block';
+      }
+  });
+}
+
+function newComment(eventId,postId){
+  var formArray=$("form").serializeArray();
+  var data = {};
+  for (index in formArray){
+    data[formArray[index].name]=formArray[index].value;
+  }
+  sendAjaxCommentQuery('/create_comment',data,eventId,postId);
+}
+
+
+
+
+
+
+
+
 
 /**
  *
