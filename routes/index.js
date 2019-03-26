@@ -56,6 +56,15 @@ router.post("/update_event", function(req, res, next) {
 });
 
 /**
+ * POST data to add comments to an event
+ */
+router.post("/create_comment", function(req, res, next) {
+  const comment = getComment(req.body.text);
+  res.setHeader("Content-Type", "application/json");
+  res.send(JSON.stringify(comment));
+});
+
+/**
  *
  * @constructor
  */
@@ -86,6 +95,18 @@ class Post {
 }
 function getPost(text) {
   return new Post(uuidv1(), "HasanAsim", [], new Date(), null, null, text);
+}
+
+class Comment {
+  constructor(id, author, text) {
+    this.id = id;
+    this.author = author;
+    this.text = text;
+  }
+}
+
+function getComment(text) {
+  return new Comment(uuidv1(), "BigBorja", text);
 }
 
 module.exports = router;

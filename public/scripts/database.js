@@ -190,3 +190,30 @@ function addPostObject(postObject, id) {
       });
   }
 }
+
+/* ADD COMMENT OBJECTS TO AN EVENT */
+function addCommentObject(commentObject, eventId, postId) {
+  if (dbPromise) {
+    return dbPromise
+      .then(function(db) {
+        var tx = db.transaction(db.objectStoreNames);
+        var store = tx.objectStore(MANIFEST_STORE_NAME);
+        var eventObject = store.getAll(parseInt(eventId));
+        return eventObject;
+      })
+      .then(function(eventObject) {
+        var event = eventObject[0];
+        var posts = event.posts;
+        for (i = 0; i < posts.length; i++) {
+          if (posts[i].id == postId) {
+            posts[i].comments.push(commentObject);
+          }
+        }
+        return dbPromise.then(function(db) {
+          var tx = db.transaction(db.objectStoreNames, "readwrite");
+          var store = tx.objectStore(MANIFEST_STORE_NAME);
+          store.put(event);
+        });
+      });
+  }
+}
