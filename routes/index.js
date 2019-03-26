@@ -6,6 +6,9 @@ const uuidv1 = require("uuid/v1");
 router.get("/", function(req, res, next) {
   res.render("index", { title: "Music Festivals" });
 });
+router.get("/explore", function(req, res, next) {
+  res.render("explore");
+});
 
 /* GET event page */
 router.get("/events/:eventId", function(req, res) {
