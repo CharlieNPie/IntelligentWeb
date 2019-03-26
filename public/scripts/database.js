@@ -102,7 +102,7 @@ function getDataById(id) {
     }
 }
 
-/* GETS DATA OBJECT GIVEN ITS ID */
+/* GETS EVENT OBJECT GIVEN ITS ID */
 function getDataObject(id) {
     if (dbPromise) {
         return dbPromise.then(function (db) {

@@ -113,8 +113,8 @@ function loadEvent(id){
 
 
 /**
- * given the forecast data returned by the server,
- * it adds a row of weather forecasts to the results div
+ * given the event data returned by the server,
+ * it adds a row of an event to the results div
  * @param dataR the data returned by the server:
  * class WeatherForecast{
   *  constructor (location, date, forecast, temperature, wind, precipitations) {
@@ -148,9 +148,6 @@ function addToResults(dataR) {
         $('.'+id+'.card.my_card.bg-faded').append(event);
     }
 }
-
-
-
 
 /* function for when new event entry is made */
 function newEvent() {
@@ -244,7 +241,8 @@ function addToEvent(dataR) {
       var i;
       posts = "";
       for (i=0;i<dataR.posts.length;i++){
-        posts = posts +"<br> "+ String(dataR.posts[i].author) + "<br> " + String(dataR.posts[i].text);
+        posts = posts +"<br><div class='panel panel-default'><div class='panel-body'>"+ String(dataR.posts[i].author) 
+          + "<br> " + String(dataR.posts[i].text) + "</div></div>";
       }
       event =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
          "<br> Organiser is " + dataR.organiser + posts;
@@ -305,6 +303,18 @@ function sendUpdateEventQuery(url, data, id) {
 function deleteEvent(id) {
   deleteObject(id);
 }
+
+/**
+ * 
+ * POST PAGES
+ * 
+ */
+
+ /* LOADING POST PAGE */
+
+ function loadPost(id) {
+   console.log("here");
+ }
 
 
 /**

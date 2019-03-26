@@ -10,12 +10,16 @@ router.get('/', function(req, res, next) {
 /* GET event page */
 router.get('/events/:eventId', function (req, res) {
   res.render('events', { id: req.params.eventId} );
-})
+});
 
 /* GET edit event page */
 router.get('/events/:eventId/edit', function (req, res) {
-  res.render('updateEvent', { id: req.params.eventId, title : "Edit Event" })
-})
+  res.render('updateEvent', { id: req.params.eventId, title: "Edit Event" })
+});
+
+router.get('/events/:eventId/posts/:postId', function (req, res) {
+  res.render('posts', {eventId: req.params.eventId, postId: req.params.postId})
+});
 
 /**
  *  POST the data about the event.
