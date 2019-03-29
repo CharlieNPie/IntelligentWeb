@@ -18,10 +18,6 @@ function initEvents() {
   loadData();
 }
 
-/**
- * given the list of cities created by the user, it will retrieve all the data from
- * the server (or failing that) from the database
- */
 function loadData() {
   refreshEventList();
   pullFromDatabase();
