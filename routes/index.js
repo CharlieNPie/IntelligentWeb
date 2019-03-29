@@ -67,10 +67,6 @@ router.post("/create_comment", function(req, res, next) {
   res.send(JSON.stringify(comment));
 });
 
-/**
- *
- * @constructor
- */
 class Event {
   constructor(name, date, image, organiser, location, posts) {
     this.name = name;
@@ -97,19 +93,41 @@ class Post {
   }
 }
 function getPost(text) {
-  return new Post(uuidv1(), "HasanAsim", [], new Date(), null, null, text);
+  return new Post(uuidv1(), "username", [], new Date(), null, null, text);
 }
 
 class Comment {
-  constructor(id, author, text) {
+  constructor(id, author, text, avatar) {
     this.id = id;
     this.author = author;
     this.text = text;
+    this.avatar = avatar;
+    var months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    var d = new Date();
+    this.date = d.getDate() + " " + months[d.getMonth()];
   }
 }
 
 function getComment(text) {
-  return new Comment(uuidv1(), "BigBorja", text);
+  return new Comment(
+    uuidv1(),
+    "username",
+    text,
+    "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
+  );
 }
 
 module.exports = router;

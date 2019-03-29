@@ -26,7 +26,7 @@
     onload='loadPost("<%=eventId %>", "<%= postId %>")'
   >
     <div class="nav">
-      <a href="../event/event.html"
+      <a href="/events/<%=eventId %>"
         ><img
           src="https://image.flaticon.com/icons/svg/271/271220.svg"
           class="back-button"
@@ -37,36 +37,18 @@
 
     <main role="main" class="flex-shrink-0" id="posts">
       <div class="empty"></div>
-      <div class="comment">
-        <img
-          src="https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
-          class="ps-avatar"
-        />
-        <div class="ps-text">
-          <span class="ps-username"
-            ><b>borjadotai</b> This is an example of what kind of comment
-            someone would leave in a post and how that would look .</span
-          >
-          <p class="ps-date">15 Jan</p>
-        </div>
-      </div>
-      <div class="comment">
-        <img
-          src="https://randomuser.me/api/portraits/men/17.jpg"
-          class="ps-avatar"
-        />
-        <div class="ps-text">
-          <span class="ps-username"
-            ><b>mike25</b> This is another example of what kind of comment
-            someone would leave in a post and how that would look.</span
-          >
-          <p class="ps-date">17 Jan</p>
-        </div>
-      </div>
     </main>
 
     <footer class="footer mt-auto py-3 ft-color ft-stick">
-      <div><input class="box" /> <span>Post</span></div>
+      <form
+        id="addComment"
+        onsubmit="newComment('<%= eventId %>','<%= postId %>')"
+      >
+        <div class="postInLine">
+          <input type="text" name="text" id="text" class="box" />
+          <input type="submit" name="g" value="Post" id="g" />
+        </div>
+      </form>
     </footer>
   </body>
 </html>

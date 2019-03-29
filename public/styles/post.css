@@ -117,3 +117,8 @@
   border: 1px solid #cfcece;
   background-color: #fafafa;
 }
+
+.postInLine {
+  display: flex;
+  flex-direction: row;
+}

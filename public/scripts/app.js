@@ -63,6 +63,11 @@ function addToEvent(data) {
   var image = "<img" + " src='" + data.image + "'" + " class='e-image'" + "/>";
   $("#eventImage").html(image);
   data.posts.map(post => {
+    if (checkForLike(post.id)) {
+      var heart = "/images/like.png";
+    } else {
+      var heart = "https://image.flaticon.com/icons/svg/126/126471.svg";
+    }
     var post =
       "<div class='post'>" +
       "<div class='ps-user'>" +
@@ -80,11 +85,17 @@ function addToEvent(data) {
       "<div id='heart-" +
       post.id +
       "'>" +
-      "<img src='https://image.flaticon.com/icons/svg/126/126471.svg' onClick='handleLike(" +
+      "<img src='" +
+      heart +
+      "' onClick='handleLike(" +
       post.id +
       ")' class='psm-button' />" +
       "</div>" +
-      "<a href='#'>" +
+      "<a href='" +
+      window.location.href +
+      "/posts/" +
+      post.id +
+      "'>" +
       "<img src='https://img.icons8.com/ios/50/000000/topic.png' class='psm-button' />" +
       "</a>" +
       "</div>" +
@@ -104,6 +115,15 @@ function addToEvent(data) {
     $("#posts").append(post);
   });
 }
+
+const checkForLike = id => {
+  let liked = JSON.parse(localStorage.getItem("liked"));
+  if (liked.includes(parseInt(id))) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const handleLike = id => {
   let liked = JSON.parse(localStorage.getItem("liked"));
