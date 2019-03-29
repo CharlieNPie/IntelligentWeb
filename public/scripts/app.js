@@ -22,6 +22,7 @@ function loadData() {
   refreshEventList();
   pullFromDatabase();
 }
+
 function loadEvent(id) {
   initDatabase();
   getDataById(id);
@@ -266,6 +267,7 @@ function listEventDetails(id) {
   var retrievedEvent = getEventObject(id);
   retrievedEvent.then(function(data) {
     dataObject = data[0];
+    $("#eventName").html(dataObject.name);
     document.getElementById("name").value = String(dataObject.name);
     document.getElementById("location").value = String(dataObject.location);
     document.getElementById("date").value = String(dataObject.date);

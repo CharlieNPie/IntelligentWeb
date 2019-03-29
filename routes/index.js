@@ -17,7 +17,7 @@ router.get("/events/:eventId", function(req, res) {
 
 /* GET edit event page */
 router.get("/events/:eventId/edit", function(req, res) {
-  res.render("updateEvent", { id: req.params.eventId, title: "Edit Event" });
+  res.render("editEvent", { id: req.params.eventId });
 });
 
 /* GET post page */

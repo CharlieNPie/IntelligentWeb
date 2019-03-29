@@ -1,0 +1,24 @@
+.eventForm {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 5rem;
+}
+
+.pair {
+  display: flex;
+  flex-direction: row;
+}
+
+.label {
+  color: #3333;
+  font-size: 1rem;
+}
+
+.boxes {
+  min-width: 10rem;
+}
+
+.submit {
+  border-radius: 5px;
+  border: 1px solid #fafafa;
+}
