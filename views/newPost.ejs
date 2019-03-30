@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <% include partials/head.ejs %>
+  <body onload="initDatabase()">
+    <div class="nav">
+      <a href="/events/<%= eventId %>"><span class="cancel">Cancel</span></a>
+      <span>New post</span>
+      <span class="share"
+        ><input
+          type="submit"
+          class="submit"
+          value="Share"
+          id="g"
+          form="new-event"
+      /></span>
+    </div>
+
+    <main role="main" class="flex-shrink-0">
+      <div class="empty"></div>
+      <div class="pt-comment">
+        <img
+          src="https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
+          class="ps-avatar"
+        />
+        <div class="pt-username">
+          borjadotai
+        </div>
+      </div>
+      <form id="new-event" onsubmit="newPost()">
+        <textarea
+          type="text"
+          name="text"
+          id="text"
+          class="pt-text"
+          placeholder="Write enything you want to share here! You can also attach images or videos in your posts!"
+        ></textarea>
+      </form>
+      <img
+        src="https://image.flaticon.com/icons/svg/133/133967.svg"
+        class="camera-icon"
+      />
+      <div class="empty"></div>
+    </main>
+
+    <% include partials/footer.ejs %>
+  </body>
+</html>

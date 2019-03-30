@@ -2,23 +2,56 @@
 <html>
   <% include partials/head.ejs %>
   <body onload="initDatabase()">
-    <div class="container" style="width: 100%">
-      <h1>Add a new event</h1>
-      <form id="new-event" onsubmit="newEvent()">
-        Name:
-        <input type="text" name="name" id="name" value="" /><br />
-        Description:
-        <input type="text" name="description" id="description" value="" /><br />
-        Image url:
-        <input type="text" name="image" id="image" value="" /><br />
-        Location:
-        <input type="text" name="location" id="location" value="" /><br />
-        Date:
-        <input type="date" name="date" id="date" value="" /><br />
-
-        <input type="submit" class="submit" value="Submit" id="g" />
-      </form>
+    <div class="nav">
+      <a href="/"><span class="cancel">Cancel</span></a>
+      <span>Create event</span>
+      <span class="share"
+        ><input
+          type="submit"
+          class="submit"
+          value="Create"
+          id="g"
+          form="new-event"
+      /></span>
     </div>
+    <main role="main" class="flex-shrink-0">
+      <div class="empty"></div>
+      <form id="new-event" onsubmit="newEvent()" class="event-form">
+        <div class="pairs">
+          <span class="">Name</span>
+          <input type="text" name="name" id="name" value="" class="inputs" />
+        </div>
+        <div class="pairs">
+          <span class="">Image url</span>
+          <input type="text" name="image" id="image" value="" class="inputs" />
+        </div>
+        <div class="pairs">
+          <span class="">Location</span>
+          <input
+            type="text"
+            name="location"
+            id="location"
+            value=""
+            class="inputs"
+          />
+        </div>
+        <div class="pairs">
+          <span class="">Date</span>
+          <input type="date" name="date" id="date" value="" class="inputs" />
+        </div>
+        <div class="pairs">
+          <span class="">Description</span>
+          <textarea
+            type="text"
+            name="description"
+            id="description"
+            value=""
+            class="inputs"
+          ></textarea>
+        </div>
+      </form>
+      <div class="empty"></div>
+    </main>
     <% include partials/footer.ejs %>
   </body>
 </html>

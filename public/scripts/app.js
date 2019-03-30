@@ -199,7 +199,6 @@ function newEvent() {
     data[formArray[index].name] = formArray[index].value;
   }
   sendNewEventQuery("/create_event", data);
-  event.preventDefault();
 }
 
 /* send request to server */
@@ -211,7 +210,7 @@ function sendNewEventQuery(url, data) {
     type: "POST",
     success: function(response) {
       storeCachedEventData(response);
-      location.reload();
+      window.location.replace("/");
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
@@ -298,7 +297,7 @@ function sendUpdateEventQuery(url, data, id) {
     type: "POST",
     success: function(response) {
       setDataObject(response, id);
-      //location.reload();
+      window.location.replace("/events/" + id);
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },

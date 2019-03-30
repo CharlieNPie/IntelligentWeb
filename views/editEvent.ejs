@@ -3,14 +3,16 @@
   <% include ./partials/head.ejs %>
   <body onload='listEventDetails("<%= id %>")' class="d-flex flex-column h-100">
     <div class="nav">
-      <a href="/events/<%= id %>">
-        <img
-          src="https://image.flaticon.com/icons/svg/271/271220.svg"
-          class="back-button"
-        />
-      </a>
+      <a href="/events/<%= id %>"><span class="cancel">Cancel</span></a>
       <span id="eventName"></span>
-      <p></p>
+      <span class="share"
+        ><input
+          type="submit"
+          class="submit"
+          value="Edit"
+          id="g"
+          form="new-event"
+      /></span>
     </div>
 
     <main role="main" class="flex-shrink-0">
@@ -18,29 +20,51 @@
       <form
         id="new-event"
         onsubmit='updateEvent("<%= id %>")'
-        class="eventForm"
+        class="event-form"
       >
-        <div class="pair">
-          <span class="label">Name:</span>
-          <input type="text" name="name" id="name" class="boxes" />
+        <div class="pairs">
+          <span class="">Name</span>
+          <input type="text" name="name" id="name" value="" class="inputs" />
         </div>
-        <div class="pair">
-          <span class="label">Location:</span>
-          <input type="text" name="location" id="location" class="boxes" />
+        <div class="pairs">
+          <span class="">Image url</span>
+          <input type="text" name="image" id="image" value="" class="inputs" />
         </div>
-        <div class="pair">
-          <span class="label">Date:</span>
-          <input type="date" name="date" id="date" value="" />
+        <div class="pairs">
+          <span class="">Location</span>
+          <input
+            type="text"
+            name="location"
+            id="location"
+            value=""
+            class="inputs"
+          />
         </div>
-        <input type="submit" class="submit" value="Submit" id="g" />
+        <div class="pairs">
+          <span class="">Date</span>
+          <input type="date" name="date" id="date" value="" class="inputs" />
+        </div>
+        <div class="pairs">
+          <span class="">Description</span>
+          <textarea
+            type="text"
+            name="description"
+            id="description"
+            value=""
+            class="inputs"
+          ></textarea>
+        </div>
       </form>
-      <form action="/">
-        <input
-          type="submit"
-          onclick="deleteEvent('<%= id %>')"
-          value="Delete Event"
-        />
-      </form>
+      <div style="padding: 0 1rem;">
+        <form action="/">
+          <input
+            type="submit"
+            onclick="deleteEvent('<%= id %>')"
+            value="Delete"
+            style="color: red;"
+          />
+        </form>
+      </div>
       <div class="empty"></div>
     </main>
 

@@ -24,6 +24,12 @@ router.get("/events/:eventId/edit", function(req, res) {
   res.render("editEvent", { id: req.params.eventId });
 });
 
+router.get("/events/:eventId/posts/new", function(req, res) {
+  res.render("newPost", {
+    eventId: req.params.eventId
+  });
+});
+
 /* GET post page */
 router.get("/events/:eventId/posts/:postId", function(req, res) {
   res.render("post", {
@@ -63,9 +69,15 @@ router.post("/create_post", function(req, res, next) {
  * POST data that updates the event details
  */
 router.post("/update_event", function(req, res, next) {
-  updatedEvent = req.body;
+  const event = getEvent(
+    req.body.name,
+    req.body.date,
+    req.body.image,
+    req.body.description,
+    req.body.location
+  );
   res.setHeader("Content-Type", "application/json");
-  res.send(JSON.stringify(updatedEvent));
+  res.send(JSON.stringify(event));
 });
 
 /**
