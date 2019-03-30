@@ -66,6 +66,21 @@ router.post("/create_post", function(req, res, next) {
 });
 
 /**
+ * POST data used to add a new post with image attached
+ */
+router.post('/upload_picture', function(req, res, next) {
+  console.log("Hello");
+  var picData = req.body.imageBlob;
+  var text = req.body.text;
+
+  var data = getPost(text, picData);
+
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(data));
+  
+});
+
+/**
  * POST data that updates the event details
  */
 router.post("/update_event", function(req, res, next) {
@@ -123,8 +138,8 @@ class Post {
     this.id = id;
   }
 }
-function getPost(text) {
-  return new Post(uuidv1(), "username", [], new Date(), null, null, text);
+function getPost(text, image) {
+  return new Post(uuidv1(), "username", [], new Date(), image, null, text);
 }
 
 class Comment {

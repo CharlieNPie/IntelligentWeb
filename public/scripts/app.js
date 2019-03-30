@@ -264,6 +264,41 @@ function newPost(id) {
   sendAjaxPostQuery("/create_post", data, id);
 }
 
+ /* LOADING POST PAGE WITH IMAGES */
+
+ function addPhotoPost(eventId) {
+  canvas = document.getElementById('canvas');
+  var formArray= $("form").serializeArray();
+  var postData={};
+  for (index in formArray){
+      postData[formArray[index].name]= formArray[index].value;
+  }
+  var picData = canvas.toDataURL();
+  postData["imageBlob"] = picData;
+
+  console.log(postData);
+
+  postWithImageQuery(postData, eventId);
+}
+
+function postWithImageQuery(data, eventId) {
+  $.ajax({
+    dataType: "json",
+    url: '/upload_picture',
+    type: "POST",
+    data: data,
+    success: function (data) {
+      console.log(data);
+      addPostObject(data,eventId);
+      if (document.getElementById('offline_div')!=null)
+              document.getElementById('offline_div').style.display='none';
+    },
+    error: function (err) {
+      alert('Error: ' + err.status + ':' + err.statusText);
+    } 
+  })
+}
+
 /* SHOW EVENT DATA FIELDS */
 function listEventDetails(id) {
   initDatabase();
