@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+  <% include partials/head.ejs %>
+  <body onload='loadEvent("<%= id %>")' class="d-flex flex-column h-100">
+    <div class="nav">
+      <a href="/">
+        <img
+          src="https://image.flaticon.com/icons/svg/271/271220.svg"
+          class="back-button"
+        />
+      </a>
+      <span id="eventName"></span>
+      <a href="/events/<%= id %>/edit">
+        <img
+          src="https://image.flaticon.com/icons/svg/1159/1159633.svg"
+          class="back-button"
+        />
+      </a>
+    </div>
+
+    <main role="main" class="flex-shrink-0">
+      <div class="top-container">
+        <div id="eventImage" class="row"></div>
+        <div class="row text-center">
+          <p class="e-details" id="eventDescription"></p>
+        </div>
+      </div>
+
+      <div class="menu">
+        <img
+          src="https://image.flaticon.com/icons/svg/151/151917.svg"
+          class="menu-button"
+        />
+        <a href="./event_map.html"
+          ><img
+            src="https://image.flaticon.com/icons/svg/263/263072.svg"
+            class="menu-button"
+        /></a>
+      </div>
+      <div id="posts"></div>
+      <div class="empty"></div>
+    </main>
+
+    <% include partials/footer.ejs %>
+  </body>
+</html>

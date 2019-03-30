@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <% include partials/head.ejs %>
+  <body onload="initDatabase()">
+    <div class="container" style="width: 100%">
+      <h1>Add a new event</h1>
+      <form id="new-event" onsubmit="newEvent()">
+        Name:
+        <input type="text" name="name" id="name" value="" /><br />
+        Description:
+        <input type="text" name="description" id="description" value="" /><br />
+        Image url:
+        <input type="text" name="image" id="image" value="" /><br />
+        Location:
+        <input type="text" name="location" id="location" value="" /><br />
+        Date:
+        <input type="date" name="date" id="date" value="" /><br />
+
+        <input type="submit" class="submit" value="Submit" id="g" />
+      </form>
+    </div>
+    <% include partials/footer.ejs %>
+  </body>
+</html>

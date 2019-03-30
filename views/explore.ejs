@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="description" content="" />
-    <title>Manifest</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <script src="/scripts/jquery.min.js"></script>
-    <script src="/scripts/idb.js"></script>
-    <script src="/scripts/app.js"></script>
-    <script src="/scripts/database.js"></script>
-    <link href="/styles/explore.css" rel="stylesheet" />
+  <% include ./partials/head.ejs %>
+  <body class="d-flex flex-column h-100">
+    <div class="nav">
+      <input class="search" />
+      <input type="text" name="datefilter" placeholder="Date" class="date" />
+    </div>
+
+    <main role="main" class="flex-shrink-0">
+      <div class="map" id="map_canvas"></div>
+    </main>
+
+    <% include ./partials/footer.ejs %>
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"
@@ -63,38 +56,6 @@
       }
       google.maps.event.addDomListener(window, "load", initialize);
     </script>
-  </head>
-
-  <body class="d-flex flex-column h-100">
-    <div class="nav">
-      <input class="search" />
-      <input type="text" name="datefilter" placeholder="Date" class="date" />
-    </div>
-
-    <main role="main" class="flex-shrink-0">
-      <div class="map" id="map_canvas"></div>
-    </main>
-
-    <footer class="footer mt-auto py-3 ft-color ft-stick">
-      <div class="container ft-layout">
-        <img
-          src="https://image.flaticon.com/icons/svg/131/131057.svg"
-          class="menu-button"
-        />
-        <img
-          src="https://image.flaticon.com/icons/svg/149/149309.svg"
-          class="menu-button"
-        />
-        <img
-          src="https://image.flaticon.com/icons/svg/159/159719.svg"
-          class="menu-button"
-        />
-        <img
-          src="https://image.flaticon.com/icons/svg/149/149452.svg"
-          class="menu-button"
-        />
-      </div>
-    </footer>
     <script type="text/javascript">
       $(function() {
         $('input[name="datefilter"]').daterangepicker({

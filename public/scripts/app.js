@@ -115,10 +115,14 @@ function addToEvent(data) {
 
 const checkForLike = id => {
   let liked = JSON.parse(localStorage.getItem("liked"));
-  if (liked.includes(parseInt(id))) {
-    return true;
-  } else {
+  if (liked === null) {
     return false;
+  } else {
+    if (liked.includes(parseInt(id))) {
+      return true;
+    } else {
+      return false;
+    }
   }
 };
 
@@ -315,14 +319,6 @@ function deleteEvent(id) {
   deleteObject(id);
 }
 
-/**
- *
- * POST PAGES
- *
- */
-
-/* LOADING POST PAGE */
-
 function loadPost(eventId, postId) {
   initDatabase();
   var postPromise = getPostObject(eventId, postId);
@@ -386,16 +382,6 @@ function newComment(eventId, postId) {
   sendAjaxCommentQuery("/create_comment", data, eventId, postId);
 }
 
-/**
- *
- * OTHER JAVASCRIPT
- *
- */
-
-/**
- * When the client gets off-line, it shows an off line warning to the user
- * so that it is clear that the data is stale
- */
 window.addEventListener(
   "offline",
   function(e) {

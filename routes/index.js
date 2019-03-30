@@ -4,15 +4,19 @@ const uuidv1 = require("uuid/v1");
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-  res.render("index", { title: "Music Festivals" });
+  res.render("index");
 });
 router.get("/explore", function(req, res, next) {
   res.render("explore");
 });
 
+router.get("/events/new", function(req, res) {
+  res.render("newEvent");
+});
+
 /* GET event page */
 router.get("/events/:eventId", function(req, res) {
-  res.render("events", { id: req.params.eventId });
+  res.render("event", { id: req.params.eventId });
 });
 
 /* GET edit event page */
@@ -35,7 +39,13 @@ router.get("/events/:eventId/posts/:postId", function(req, res) {
  *
  */
 router.post("/create_event", function(req, res, next) {
-  const event = getEvent(req.body.name, req.body.date, req.body.location);
+  const event = getEvent(
+    req.body.name,
+    req.body.date,
+    req.body.image,
+    req.body.description,
+    req.body.location
+  );
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(event));
 });
@@ -68,17 +78,26 @@ router.post("/create_comment", function(req, res, next) {
 });
 
 class Event {
-  constructor(name, date, image, organiser, location, posts) {
+  constructor(name, date, image, description, organiser, location, posts) {
     this.name = name;
     this.date = date;
     this.image = image;
+    this.description = description;
     this.organiser = organiser;
     this.location = location;
     this.posts = posts;
   }
 }
-function getEvent(name, date, location) {
-  return new Event(name, date, null, null, location, []);
+function getEvent(name, date, image, description, location) {
+  return new Event(
+    name,
+    date,
+    image,
+    description,
+    "maniOrganisers",
+    location,
+    []
+  );
 }
 
 class Post {

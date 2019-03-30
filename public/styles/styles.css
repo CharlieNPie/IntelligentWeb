@@ -1,3 +1,7 @@
+/* ---------------------------------------- */
+/* ----------    INDEX STYLES     --------- */
+/* ---------------------------------------- */
+
 .nav {
   display: flex;
   flex-direction: row;
@@ -14,6 +18,11 @@
   color: #333333;
   font-weight: 500;
   font-size: 1.1rem;
+}
+
+.small-image {
+  width: 1rem;
+  height: 1rem;
 }
 
 .top-container {
@@ -101,4 +110,179 @@
 
 .empty {
   height: 3.5rem;
+}
+
+/* ---------------------------------------- */
+/* ----------    POST STYLES      --------- */
+/* ---------------------------------------- */
+
+.back-button {
+  width: 1rem;
+}
+
+.menu {
+  border-top: 0.1px solid #eeeeee;
+  border-bottom: 0.1px solid #eeeeee;
+  height: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.comment {
+  min-height: 4rem;
+  border-bottom: 0.1px solid #eeeeee;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1rem 1.5rem 0 0;
+}
+
+.ps-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: justify;
+}
+
+.ps-date {
+  margin: 0.5rem 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: rgb(92, 91, 91);
+}
+
+.ps-avatar {
+  margin: 0 1rem 0 0.5rem;
+  border-radius: 100%;
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: cover;
+}
+
+.ps-photo {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.ps-content {
+  padding: 1rem 1rem;
+  color: #333;
+  font-size: 1rem;
+}
+
+.map {
+  margin-top: 3.5rem;
+  width: 100%;
+  height: 90vh;
+}
+
+.box {
+  height: 2.5rem;
+  width: 80%;
+  margin: 0.2rem 0.5rem 0 1rem;
+  border-radius: 4px;
+  border: 1px solid #cfcece;
+  background-color: #fafafa;
+}
+
+.postInLine {
+  display: flex;
+  flex-direction: row;
+}
+
+/* ---------------------------------------- */
+/* ----------   EXPLORE STYLES    --------- */
+/* ---------------------------------------- */
+
+.search {
+  margin-left: 0.5rem;
+  border-radius: 4px;
+  width: 65%;
+  height: 2rem;
+  background-color: #eeeeee;
+  border: none;
+}
+
+.date {
+  margin-right: 0.5rem;
+  border-radius: 6px;
+  width: 20%;
+  height: 2rem;
+  border: 1.3px solid #eeeeee;
+  color: #333333;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+/* ---------------------------------------- */
+/* ----------    EVENT STYLES     --------- */
+/* ---------------------------------------- */
+
+.ps-menu {
+  border-top: 0.1px solid #eeeeee;
+  border-bottom: 0.1px solid #eeeeee;
+  height: 2.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.psm-button {
+  width: 1.2rem;
+  margin: 0 1rem;
+}
+
+.ps-user {
+  border-bottom: 0.1px solid #eeeeee;
+  height: 4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.2rem;
+}
+
+.ps-details {
+  padding: 0 1rem;
+  color: rgb(80, 79, 79);
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ---------------------------------------- */
+/* --------  EDIT EVENT STYLES    --------- */
+/* ---------------------------------------- */
+
+.eventForm {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 5rem;
+}
+
+.pair {
+  display: flex;
+  flex-direction: row;
+}
+
+.label {
+  color: #3333;
+  font-size: 1rem;
+}
+
+.boxes {
+  min-width: 10rem;
+}
+
+.submit {
+  border-radius: 5px;
+  border: 1px solid #fafafa;
 }
