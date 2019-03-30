@@ -6,10 +6,7 @@ var data = [
     date: new Date("05/12/2019"),
     image: "https://i.imgur.com/Qp3tTtH.jpg",
     organiser: "93729347234",
-    location:new google.maps.LatLng(
-      53.38108855193859,
-      -1.4801287651062012
-    ),
+    location:"los angeles",
     posts: [
       {
         id: "1",
