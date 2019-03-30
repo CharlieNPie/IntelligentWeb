@@ -2,8 +2,14 @@ var express = require('express');
 var router = express.Router();
 const uuidv1 = require('uuid/v1');
 
-/* GET home page. */
+/* GET login page. */
 router.get('/', function(req, res, next) {
+  console.log("hello");
+  res.render('login');
+});
+
+/* GET home page. */
+router.get('/home', function(req, res, next) {
   res.render('index', { title: 'Music Festivals' });
 });
 
@@ -14,12 +20,17 @@ router.get('/events/:eventId', function (req, res) {
 
 /* GET edit event page */
 router.get('/events/:eventId/edit', function (req, res) {
-  res.render('updateEvent', { id: req.params.eventId, title: "Edit Event" })
+  res.render('updateEvent', { id: req.params.eventId, title: "Edit Event" });
 });
 
 /* GET post page */
 router.get('/events/:eventId/posts/:postId', function (req, res) {
-  res.render('posts', {eventId: req.params.eventId, postId: req.params.postId})
+  res.render('posts', {eventId: req.params.eventId, postId: req.params.postId});
+});
+
+/* GET new post page */
+router.get('/events/:eventId/newPost', function (req, res) {
+  res.render('newPost', {title : 'New Post', id: req.params.eventId});
 });
 
 
@@ -55,6 +66,28 @@ router.post('/update_event', function(req, res, next){
 })
 
 /**
+ * POST data used to add a new post with image attached
+ */
+router.post('/upload_picture', function(req, res, next) {
+  console.log("Hello");
+  var picData = req.body.imageBlob;
+  var text = req.body.text;
+
+  var data = getPost(text, picData);
+
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(data));
+  
+});
+
+/**
+ * 
+ *  AUTHENTICATION 
+ * 
+ */
+
+
+/**
  *
  * @constructor
  */
@@ -83,8 +116,9 @@ class Post {
     this.id = id;
   }
 }
-function getPost(text){
-  return new Post(uuidv1(),"HasanAsim",[],new Date(),null,null,text);
+
+function getPost(text, image){
+  return new Post(uuidv1(),"sample author",[],new Date(),image,null,text);
 }
 
 module.exports = router;

@@ -1,68 +1,3 @@
-var data = [
-    {
-      name: "Coachella",
-      date: "2019-05-12",
-      image: "http://google.io/picture.jpeg",
-      organiser: "93729347234",
-      location: "Los Angeles",
-      posts: [
-        {
-          text: "Lol I just lost my cap, anybody seen it?",
-          image: "http://borja.leiva/image.jpeg",
-          author: "borjadotai",
-          date: "12/05/2019 - 17:30",
-          location: "Los Angeles - 3rd Area",
-          comments: [
-            {
-              author: "hasanasim",
-              text: "Yo yo I saw it in Michelles crib"
-            },
-            {
-              author: "michelle23",
-              text: "Yeah its here! Come get it."
-            }
-          ]
-        },
-        {
-          text:
-            "What time is Travis playing at? Completely lost track of time...",
-          image: "http://borja.leiva/image.jpeg",
-          author: "hasanasim",
-          date: "12/05/2019 - 14:30",
-          location: "Los Angeles - 6th Area",
-          comments: [
-            {
-              author: "charliePie",
-              text: "Duuuuude he already played, you missed it..."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: "SheffieldFest",
-      date: "2019-06-12",
-      image: "http://google.io/picture.jpeg",
-      organiser: "93729347235",
-      location: "Sheffield",
-      posts: [
-        {
-          text: "Yoooo! Here watching Drake in the diamond, looking gooooood!",
-          image: "http://borja.leiva/image.jpeg",
-          author: "charliePie",
-          date: "12/05/2019 - 15:30",
-          location: "Sheffield - The Diamond",
-          comments: [
-            {
-              author: "borjadotai",
-              text: "I know right? Pretty sick!"
-            }
-          ]
-        }
-      ]
-    }
-  ];
-
 /**
  * called by the HTML onload
  * showing any cached forecast data and declaring the service worker
@@ -86,8 +21,6 @@ function initEvents() {
         console.log('This browser doesn\'t support IndexedDB');
     }
     loadData();
-    //for (index in data)
-        //storeCachedEventData(data[index]);
 }
 
 /**
@@ -187,44 +120,8 @@ function sendNewEventQuery(url, data) {
 }
 
 
-/**
- * 
- * ADDING POSTS TO EVENTS 
- */
 
- /* send request to server */
-function sendAjaxPostQuery(url, data, id) {
-  $.ajax({
-      url: url ,
-      data: data,
-      dataType: 'json',
-      type: 'POST',
-      success: function (response) {
-          addPostObject(response,id);
-          //location.reload();
-          if (document.getElementById('offline_div')!=null)
-                  document.getElementById('offline_div').style.display='none';
-      },
-      error: function (xhr, status, error) {
-          showOfflineWarning();
-          var offlineEventList = JSON.parse(localStorage.getItem('offline_events'));
-          offlineEventList.push(data);
-          newEventList = offlineEventList;
-          localStorage.setItem("offline_events", JSON.stringify(newEventList));
-          const dvv= document.getElementById('offline_div');
-          if (dvv!=null)
-                  dvv.style.display='block';
-      }
-  });
-}
-function newPost(id){
-  var formArray=$("form").serializeArray();
-  var data = {};
-  for (index in formArray){
-    data[formArray[index].name]= formArray[index].value;
-  }
-  sendAjaxPostQuery('/create_post', data,id);
-}
+
 
 
 
@@ -242,7 +139,7 @@ function addToEvent(dataR) {
       posts = "";
       for (i=0;i<dataR.posts.length;i++){
         posts = posts +"<br><div class='panel panel-default'><div class='panel-body'>"+ String(dataR.posts[i].author) 
-          + "<br> " + String(dataR.posts[i].text) + "<br><a href='"+window.location.href+"/posts/"+String(dataR.posts[i].id)
+          + "<br> " + String(dataR.posts[i].text) + "<br><a href='"+dataR.id+"/posts/"+String(dataR.posts[i].id)
            + "'>" + String(dataR.posts[i].id) + "</a></div></div>";
       }
       event =  dataR.id+" <br>Name is " +dataR.name+ "<br>Location is " + dataR.location +
@@ -317,11 +214,45 @@ function deleteEvent(id) {
    initDatabase();
    var postPromise = getPostObject(eventId, postId);
    postPromise.then(function (postData) {
-    post =  postData.id+" <br>Author is " +postData.author+ "<br>Date is " + postData.date + "<br>" + postData.text;
+    post =  postData.id+" <br>Author is " +postData.author+ "<br>Date is " + postData.date + "<br>" + postData.text + "<br><img src='"+postData.image+"' alt='Data' height='100' width='100'>";
     $('.post').append(post);
-   })
+   });
  }
 
+ /* LOADING POST PAGE WITH IMAGES */
+
+function addPhotoPost(eventId) {
+  canvas = document.getElementById('canvas');
+  var formArray= $("form").serializeArray();
+  var postData={};
+  for (index in formArray){
+      postData[formArray[index].name]= formArray[index].value;
+  }
+  var picData = canvas.toDataURL();
+  postData["imageBlob"] = picData;
+
+  console.log(postData);
+
+  postWithImageQuery(postData, eventId);
+}
+
+function postWithImageQuery(data, eventId) {
+  $.ajax({
+    dataType: "json",
+    url: '/upload_picture',
+    type: "POST",
+    data: data,
+    success: function (data) {
+      console.log(data);
+      addPostObject(data,eventId);
+      if (document.getElementById('offline_div')!=null)
+              document.getElementById('offline_div').style.display='none';
+    },
+    error: function (err) {
+      alert('Error: ' + err.status + ':' + err.statusText);
+    } 
+  })
+}
 
 /**
  * 
@@ -372,8 +303,8 @@ function hideOfflineWarning(){
  * it shows the city list in the browser
  */
 function showEventForm() {
-    if (document.getElementById('city_list')!=null)
-        document.getElementById('city_list').style.display = 'block';
+    if (document.getElementById('event_list')!=null)
+        document.getElementById('event_list').style.display = 'block';
 }
 
 /**
@@ -382,4 +313,17 @@ function showEventForm() {
 function refreshEventList(){
     if (document.getElementById('results')!=null)
         document.getElementById('results').innerHTML='';
+}
+
+/**
+ * SHOW PASSWORD AS TEXT
+ */
+
+function showPassword() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
 }

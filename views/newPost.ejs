@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManiFest</title>
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/inline.css">
+
+    <!-- TODO add manifest here -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="ManiFest">
+    <link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
+    <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2">
+    <script src="/scripts/app.js"></script>
+    <script src="/scripts/database.js"></script>
+    <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/idb.js"></script>
+    <script src="/scripts/camera.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="/scripts/bootstrap.min.js"></script>
+</head>
+<body onload="setupCamera()">
+    <h1>Add Photo</h1>
+    <div class="camera"> 
+        <div hidden id="output">
+            <img id="photo" alt="The screen capture will appear in this box.">
+        </div>
+        <video id="video">Video stream not available.</video>
+        <button id="startbutton">Take photo</button>
+        <!-- 
+        <form id="continueButton" action="/" style="display : none;">
+            <input type="submit" value="Continue?">
+        </form>
+        -->
+
+    </div>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <form id=“addPost" action="/home/" class="addPost" onsubmit="addPhotoPost('<%= id %>')">
+        Text:
+        <input type="text" size="35" name="text" id="text" value="Man im tripping balls im seeing some shit!"><br>
+        <input type="submit" name="g" value="Submit" id="g">
+    </form>
+
+</body>
+</html>
