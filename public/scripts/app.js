@@ -3,10 +3,13 @@ var data = [
     name: "Coachella",
     description:
       "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-    date: "12/05/2019",
+    date: new Date("05/12/2019"),
     image: "https://i.imgur.com/Qp3tTtH.jpg",
     organiser: "93729347234",
-    location: "Los Angeles",
+    location:new google.maps.LatLng(
+      53.38108855193859,
+      -1.4801287651062012
+    ),
     posts: [
       {
         id: "1",
@@ -55,7 +58,7 @@ var data = [
     name: "SheffieldFest",
     description:
       "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-    date: "12/06/2019",
+    date:  new Date("04/04/2019"),
     image: "https://i.imgur.com/jJHdo4D.jpg",
     organiser: "93729347235",
     location: "Sheffield",
@@ -144,7 +147,7 @@ function addToResults(data) {
 }
 
 function addToSearch(data){
-  if (document.getElementById("searchResults") != null) {
+  if (document.getElementById("searchResults") == null) {
     const row = document.createElement("div");
     document.getElementById("searchResults").appendChild(row);
     row.innerHTML =
@@ -156,7 +159,20 @@ function addToSearch(data){
     "</span>" +
     "</a>";
     console.log(row);
-  }
+  }else{
+    document.getElementById("searchResults").innerHTML="";
+    const row = document.createElement("div");
+    document.getElementById("searchResults").appendChild(row);
+    row.innerHTML =
+    "<a href=/events/" +
+    data.id +
+    ">" +
+    "<span class='sti-title'>" +
+    data.name +
+    "</span>" +
+    "</a>";
+    console.log(row);
+    }
 }
 
 function addToEvent(data) {
@@ -438,7 +454,6 @@ function loadPost(eventId, postId) {
   });
 }
 
-
 function sendAjaxCommentQuery(url, data, eventId,postId) {
   $.ajax({
       url: url ,
@@ -472,13 +487,6 @@ function newComment(eventId,postId){
   }
   sendAjaxCommentQuery('/create_comment',data,eventId,postId);
 }
-
-
-
-
-
-
-
 
 
 /**
@@ -549,6 +557,36 @@ function refreshEventList() {
 
 function initExplore(){
   initDatabase();
+  $(function() {
+    $('input[name="datefilter"]').daterangepicker({
+      autoUpdateInput: false,
+      locale: {
+        cancelLabel: "Clear"
+      }
+    });
+
+    $('input[name="datefilter"]').on("apply.daterangepicker", function(
+      ev,
+      picker
+    ) {
+      var start = picker.startDate.format("MM/DD/YYYY");
+      var end = picker.endDate.format("MM/DD/YYYY");
+      $(this).val(
+          start + " - " + end
+      );
+      console.log(start);
+      var startDate =  new Date(start);
+      var endDate = new Date(end);
+      getDataByDate(startDate,endDate);
+      event.stopPropagation();
+    });
+    $('input[name="datefilter"]').on("cancel.daterangepicker", function(
+      ev,
+      picker
+    ) {
+      $(this).val("");
+    });
+  });
   $('.search').keypress(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){
@@ -557,3 +595,4 @@ function initExplore(){
     event.stopPropagation();
   });
 }
+

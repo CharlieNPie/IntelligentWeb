@@ -14,6 +14,10 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <script
+      type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATXNPRdHfVZng3m4PTz6-4a82YAq6Z48E&sensor=true"
+    ></script>
     <script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/idb.js"></script>
     <script src="/scripts/app.js"></script>
@@ -36,10 +40,7 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
     />
-    <script
-      type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQojS3vo9zXib311L9_TUm65wMIH3wnHA&sensor=true"
-    ></script>
+    
     <script type="text/javascript">
       function initialize() {
         var myLatlng = new google.maps.LatLng(
@@ -54,12 +55,12 @@
           document.getElementById("map_canvas"),
           mapOptions
         );
-        // To add the marker to the map, use the 'map' property
-        var marker = new google.maps.Marker({
-          position: myLatlng,
-          map: map,
-          title: "Hello World!"
-        });
+       // To add the marker to the map, use the 'map' property
+        // var marker = new google.maps.Marker({
+        //   position: myLatlng,
+        //   map: map,
+        //   title: "Hello World!"
+        // });
       }
       google.maps.event.addDomListener(window, "load", initialize);
     </script>
@@ -67,11 +68,19 @@
 
   <body class="d-flex flex-column h-100" onload="initExplore()"> 
     <div class="nav">
-        <input class="search" id="search"/>
+        <input list="results" class="search" id="search"/>
         <input type="text" name="datefilter" placeholder="Date" class="date" />
+        <datalist id="results">
+            <option value="Chrome">
+            <option value="Firefox">
+            <option value="Internet Explorer">
+            <option value="Opera">
+            <option value="Safari">
+            <option value="Microsoft Edge">
+          </datalist>
         <div class="st-galery" id="searchResults"></div>
     </div>
-    
+        
     <main role="main" class="flex-shrink-0">
       <div class="map" id="map_canvas"></div>
     </main>
@@ -96,33 +105,5 @@
         />
       </div>
     </footer>
-    <script type="text/javascript">
-      $(function() {
-        $('input[name="datefilter"]').daterangepicker({
-          autoUpdateInput: false,
-          locale: {
-            cancelLabel: "Clear"
-          }
-        });
-
-        $('input[name="datefilter"]').on("apply.daterangepicker", function(
-          ev,
-          picker
-        ) {
-          $(this).val(
-            picker.startDate.format("MM/DD/YYYY") +
-              " - " +
-              picker.endDate.format("MM/DD/YYYY")
-          );
-        });
-
-        $('input[name="datefilter"]').on("cancel.daterangepicker", function(
-          ev,
-          picker
-        ) {
-          $(this).val("");
-        });
-      });
-    </script>
   </body>
 </html>
