@@ -360,6 +360,58 @@
   float: right;
 }
 
+/* ---------------------------------------- */
+/* --------      AUTH STYLES      --------- */
+/* ---------------------------------------- */
+
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1rem;
+  width: 50;
+  height: 10rem;
+}
+
+.login-box h2 {
+  font-size: 1.5rem;
+  color: #333333;
+}
+
+.login-button {
+  margin-top: 1rem;
+  border-radius: 5px;
+  background-color: #eeecec;
+  color: #333333;
+  font-size: 1rem;
+  border: none;
+  width: 10rem;
+}
+
+.profile-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  width: 100%;
+  height: 30rem;
+}
+
+.profile-box img {
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 0 2rem 0;
+}
+
+/* ---------------------------------------- */
+/* --------    DESKTOP STYLES     --------- */
+/* ---------------------------------------- */
+
 @media only screen and (min-width: 800px) {
   .center-ui {
     align-items: center;

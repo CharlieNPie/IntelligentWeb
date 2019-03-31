@@ -6,6 +6,11 @@ const uuidv1 = require("uuid/v1");
 router.get("/", function(req, res, next) {
   res.render("index");
 });
+
+router.get("/profile", function(req, res, next) {
+  res.render("profile");
+});
+
 router.get("/explore", function(req, res, next) {
   res.render("explore");
 });
@@ -184,7 +189,7 @@ class Comment {
 function getComment(text) {
   return new Comment(
     uuidv1(),
-    "username",
+    "borjadotai",
     text,
     "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
   );

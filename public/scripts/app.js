@@ -35,6 +35,10 @@ function loadEvent(id) {
 
 function addToResults(data) {
   if (document.getElementById("events") != null) {
+    let loggedin = JSON.parse(localStorage.getItem("admin"));
+    if (!loggedin) {
+      $("#new-event").remove();
+    }
     const row = document.createElement("div");
     document.getElementById("events").appendChild(row);
     row.innerHTML =
@@ -49,71 +53,82 @@ function addToResults(data) {
       data.name +
       "</span>" +
       "</a>";
-    console.log(row);
   }
 }
 
 function addToEvent(data) {
-  console.log("borja", data);
   $("#eventName").html(data.name);
   $("#eventDescription").html(data.description);
   var image = "<img" + " src='" + data.image + "'" + " class='e-image'" + "/>";
   $("#eventImage").html(image);
-  data.posts.map(post => {
-    if (checkForLike(post.id)) {
-      var heart = "/images/like.png";
-    } else {
-      var heart = "https://image.flaticon.com/icons/svg/126/126471.svg";
-    }
-    if (post.image) {
-      var image = "<img src='" + post.image + "' class='ps-photo' />";
-    } else {
-      var image;
-    }
-    var post =
-      "<div class='post'>" +
-      "<div class='ps-user'>" +
-      "<img src='" +
-      post.avatar +
-      "' class='ps-avatar' />" +
-      "<span class='ps-username'>" +
-      post.author +
-      "</span>" +
-      "</div>" +
-      image +
-      "<div class='ps-menu'>" +
-      "<div id='heart-" +
-      post.id +
-      "'>" +
-      "<img src='" +
-      heart +
-      "' onClick='handleLike(" +
-      post.id +
-      ")' class='psm-button' />" +
-      "</div>" +
-      "<a href='" +
-      window.location.href +
-      "/posts/" +
-      post.id +
-      "'>" +
-      "<img src='https://img.icons8.com/ios/50/000000/topic.png' class='psm-button' />" +
-      "</a>" +
-      "</div>" +
-      "<div class='ps-content'>" +
-      "<b>" +
-      post.author +
-      ": </b>" +
-      post.text +
-      "</div>" +
-      "<div class='ps-details'>" +
-      "<span>" +
-      post.date +
-      "</span>" +
-      "<b> See more </b>" +
-      "</div>" +
-      "</div>";
+  let loggedin = JSON.parse(localStorage.getItem("login"));
+  let admin = JSON.parse(localStorage.getItem("admin"));
+  if (loggedin || admin) {
+    data.posts.map(post => {
+      if (checkForLike(post.id)) {
+        var heart = "/images/like.png";
+      } else {
+        var heart = "https://image.flaticon.com/icons/svg/126/126471.svg";
+      }
+      if (post.image) {
+        var image = "<img src='" + post.image + "' class='ps-photo' />";
+      } else {
+        var image;
+      }
+      var post =
+        "<div class='post'>" +
+        "<div class='ps-user'>" +
+        "<img src='" +
+        post.avatar +
+        "' class='ps-avatar' />" +
+        "<span class='ps-username'>" +
+        post.author +
+        "</span>" +
+        "</div>" +
+        image +
+        "<div class='ps-menu'>" +
+        "<div id='heart-" +
+        post.id +
+        "'>" +
+        "<img src='" +
+        heart +
+        "' onClick='handleLike(" +
+        post.id +
+        ")' class='psm-button' />" +
+        "</div>" +
+        "<a href='" +
+        window.location.href +
+        "/posts/" +
+        post.id +
+        "'>" +
+        "<img src='https://img.icons8.com/ios/50/000000/topic.png' class='psm-button' />" +
+        "</a>" +
+        "</div>" +
+        "<div class='ps-content'>" +
+        "<b>" +
+        post.author +
+        ": </b>" +
+        post.text +
+        "</div>" +
+        "<div class='ps-details'>" +
+        "<span>" +
+        post.date +
+        "</span>" +
+        "<b> See more </b>" +
+        "</div>" +
+        "</div>";
+      $("#posts").append(post);
+      if (!admin) {
+        $("#edit-event").remove();
+      }
+    });
+  } else {
+    $("#new-post").remove();
+    $("#edit-event").remove();
+    let post =
+      "<div class='login-box'><h2>Sorry, you need to be logged in to fully view events.</h2><a href='/profile'><button class='login-button'>Login</button></a></div>";
     $("#posts").append(post);
-  });
+  }
 }
 
 const checkForLike = id => {
@@ -541,3 +556,50 @@ function addToSearch(data) {
     console.log(row);
   }
 }
+
+const handleProfile = () => {
+  let admin = JSON.parse(localStorage.getItem("admin"));
+  let loggedin = JSON.parse(localStorage.getItem("login"));
+  if (admin || loggedin) {
+    $("#title").html("Profile");
+    const logout =
+      "<img src='https://image.flaticon.com/icons/svg/126/126467.svg' onclick='handleLogout()' class='back-button' />";
+    $("#logout").html(logout);
+    const ubox =
+      "<div class='profile-box'><img src='https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg' /><p>Name: Borja Leiva</p><p>Location: Sheffield</p></div>";
+    const abox =
+      "<div class='profile-box'><img src='https://pixel.nymag.com/imgs/daily/intelligencer/2018/11/21/21-mark-zuckerberg-cnn.w700.h700.jpg' /><p>Name: Mark Suckerborg</p><p>Location: SF, California</p></div>";
+    if (admin) {
+      $("#content").append(abox);
+    } else {
+      $("#content").append(ubox);
+    }
+  } else {
+    $("#title").html("Login");
+    const box =
+      "<div class='profile-box'><p>Username: </p>" +
+      "<form id='login' onsubmit='handleLogin()'>" +
+      "<input id='user' type='text' name='user' />" +
+      "<span class='share'><input type='submit' class='submit' value='Login' form='login'/></span>" +
+      "</form>" +
+      "</div>";
+    $("#content").append(box);
+  }
+};
+
+const handleLogout = () => {
+  localStorage.setItem("admin", false);
+  localStorage.setItem("login", false);
+  location.reload();
+};
+
+const handleLogin = () => {
+  const user = $("#user").val();
+  console.log(user);
+  if (user == "admin") {
+    localStorage.setItem("admin", true);
+  } else if (user == "user") {
+    localStorage.setItem("login", true);
+  }
+  location.reload();
+};
