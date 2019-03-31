@@ -274,7 +274,6 @@ function newPost(id) {
   var picData = canvas.toDataURL();
   postData["imageBlob"] = picData;
 
-  console.log(postData);
 
   postWithImageQuery(postData, eventId);
 }
