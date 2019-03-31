@@ -49,7 +49,6 @@ function addToResults(data) {
       data.name +
       "</span>" +
       "</a>";
-    console.log(row);
   }
 }
 
