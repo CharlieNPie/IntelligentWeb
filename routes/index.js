@@ -70,7 +70,6 @@ router.post("/create_post", function(req, res, next) {
  * POST data used to add a new post with image attached
  */
 router.post('/upload_picture', function(req, res, next) {
-  console.log("Hello");
   var picData = req.body.imageBlob;
   var text = req.body.text;
 

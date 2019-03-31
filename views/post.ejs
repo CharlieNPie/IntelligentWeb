@@ -1,8 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
-    var socket = io();
+    $(function () {
+      var socket = io();
+      $('form').submit(function(e){
+        e.preventDefault(); // prevents page reloading
+        socket.emit('chat message', $('#text').val());
+        $('#text').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        newComment('<%= eventId %>','<%= postId %>', msg)
+      });
+    }); 
   </script>
   <% include partials/head.ejs %>
   <body
@@ -26,7 +38,6 @@
     <footer class="footer mt-auto py-3 ft-color ft-stick">
       <form
         id="addComment"
-        onsubmit="newComment('<%= eventId %>','<%= postId %>')"
       >
         <div class="postInLine">
           <input type="text" name="text" id="text" class="box" />

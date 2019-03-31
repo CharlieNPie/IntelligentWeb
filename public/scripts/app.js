@@ -53,7 +53,6 @@ function addToResults(data) {
 }
 
 function addToEvent(data) {
-  console.log("borja", data);
   $("#eventName").html(data.name);
   $("#eventDescription").html(data.description);
   var image = "<img" + " src='" + data.image + "'" + " class='e-image'" + "/>";
@@ -357,7 +356,6 @@ function loadPost(eventId, postId) {
   var postPromise = getPostObject(eventId, postId);
   postPromise.then(function({ comments }) {
     comments.map(comment => {
-      console.log(comment);
       let post =
         "<div class='comment'>" +
         "<img src='" +
@@ -390,7 +388,24 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
     type: "POST",
     success: function(response) {
       addCommentObject(response, eventId, postId);
-      //location.reload();
+      let post =
+      "<div class='comment'>" +
+      "<img src='" +
+      response.avatar +
+      "' class='ps-avatar' />" +
+      "<div class='ps-text'>" +
+      "<span class='ps-username'><b>" +
+      response.author +
+      " </b> " +
+      response.text +
+      "</span>" +
+      "<p class='ps-date'>" +
+      response.date +
+      "</p>" +
+      "</div>" +
+      "</div>";
+      console.log(post);
+      $("#posts").append(post);
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
@@ -406,12 +421,10 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
   });
 }
 
-function newComment(eventId, postId) {
-  var formArray = $("form").serializeArray();
-  var data = {};
-  for (index in formArray) {
-    data[formArray[index].name] = formArray[index].value;
-  }
+function newComment(eventId, postId, msg) {
+  console.log(msg)
+  var data = {text: msg};
+  console.log(data);
   sendAjaxCommentQuery("/create_comment", data, eventId, postId);
 }
 
