@@ -1,42 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <script src='/scripts/camera.js'></script>
   <% include partials/head.ejs %>
-  <body onload="setupCamera()">
+  <body class="d-flex flex-column h-100 center-ui" onload="setupCamera()">
     <div class="nav">
       <a href="/events/<%= eventId %>"><span class="cancel">Cancel</span></a>
       <span>New post</span>
       <span class="share"
-        ><input
-          type="submit"
-          class="submit"
-          value="Share"
-          id="g"
-          form="new-event"
+        ><input type="submit" class="submit" value="Share" id="g" form="addPost"
       /></span>
     </div>
 
     <main role="main" class="flex-shrink-0">
-      <div class="camera"> 
-          <div hidden id="output">
-              <img id="photo" alt="The screen capture will appear in this box.">
-          </div>
-          <video id="video">Video stream not available.</video>
-          <button id="startbutton">Take photo</button>
-          <!-- 
+      <div class="empty"></div>
+      <div class="camera">
+        <div hidden id="output">
+          <img id="photo" alt="The screen capture will appear in this box." />
+        </div>
+        <video id="video">Video stream not available.</video>
+        <button id="startbutton">Take photo</button>
+        <!-- 
           <form id="continueButton" action="/" style="display : none;">
               <input type="submit" value="Continue?">
           </form>
           -->
-  
       </div>
       <canvas id="canvas" style="display: none;"></canvas>
-      <form id=“addPost" action="/home/" class="addPost" onsubmit="addPhotoPost('<%= eventId %>')">
-          Text:
-          <input type="text" size="35" name="text" id="text" value="Man im tripping balls im seeing some shit!"><br>
-          <input type="submit" name="g" value="Submit" id="g">
-      </form>
-      <div class="empty"></div>
       <div class="pt-comment">
         <img
           src="https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
@@ -46,7 +34,7 @@
           borjadotai
         </div>
       </div>
-      <form id="new-event" onsubmit="newPost()">
+      <form id="addPost" onsubmit="addPhotoPost('<%= eventId %>')">
         <textarea
           type="text"
           name="text"
@@ -63,5 +51,6 @@
     </main>
 
     <% include partials/footer.ejs %>
+    <script src="/scripts/camera.js"></script>
   </body>
 </html>
