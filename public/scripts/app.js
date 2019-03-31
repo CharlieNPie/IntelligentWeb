@@ -65,6 +65,11 @@ function addToEvent(data) {
     } else {
       var heart = "https://image.flaticon.com/icons/svg/126/126471.svg";
     }
+    if (post.image) {
+      var image = "<img src='" + post.image + "' class='ps-photo' />";
+    } else {
+      var image;
+    }
     var post =
       "<div class='post'>" +
       "<div class='ps-user'>" +
@@ -75,9 +80,7 @@ function addToEvent(data) {
       post.author +
       "</span>" +
       "</div>" +
-      "<img src='" +
-      post.image +
-      "' class='ps-photo' />" +
+      image +
       "<div class='ps-menu'>" +
       "<div id='heart-" +
       post.id +
@@ -264,14 +267,14 @@ function newPost(id) {
   sendAjaxPostQuery("/create_post", data, id);
 }
 
- /* LOADING POST PAGE WITH IMAGES */
+/* LOADING POST PAGE WITH IMAGES */
 
- function addPhotoPost(eventId) {
-  canvas = document.getElementById('canvas');
-  var formArray= $("form").serializeArray();
-  var postData={};
-  for (index in formArray){
-      postData[formArray[index].name]= formArray[index].value;
+function addPhotoPost(eventId) {
+  canvas = document.getElementById("canvas");
+  var formArray = $("form").serializeArray();
+  var postData = {};
+  for (index in formArray) {
+    postData[formArray[index].name] = formArray[index].value;
   }
   var picData = canvas.toDataURL();
   postData["imageBlob"] = picData;
@@ -284,19 +287,19 @@ function newPost(id) {
 function postWithImageQuery(data, eventId) {
   $.ajax({
     dataType: "json",
-    url: '/upload_picture',
+    url: "/upload_picture",
     type: "POST",
     data: data,
-    success: function (data) {
-      console.log(data);
-      addPostObject(data,eventId);
-      if (document.getElementById('offline_div')!=null)
-              document.getElementById('offline_div').style.display='none';
+    success: function(data) {
+      window.location.replace("/events/" + eventId);
+      addPostObject(data, eventId);
+      if (document.getElementById("offline_div") != null)
+        document.getElementById("offline_div").style.display = "none";
     },
-    error: function (err) {
-      alert('Error: ' + err.status + ':' + err.statusText);
-    } 
-  })
+    error: function(err) {
+      alert("Error: " + err.status + ":" + err.statusText);
+    }
+  });
 }
 
 /* SHOW EVENT DATA FIELDS */
@@ -471,7 +474,7 @@ function refreshEventList() {
   if (document.getElementById("results") != null)
     document.getElementById("results").innerHTML = "";
 }
-function initExplore(){
+function initExplore() {
   initDatabase();
   $(function() {
     $('input[name="datefilter"]').daterangepicker({
@@ -487,13 +490,11 @@ function initExplore(){
     ) {
       var start = picker.startDate.format("MM/DD/YYYY");
       var end = picker.endDate.format("MM/DD/YYYY");
-      $(this).val(
-          start + " - " + end
-      );
+      $(this).val(start + " - " + end);
       console.log(start);
-      var startDate =  new Date(start);
+      var startDate = new Date(start);
       var endDate = new Date(end);
-      getDataByDate(startDate,endDate);
+      getDataByDate(startDate, endDate);
       event.stopPropagation();
     });
     $('input[name="datefilter"]').on("cancel.daterangepicker", function(
@@ -503,40 +504,40 @@ function initExplore(){
       $(this).val("");
     });
   });
-  $('.search').keypress(function(event){
-    var keycode = (event.keyCode ? event.keyCode : event.which);
-    if(keycode == '13'){
-      getDataByName($('#search').val());
+  $(".search").keypress(function(event) {
+    var keycode = event.keyCode ? event.keyCode : event.which;
+    if (keycode == "13") {
+      getDataByName($("#search").val());
     }
     event.stopPropagation();
   });
 }
 
-function addToSearch(data){
+function addToSearch(data) {
   if (document.getElementById("searchResults") == null) {
     const row = document.createElement("div");
     document.getElementById("searchResults").appendChild(row);
     row.innerHTML =
-    "<a href=/events/" +
-    data.id +
-    ">" +
-    "<span class='sti-title'>" +
-    data.name +
-    "</span>" +
-    "</a>";
+      "<a href=/events/" +
+      data.id +
+      ">" +
+      "<span class='sti-title'>" +
+      data.name +
+      "</span>" +
+      "</a>";
     console.log(row);
-  }else{
-    document.getElementById("searchResults").innerHTML="";
+  } else {
+    document.getElementById("searchResults").innerHTML = "";
     const row = document.createElement("div");
     document.getElementById("searchResults").appendChild(row);
     row.innerHTML =
-    "<a href=/events/" +
-    data.id +
-    ">" +
-    "<span class='sti-title'>" +
-    data.name +
-    "</span>" +
-    "</a>";
+      "<a href=/events/" +
+      data.id +
+      ">" +
+      "<span class='sti-title'>" +
+      data.name +
+      "</span>" +
+      "</a>";
     console.log(row);
-    }
+  }
 }
