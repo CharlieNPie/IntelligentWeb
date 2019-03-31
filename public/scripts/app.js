@@ -470,3 +470,72 @@ function refreshEventList() {
   if (document.getElementById("results") != null)
     document.getElementById("results").innerHTML = "";
 }
+function initExplore(){
+  initDatabase();
+  $(function() {
+    $('input[name="datefilter"]').daterangepicker({
+      autoUpdateInput: false,
+      locale: {
+        cancelLabel: "Clear"
+      }
+    });
+
+    $('input[name="datefilter"]').on("apply.daterangepicker", function(
+      ev,
+      picker
+    ) {
+      var start = picker.startDate.format("MM/DD/YYYY");
+      var end = picker.endDate.format("MM/DD/YYYY");
+      $(this).val(
+          start + " - " + end
+      );
+      console.log(start);
+      var startDate =  new Date(start);
+      var endDate = new Date(end);
+      getDataByDate(startDate,endDate);
+      event.stopPropagation();
+    });
+    $('input[name="datefilter"]').on("cancel.daterangepicker", function(
+      ev,
+      picker
+    ) {
+      $(this).val("");
+    });
+  });
+  $('.search').keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+      getDataByName($('#search').val());
+    }
+    event.stopPropagation();
+  });
+}
+
+function addToSearch(data){
+  if (document.getElementById("searchResults") == null) {
+    const row = document.createElement("div");
+    document.getElementById("searchResults").appendChild(row);
+    row.innerHTML =
+    "<a href=/events/" +
+    data.id +
+    ">" +
+    "<span class='sti-title'>" +
+    data.name +
+    "</span>" +
+    "</a>";
+    console.log(row);
+  }else{
+    document.getElementById("searchResults").innerHTML="";
+    const row = document.createElement("div");
+    document.getElementById("searchResults").appendChild(row);
+    row.innerHTML =
+    "<a href=/events/" +
+    data.id +
+    ">" +
+    "<span class='sti-title'>" +
+    data.name +
+    "</span>" +
+    "</a>";
+    console.log(row);
+    }
+}

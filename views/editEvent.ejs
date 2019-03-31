@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
   <% include ./partials/head.ejs %>
-  <body onload='listEventDetails("<%= id %>")' class="d-flex flex-column h-100">
+  <body
+    onload='listEventDetails("<%= id %>")'
+    class="d-flex flex-column h-100 center-ui"
+  >
     <div class="nav">
       <a href="/events/<%= id %>"><span class="cancel">Cancel</span></a>
       <span id="eventName"></span>

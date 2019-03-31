@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
   <% include ./partials/head.ejs %>
-  <body class="d-flex flex-column h-100">
+  <!-- <body class="d-flex flex-column h-100">
+      <div class="nav">
+        <input class="search" />
+        <input type="text" name="datefilter" placeholder="Date" class="date" />
+      </div> -->
+
+  <body class="d-flex flex-column h-100 center-ui" onload="initExplore()">
     <div class="nav">
-      <input class="search" />
+      <input list="results" class="search" id="search" />
       <input type="text" name="datefilter" placeholder="Date" class="date" />
     </div>
+    <div class="st-galery" id="searchResults"></div>
 
     <main role="main" class="flex-shrink-0">
       <div class="map" id="map_canvas"></div>
     </main>
-
     <% include ./partials/footer.ejs %>
     <script
       type="text/javascript"
@@ -55,34 +61,6 @@
         });
       }
       google.maps.event.addDomListener(window, "load", initialize);
-    </script>
-    <script type="text/javascript">
-      $(function() {
-        $('input[name="datefilter"]').daterangepicker({
-          autoUpdateInput: false,
-          locale: {
-            cancelLabel: "Clear"
-          }
-        });
-
-        $('input[name="datefilter"]').on("apply.daterangepicker", function(
-          ev,
-          picker
-        ) {
-          $(this).val(
-            picker.startDate.format("MM/DD/YYYY") +
-              " - " +
-              picker.endDate.format("MM/DD/YYYY")
-          );
-        });
-
-        $('input[name="datefilter"]').on("cancel.daterangepicker", function(
-          ev,
-          picker
-        ) {
-          $(this).val("");
-        });
-      });
     </script>
   </body>
 </html>
