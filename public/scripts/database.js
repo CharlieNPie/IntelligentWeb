@@ -99,6 +99,76 @@ function getDataById(id) {
     else addToResults(value);
   }
 }
+// used to pull events from db when searching by name 
+function getDataByName(name) {
+  if (dbPromise) {
+    dbPromise
+      .then(function(db) {
+        console.log("fetching: " + event);
+        var tx = db.transaction(db.objectStoreNames);
+        var store = tx.objectStore(MANIFEST_STORE_NAME);
+        var index = store.index("name");
+        console.log(name);
+        return index.getAll(IDBKeyRange.only(name));
+      })
+      .then(function(readingsList) {
+        if (readingsList && readingsList.length > 0) {
+          var max;
+          for (var elem of readingsList)
+            if (!max || elem.date > max.date) max = elem;
+          if (max) addToSearch(max);
+        } else {
+          const value = localStorage.getItem(event);
+          console.log(readingsList);
+          console.log(value);
+          if (value != null){
+            addToSearch(value)
+          };
+        }
+      });
+  } else {
+    const value = localStorage.getItem(event);
+    console.log(value);
+    if (value == null) addToResults({ city: city, date: date });
+    else addToResults(value);
+  }
+}
+// used to pull events from db when searching by date
+function getDataByDate(startDate,endDate) {
+  if (dbPromise) {
+    dbPromise
+      .then(function(db) {
+        console.log("fetching: " + event);
+        var tx = db.transaction(db.objectStoreNames);
+        var store = tx.objectStore(MANIFEST_STORE_NAME);
+        var index = store.index("date");
+        console.log(name);
+        return index.getAll(IDBKeyRange.bound(startDate,endDate));
+      })
+      .then(function(readingsList) {
+        console.log(readingsList);
+        if (readingsList && readingsList.length > 0) {
+          var max;
+          for (var elem of readingsList)
+            if (!max || elem.date > max.date) max = elem;
+          if (max) addToSearch(max);
+        } else {
+          const value = localStorage.getItem(event);
+          console.log(readingsList);
+          console.log(value);
+          if (value != null){
+            addToSearch(value)
+          };
+        }
+      });
+  } else {
+    addToSearch(null);
+    const value = localStorage.getItem(event);
+    console.log(value);
+    if (value == null) addToResults({ city: city, date: date });
+    else addToResults(value);
+  }
+}
 
 /* GETS EVENT OBJECT GIVEN ITS ID */
 function getEventObject(id) {
