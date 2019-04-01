@@ -10,6 +10,7 @@ var debug = require('debug')('progressiveapp:server');
 var https = require('https');
 var fs = require('fs-extra');
 
+
 /**
  * Get port from environment and store in Express.
  */
@@ -30,7 +31,19 @@ var options = {
  */
 var server = https.createServer(options, app);
 // var server = http.createServer(app);
-
+var io = require('socket.io').listen(server);
+io.on('connection', function(socket) {
+  console.log("User connected");
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+})
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+    io.emit('chat message', msg)
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.
