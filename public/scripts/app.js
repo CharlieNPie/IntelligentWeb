@@ -33,15 +33,19 @@ function loadEvent(id) {
   });
 }
 
+/**
+ * It adds an event element into the UI when called
+ * @param data takes the events data to create the UI element
+ * that will be added into the front-end
+ */
 function addToResults(data) {
   if (document.getElementById("events") != null) {
     let loggedin = JSON.parse(localStorage.getItem("admin"));
     if (!loggedin) {
       $("#new-event").remove();
     }
-    const row = document.createElement("div");
-    document.getElementById("events").appendChild(row);
-    row.innerHTML =
+    const element =
+      "<div>" +
       "<a href=/events/" +
       data.id +
       ">" +
@@ -52,10 +56,20 @@ function addToResults(data) {
       "<span class='sti-title'>" +
       data.name +
       "</span>" +
-      "</a>";
+      "</a>" +
+      "</div>";
+    $("#events").append(element);
+    // Adding them to near and past too since it's all fake data anyway
+    $("#near-events").append(element);
+    $("#past-events").append(element);
   }
 }
 
+/**
+ * It adds all the relevant data into an events UI
+ * @param data takes the event's data to create all the UI elements
+ * It will get the relevant data and either replace or add UI into the event page
+ */
 function addToEvent(data) {
   $("#eventName").html(data.name);
   $("#eventDescription").html(data.description);
@@ -110,11 +124,10 @@ function addToEvent(data) {
         ": </b>" +
         post.text +
         "</div>" +
-        "<div class='ps-details'>" +
+        "<div class='ps-details'><span></span>" +
         "<span>" +
         post.date +
         "</span>" +
-        "<b> See more </b>" +
         "</div>" +
         "</div>";
       $("#posts").append(post);
@@ -131,6 +144,12 @@ function addToEvent(data) {
   }
 }
 
+/**
+ * Util function needed by addToEvent that checks if a post has been
+ * previously liked by the user in order to know if the heart on the
+ * UI should be empty or filled
+ * @param id takes the posts id to check if was previously liked
+ */
 const checkForLike = id => {
   let liked = JSON.parse(localStorage.getItem("liked"));
   if (liked === null) {
@@ -144,6 +163,12 @@ const checkForLike = id => {
   }
 };
 
+/**
+ * Util function needed by addToEvent that handles the liking functionality
+ * @param id takes the posts id and checks if the user has ever likes something
+ * if he didn't creates a new array in localStorage to start saving liked posts,
+ * otherwise it just adds or removes from the array if it was or wasn't there
+ */
 const handleLike = id => {
   let liked = JSON.parse(localStorage.getItem("liked"));
   console.log(liked);
@@ -242,7 +267,6 @@ function addPhotoPost(eventId) {
   var picData = canvas.toDataURL();
   postData["imageBlob"] = picData;
 
-
   postWithImageQuery(postData, eventId);
 }
 
@@ -334,8 +358,13 @@ function deleteEvent(id) {
   deleteObject(id);
 }
 
-
-/* LOAD POST INTO VIEW */
+/**
+ * Adds comments into the comment section of a post
+ * @param eventId takes the event's ID
+ * @param postId takes the posts's ID
+ * with both ids, it pulls the posts comments from the database
+ * and it adds each comment to the UI
+ */
 function loadPost(eventId, postId) {
   initDatabase();
   var postPromise = getPostObject(eventId, postId);
