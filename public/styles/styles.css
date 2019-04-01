@@ -156,7 +156,7 @@
 
 .ps-avatar {
   margin: 0 1rem 0 0.5rem;
-  border-radius: 100%;
+  border-radius: 50%;
   width: 2.5rem;
   height: 2.5rem;
   object-fit: cover;

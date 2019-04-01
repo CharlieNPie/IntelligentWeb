@@ -39,9 +39,8 @@ function addToResults(data) {
     if (!loggedin) {
       $("#new-event").remove();
     }
-    const row = document.createElement("div");
-    document.getElementById("events").appendChild(row);
-    row.innerHTML =
+    const element =
+      "<div>" +
       "<a href=/events/" +
       data.id +
       ">" +
@@ -52,7 +51,12 @@ function addToResults(data) {
       "<span class='sti-title'>" +
       data.name +
       "</span>" +
-      "</a>";
+      "</a>" +
+      "</div>";
+    $("#events").append(element);
+    // Adding them to near and past too since it's all fake data anyway
+    $("#near-events").append(element);
+    $("#past-events").append(element);
   }
 }
 
@@ -110,11 +114,10 @@ function addToEvent(data) {
         ": </b>" +
         post.text +
         "</div>" +
-        "<div class='ps-details'>" +
+        "<div class='ps-details'><span></span>" +
         "<span>" +
         post.date +
         "</span>" +
-        "<b> See more </b>" +
         "</div>" +
         "</div>";
       $("#posts").append(post);
