@@ -281,7 +281,7 @@ function postWithImageQuery(data, eventId) {
     type: "POST",
     data: data,
     success: function(data) {
-      console.log("help",data);
+      console.log(data);
       window.location.replace("/events/" + eventId);
       addPostObject(data, eventId);
       if (document.getElementById("offline_div") != null)
@@ -375,7 +375,22 @@ function loadPost(eventId, postId) {
   var postPromise = getPostObject(eventId, postId);
   postPromise.then(function({ comments }) {
     comments.map(comment => {
-      let post = addCommentView(comment);
+      let post =
+      "<div class='comment'>" +
+      "<img src='" +
+      comment.avatar +
+      "' class='ps-avatar' />" +
+      "<div class='ps-text'>" +
+      "<span class='ps-username'><b>" +
+      comment.author +
+      " </b> " +
+      comment.text +
+      "</span>" +
+      "<p class='ps-date'>" +
+      comment.date +
+      "</p>" +
+      "</div>" +
+      "</div>";      
       $("#posts").append(post);
     });
   });
@@ -392,7 +407,22 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
     type: "POST",
     success: function(response) {
       addCommentObject(response, eventId, postId);
-      let post = addCommentView(response);
+      let post =
+      "<div class='comment'>" +
+      "<img src='" +
+      response.avatar +
+      "' class='ps-avatar' />" +
+      "<div class='ps-text'>" +
+      "<span class='ps-username'><b>" +
+      response.author +
+      " </b> " +
+      response.text +
+      "</span>" +
+      "<p class='ps-date'>" +
+      response.date +
+      "</p>" +
+      "</div>" +
+      "</div>";
       $("#posts").append(post);
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
@@ -402,27 +432,6 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
       
     }
   });
-}
-
-/* ADD COMMENT CODE TO EJS VIEW */
-function addCommentView(comment) {
-  let post =
-  "<div class='comment'>" +
-  "<img src='" +
-  response.avatar +
-  "' class='ps-avatar' />" +
-  "<div class='ps-text'>" +
-  "<span class='ps-username'><b>" +
-  response.author +
-  " </b> " +
-  response.text +
-  "</span>" +
-  "<p class='ps-date'>" +
-  response.date +
-  "</p>" +
-  "</div>" +
-  "</div>";
-  return post;
 }
 
 function newComment(eventId, postId, msg) {
