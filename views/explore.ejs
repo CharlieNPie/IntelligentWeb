@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
   <% include ./partials/head.ejs %>
-  <!-- <body class="d-flex flex-column h-100">
-      <div class="nav">
-        <input class="search" />
-        <input type="text" name="datefilter" placeholder="Date" class="date" />
-      </div> -->
-
   <body class="d-flex flex-column h-100 center-ui" onload="initExplore()">
     <div class="nav">
       <input list="results" class="search" id="search" />
       <input type="text" name="datefilter" placeholder="Date" class="date" />
     </div>
-    <div class="st-galery" id="searchResults"></div>
 
     <main role="main" class="flex-shrink-0">
       <div class="map" id="map_canvas"></div>
@@ -37,30 +30,7 @@
     />
     <script
       type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQojS3vo9zXib311L9_TUm65wMIH3wnHA&sensor=true"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATXNPRdHfVZng3m4PTz6-4a82YAq6Z48E&sensor=true"
     ></script>
-    <script type="text/javascript">
-      function initialize() {
-        var myLatlng = new google.maps.LatLng(
-          53.38108855193859,
-          -1.4801287651062012
-        );
-        var mapOptions = {
-          zoom: 18,
-          center: myLatlng
-        };
-        var map = new google.maps.Map(
-          document.getElementById("map_canvas"),
-          mapOptions
-        );
-        // To add the marker to the map, use the 'map' property
-        var marker = new google.maps.Marker({
-          position: myLatlng,
-          map: map,
-          title: "Hello World!"
-        });
-      }
-      google.maps.event.addDomListener(window, "load", initialize);
-    </script>
   </body>
 </html>

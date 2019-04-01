@@ -1,4 +1,5 @@
 function initEvents() {
+  console.log(new Date("05/12/2019"));
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("./service-worker.js")
@@ -49,7 +50,6 @@ function addToResults(data) {
       data.name +
       "</span>" +
       "</a>";
-    console.log(row);
   }
 }
 
@@ -198,6 +198,7 @@ function newEvent() {
   for (index in formArray) {
     data[formArray[index].name] = formArray[index].value;
   }
+  data.date = new Date((data.date.substring(5,7)+"/"+data.date.substring(8)+"/"+data.date.substring(0,4))); 
   sendNewEventQuery("/create_event", data);
 }
 
@@ -209,6 +210,8 @@ function sendNewEventQuery(url, data) {
     dataType: "json",
     type: "POST",
     success: function(response) {
+      console.log(response.date);
+      response.date = new Date(response.date);
       storeCachedEventData(response);
       window.location.replace("/");
       if (document.getElementById("offline_div") != null)
@@ -473,6 +476,19 @@ function refreshEventList() {
 }
 function initExplore(){
   initDatabase();
+  var myLatlng = new google.maps.LatLng(
+    53.38108855193859,
+    -1.4801287651062012
+  );
+  var mapOptions = {
+    zoom: 18,
+    center: myLatlng
+  };
+  var map = new google.maps.Map(
+    document.getElementById("map_canvas"),
+    mapOptions
+  );
+  var geocoder = new google.maps.Geocoder();
   $(function() {
     $('input[name="datefilter"]').daterangepicker({
       autoUpdateInput: false,
@@ -490,7 +506,6 @@ function initExplore(){
       $(this).val(
           start + " - " + end
       );
-      console.log(start);
       var startDate =  new Date(start);
       var endDate = new Date(end);
       getDataByDate(startDate,endDate);
@@ -513,30 +528,50 @@ function initExplore(){
 }
 
 function addToSearch(data){
-  if (document.getElementById("searchResults") == null) {
-    const row = document.createElement("div");
-    document.getElementById("searchResults").appendChild(row);
-    row.innerHTML =
-    "<a href=/events/" +
-    data.id +
-    ">" +
-    "<span class='sti-title'>" +
-    data.name +
-    "</span>" +
-    "</a>";
-    console.log(row);
-  }else{
-    document.getElementById("searchResults").innerHTML="";
-    const row = document.createElement("div");
-    document.getElementById("searchResults").appendChild(row);
-    row.innerHTML =
-    "<a href=/events/" +
-    data.id +
-    ">" +
-    "<span class='sti-title'>" +
-    data.name +
-    "</span>" +
-    "</a>";
-    console.log(row);
-    }
+  var map = new google.maps.Map(document.getElementById('map_canvas'), {
+    zoom: 8,
+    center: new google.maps.LatLng(
+      53.38108855193859,
+      -1.4801287651062012
+    )
+  }); 
+  for (i=0;i<data.length;i++){
+    var geocoder = new google.maps.Geocoder();
+    var address = data[i].location;
+    geocoder.geocode({'address': address}, geocodeCallback(data[i]));
+    function geocodeCallback(data){
+      var callback = function(results, status) {
+        var event = data;
+        if (status === 'OK') {
+          map.setZoom(3);
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+          });
+          var infowindow = new google.maps.InfoWindow({
+            content: "<a href=/events/" +
+                      event.id +
+                      ">" +
+                      "<span class='sti-title'>" +
+                      event.name +
+                      '<div id="eventImage" class="row">'+
+                      "<img" + " src='" + event.image + "'" + " class='e-image'" + "/>"+
+                      '</div>'+
+                      "</span>" +
+                      "</a>"                   
+          });
+          marker.addListener('click', function() {
+            infowindow.open(map, marker);
+          });
+          google.maps.event.addListener(map, "click", function(event) {
+            infowindow.close();
+        });
+        } else {
+            console.log("Error in geocoder ");
+        }
+      };
+      return callback;
+    }  
+}
 }

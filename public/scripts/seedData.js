@@ -4,7 +4,7 @@ function seedData() {
       name: "Coachella",
       description:
         "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-      date: "12/05/2019",
+      date: new Date("12/05/2019"),
       image: "https://i.imgur.com/Qp3tTtH.jpg",
       organiser: "93729347234",
       location: "Los Angeles",
@@ -60,7 +60,7 @@ function seedData() {
       name: "SheffieldFest",
       description:
         "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-      date: "12/06/2019",
+      date: new Date("12/06/2019"),
       image: "https://i.imgur.com/jJHdo4D.jpg",
       organiser: "93729347235",
       location: "Sheffield",

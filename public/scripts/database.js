@@ -69,6 +69,25 @@ function pullFromDatabase() {
   }
 }
 
+/* pulls all objects from database and adds them to the homepage */
+function populateMap() {
+  if (dbPromise) {
+    dbPromise
+      .then(function(db) {
+        return db
+          .transaction(db.objectStoreNames)
+          .objectStore(MANIFEST_STORE_NAME)
+          .getAll();
+      })
+      .then(function(allData) {
+        getAllData(allData);
+      });
+  } else {
+    console.log("need to do this as well");
+  }
+}
+
+
 function getDataById(id) {
   if (dbPromise) {
     dbPromise
@@ -115,8 +134,7 @@ function getDataByName(name) {
         if (readingsList && readingsList.length > 0) {
           var max;
           for (var elem of readingsList)
-            if (!max || elem.date > max.date) max = elem;
-          if (max) addToSearch(max);
+            addToSearch(readingsList);
         } else {
           const value = localStorage.getItem(event);
           console.log(readingsList);
@@ -142,16 +160,15 @@ function getDataByDate(startDate,endDate) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
         var index = store.index("date");
-        console.log(name);
+        console.log(startDate);
+        console.log(endDate);
         return index.getAll(IDBKeyRange.bound(startDate,endDate));
       })
       .then(function(readingsList) {
         console.log(readingsList);
         if (readingsList && readingsList.length > 0) {
-          var max;
-          for (var elem of readingsList)
-            if (!max || elem.date > max.date) max = elem;
-          if (max) addToSearch(max);
+          //for (var elem of readingsList)
+          addToSearch(readingsList);
         } else {
           const value = localStorage.getItem(event);
           console.log(readingsList);
@@ -262,7 +279,6 @@ function addPostObject(postObject, id) {
       });
   }
 }
-
 /* ADD COMMENT OBJECTS TO AN EVENT */
 function addCommentObject(commentObject, eventId, postId) {
   if (dbPromise) {

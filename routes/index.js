@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const uuidv1 = require("uuid/v1");
 
+
 /* GET home page. */
 router.get("/", function(req, res, next) {
   res.render("index");
@@ -108,6 +109,7 @@ class Event {
   constructor(name, date, image, description, organiser, location, posts) {
     this.name = name;
     this.date = date;
+    //new Date((date.substring(5,7)+"/"+date.substring(8)+"/"+date.substring(0,4))); 
     this.image = image;
     this.description = description;
     this.organiser = organiser;
