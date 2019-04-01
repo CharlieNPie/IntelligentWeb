@@ -24,6 +24,11 @@ router.get("/events/:eventId", function(req, res) {
   res.render("event", { id: req.params.eventId });
 });
 
+/* GET event page */
+router.get("/events/:eventId/map", function(req, res) {
+  res.render("eventMap", { id: req.params.eventId });
+});
+
 /* GET edit event page */
 router.get("/events/:eventId/edit", function(req, res) {
   res.render("editEvent", { id: req.params.eventId });
