@@ -4,7 +4,7 @@ function seedData() {
       name: "BorjaFest",
       description:
         "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-      date: "12/05/2019",
+      date: new Date("12/05/2019"),
       image:
         "https://www.readingfestival.com/wp-content/uploads/2018/01/LeedsFestival2017_MattEachus_25082017_003-4-800x650.jpg",
       organiser: "93729347234",
@@ -64,11 +64,11 @@ function seedData() {
       name: "CharlieFest",
       description:
         "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-      date: "12/05/2019",
+      date: new Date("05/05/2019"),
       image:
         "https://media.resources.festicket.com/www/photos/FreeFestival2017_V1.jpg",
       organiser: "93729347234",
-      location: "Los Angeles",
+      location: "Edinburgh, UK",
       posts: [
         {
           id: "1",
@@ -124,11 +124,11 @@ function seedData() {
       name: "HasanFest",
       description:
         "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-      date: "12/05/2019",
+      date: new Date("03/05/2019"),
       image:
         "https://blog.ticketmaster.co.uk/wp-content/uploads/2019/02/Downloaddayblog.jpg",
       organiser: "93729347234",
-      location: "Los Angeles",
+      location: "Sheffield, UK",
       posts: [
         {
           id: "1",
@@ -184,10 +184,10 @@ function seedData() {
       name: "Coachella",
       description:
         "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-      date: new Date("12/05/2019"),
+      date: new Date("05/07/2019"),
       image: "https://i.imgur.com/Qp3tTtH.jpg",
       organiser: "93729347234",
-      location: "Los Angeles",
+      location: "London, UK",
       posts: [
         {
           id: "1",
@@ -243,11 +243,11 @@ function seedData() {
       name: "SheffieldFest",
       description:
         "The most exclusive festival you will find in this city. Happening only once every 10 years.",
-      date: new Date("12/06/2019"),
+      date: new Date("05/07/2019"),
       image:
         "https://downloadfestival.co.uk/wp-content/uploads/2017/09/aohjhizykxce-900x600.jpg",
       organiser: "93729347234",
-      location: "Los Angeles",
+      location: "Manchester, UK",
       posts: [
         {
           id: "1",

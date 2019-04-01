@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
   <% include ./partials/head.ejs %>
-  <body class="d-flex flex-column h-100 center-ui" onload="initExplore()">
+  <body class="d-flex flex-column h-100" onload="initExplore()">
     <div class="nav">
       <input list="results" class="search" id="search" />
       <input type="text" name="datefilter" placeholder="Date" class="date" />
     </div>
 
-    <main role="main" class="flex-shrink-0">
+    <main role="main">
       <div class="map" id="map_canvas"></div>
     </main>
     <% include ./partials/footer.ejs %>
