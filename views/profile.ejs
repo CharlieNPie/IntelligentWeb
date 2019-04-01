@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <% include partials/head.ejs %>
+  <body class="d-flex flex-column h-100 center-ui" onload="handleProfile()">
+    <div class="nav">
+      <span id="nothing"></span>
+      <span id="title"></span>
+      <span id="logout"></span>
+    </div>
+
+    <main role="main" class="flex-shrink-0">
+      <div class="empty"></div>
+      <div id="content"></div>
+    </main>
+
+    <% include partials/footer.ejs %>
+  </body>
+</html>
