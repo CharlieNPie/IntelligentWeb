@@ -1,3 +1,7 @@
+/**
+ * Checks to see if the browser supports getUserMedia.
+ * Used as part of the setUpCamera() function.
+ */
 function hasGetUserMedia() {
     return !!(navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
@@ -5,6 +9,12 @@ function hasGetUserMedia() {
     navigator.msGetUserMedia);
 }
 
+
+/**
+ * Handles the process of setting up a user's webcam for the app
+ * Sets dimensions of camera window and pulls image data from canvas object
+ * Allows the user to take a photo of themselves via a form button
+ */
 function setupCamera() {
     initDatabase();
   
@@ -84,7 +94,6 @@ function setupCamera() {
               var data = canvas.toDataURL('image/png');
               photo.setAttribute('src', data);
               document.getElementById('output').removeAttribute('hidden');
-              //document.getElementById("continueButton").removeAttribute("style");
               var videoFeed = document.getElementById("video");
               videoFeed.style.display = 'none';
             } else {
