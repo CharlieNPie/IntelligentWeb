@@ -21,6 +21,9 @@ var filesToCache = [
     '/styles/bootstrap.min.css',
     '/scripts/bootstrap.min.js',
     '/scripts/idb.js',
+    '/scripts/camera.js',
+    '/scripts/profile.js',
+    '/scripts/seedData.js',
     '/scripts/jquery.min.js',
     '/scripts/database.js',
     '/fonts/glyphicons-halflings-regular.woff2',
@@ -83,9 +86,10 @@ self.addEventListener('activate', function (e) {
  */
 self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
-    var dataUrl = '/event_data';
-    //if the request is '/event_data', post to the server
-    if (event.request.url.indexOf(dataUrl) > -1) {
+    var dataUrls = ['/create_event', '/upload_picture', '/create_comment'];
+    //if the request is '/create_event', post to the server
+    if (event.request.url.indexOf(dataUrls) > -1) {
+        console.log("HEre");
         /*
          * When the request URL contains dataUrl, the app is asking for fresh
          * weather data. In this case, the service worker always goes to the

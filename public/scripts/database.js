@@ -25,6 +25,11 @@ function initDatabase() {
   });
 }
 
+/**
+ * Seeds the database when it gets created using a big JSON object that
+ * gets imported from seedData so that we can always change the seed data
+ * easily from a different file
+ */
 function seedDatabase() {
   const data = seedData();
   for (index in data) storeCachedEventData(data[index]);
@@ -69,25 +74,10 @@ function pullFromDatabase() {
   }
 }
 
-/* pulls all objects from database and adds them to the homepage */
-function populateMap() {
-  if (dbPromise) {
-    dbPromise
-      .then(function(db) {
-        return db
-          .transaction(db.objectStoreNames)
-          .objectStore(MANIFEST_STORE_NAME)
-          .getAll();
-      })
-      .then(function(allData) {
-        getAllData(allData);
-      });
-  } else {
-    console.log("need to do this as well");
-  }
-}
-
-
+/**
+ * Gets event object by its corresponding ID
+ * @param id is an int with the key ID of the event object. 
+ */
 function getDataById(id) {
   if (dbPromise) {
     dbPromise
@@ -118,7 +108,11 @@ function getDataById(id) {
     else addToResults(value);
   }
 }
-// used to pull events from db when searching by name 
+
+/**
+ * Searches the database by the name of an event object. 
+ * @param name a string containing the name of the object 
+ */
 function getDataByName(name) {
   if (dbPromise) {
     dbPromise
@@ -139,9 +133,9 @@ function getDataByName(name) {
           const value = localStorage.getItem(event);
           console.log(readingsList);
           console.log(value);
-          if (value != null){
-            addToSearch(value)
-          };
+          if (value != null) {
+            addToSearch(value);
+          }
         }
       });
   } else {
@@ -151,8 +145,13 @@ function getDataByName(name) {
     else addToResults(value);
   }
 }
-// used to pull events from db when searching by date
-function getDataByDate(startDate,endDate) {
+
+/**
+ * Searches the database by event start and end date.
+ * @param startDate the start date specified by the user
+ * @param endDate the end date specified by the user
+ */
+function getDataByDate(startDate, endDate) {
   if (dbPromise) {
     dbPromise
       .then(function(db) {
@@ -160,9 +159,7 @@ function getDataByDate(startDate,endDate) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
         var index = store.index("date");
-        console.log(startDate);
-        console.log(endDate);
-        return index.getAll(IDBKeyRange.bound(startDate,endDate));
+        return index.getAll(IDBKeyRange.bound(startDate, endDate));
       })
       .then(function(readingsList) {
         console.log(readingsList);
@@ -173,9 +170,9 @@ function getDataByDate(startDate,endDate) {
           const value = localStorage.getItem(event);
           console.log(readingsList);
           console.log(value);
-          if (value != null){
-            addToSearch(value)
-          };
+          if (value != null) {
+            addToSearch(value);
+          }
         }
       });
   } else {
@@ -187,7 +184,11 @@ function getDataByDate(startDate,endDate) {
   }
 }
 
-/* GETS EVENT OBJECT GIVEN ITS ID */
+
+/**
+ * gets an individual event object by its ID and returns to other function as promise
+ * @param {*} id int containing id of object 
+ */
 function getEventObject(id) {
   if (dbPromise) {
     return dbPromise.then(function(db) {
@@ -200,7 +201,12 @@ function getEventObject(id) {
   }
 }
 
-/* GETS POST OBJECT GIVEN ITS ID */
+/**
+ * Gets a post object given its post id and the id of the event that
+ * contains the post
+ * @param {*} eventId 
+ * @param {*} postId 
+ */
 function getPostObject(eventId, postId) {
   if (dbPromise) {
     var eventObject = getEventObject(eventId);
@@ -217,7 +223,11 @@ function getPostObject(eventId, postId) {
   }
 }
 
-/* SETS NEW VALUES FOR DATA OBJECT IN DB GIVEN ITS ID */
+/**
+ * sets new data in a data object given the data itself and its id
+ * @param data 
+ * @param id 
+ */
 function setDataObject(data, id) {
   if (dbPromise) {
     return dbPromise
@@ -241,7 +251,10 @@ function setDataObject(data, id) {
   }
 }
 
-/* DELETES OBJECT FROM DATABASE */
+/**
+ * deletes object given its id
+ * @param {} id 
+ */
 function deleteObject(id) {
   if (dbPromise) {
     return dbPromise.then(function(db) {
@@ -252,13 +265,20 @@ function deleteObject(id) {
   }
 }
 
-/* return name of data object */
+/**
+ * returns name of data object
+ * @param {*} dataR 
+ */
 function getEventName(dataR) {
   if (dataR.name == null && dataR.name === undefined) return "unavailable";
   else return dataR.name;
 }
 
-/* ADD POST OBJECTS TO AN EVENT */
+/**
+ * adds post object to event given the event id and the data object
+ * @param {*} postObject 
+ * @param {*} id 
+ */
 function addPostObject(postObject, id) {
   if (dbPromise) {
     return dbPromise
@@ -279,7 +299,13 @@ function addPostObject(postObject, id) {
       });
   }
 }
-/* ADD COMMENT OBJECTS TO AN EVENT */
+
+/**
+ * adds comment object to a post object
+ * @param {*} commentObject : the comment object
+ * @param {*} eventId : id of event
+ * @param {*} postId : id of post
+ */
 function addCommentObject(commentObject, eventId, postId) {
   if (dbPromise) {
     return dbPromise

@@ -32,15 +32,8 @@ var options = {
 var server = https.createServer(options, app);
 // var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-io.on('connection', function(socket) {
-  console.log("User connected");
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-})
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
     io.emit('chat message', msg)
   });
 });
