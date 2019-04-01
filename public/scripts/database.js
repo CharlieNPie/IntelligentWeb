@@ -25,6 +25,11 @@ function initDatabase() {
   });
 }
 
+/**
+ * Seeds the database when it gets created using a big JSON object that
+ * gets imported from seedData so that we can always change the seed data
+ * easily from a different file
+ */
 function seedDatabase() {
   const data = seedData();
   for (index in data) storeCachedEventData(data[index]);
@@ -99,7 +104,7 @@ function getDataById(id) {
     else addToResults(value);
   }
 }
-// used to pull events from db when searching by name 
+// used to pull events from db when searching by name
 function getDataByName(name) {
   if (dbPromise) {
     dbPromise
@@ -121,9 +126,9 @@ function getDataByName(name) {
           const value = localStorage.getItem(event);
           console.log(readingsList);
           console.log(value);
-          if (value != null){
-            addToSearch(value)
-          };
+          if (value != null) {
+            addToSearch(value);
+          }
         }
       });
   } else {
@@ -134,7 +139,7 @@ function getDataByName(name) {
   }
 }
 // used to pull events from db when searching by date
-function getDataByDate(startDate,endDate) {
+function getDataByDate(startDate, endDate) {
   if (dbPromise) {
     dbPromise
       .then(function(db) {
@@ -143,7 +148,7 @@ function getDataByDate(startDate,endDate) {
         var store = tx.objectStore(MANIFEST_STORE_NAME);
         var index = store.index("date");
         console.log(name);
-        return index.getAll(IDBKeyRange.bound(startDate,endDate));
+        return index.getAll(IDBKeyRange.bound(startDate, endDate));
       })
       .then(function(readingsList) {
         console.log(readingsList);
@@ -156,9 +161,9 @@ function getDataByDate(startDate,endDate) {
           const value = localStorage.getItem(event);
           console.log(readingsList);
           console.log(value);
-          if (value != null){
-            addToSearch(value)
-          };
+          if (value != null) {
+            addToSearch(value);
+          }
         }
       });
   } else {

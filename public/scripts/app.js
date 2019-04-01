@@ -33,6 +33,11 @@ function loadEvent(id) {
   });
 }
 
+/**
+ * It adds an event element into the UI when called
+ * @param data takes the events data to create the UI element
+ * that will be added into the front-end
+ */
 function addToResults(data) {
   if (document.getElementById("events") != null) {
     let loggedin = JSON.parse(localStorage.getItem("admin"));
@@ -60,6 +65,11 @@ function addToResults(data) {
   }
 }
 
+/**
+ * It adds all the relevant data into an events UI
+ * @param data takes the event's data to create all the UI elements
+ * It will get the relevant data and either replace or add UI into the event page
+ */
 function addToEvent(data) {
   $("#eventName").html(data.name);
   $("#eventDescription").html(data.description);
@@ -134,6 +144,12 @@ function addToEvent(data) {
   }
 }
 
+/**
+ * Util function needed by addToEvent that checks if a post has been
+ * previously liked by the user in order to know if the heart on the
+ * UI should be empty or filled
+ * @param id takes the posts id to check if was previously liked
+ */
 const checkForLike = id => {
   let liked = JSON.parse(localStorage.getItem("liked"));
   if (liked === null) {
@@ -147,6 +163,12 @@ const checkForLike = id => {
   }
 };
 
+/**
+ * Util function needed by addToEvent that handles the liking functionality
+ * @param id takes the posts id and checks if the user has ever likes something
+ * if he didn't creates a new array in localStorage to start saving liked posts,
+ * otherwise it just adds or removes from the array if it was or wasn't there
+ */
 const handleLike = id => {
   let liked = JSON.parse(localStorage.getItem("liked"));
   console.log(liked);
@@ -297,7 +319,6 @@ function addPhotoPost(eventId) {
   var picData = canvas.toDataURL();
   postData["imageBlob"] = picData;
 
-
   postWithImageQuery(postData, eventId);
 }
 
@@ -373,6 +394,13 @@ function deleteEvent(id) {
   deleteObject(id);
 }
 
+/**
+ * Adds comments into the comment section of a post
+ * @param eventId takes the event's ID
+ * @param postId takes the posts's ID
+ * with both ids, it pulls the posts comments from the database
+ * and it adds each comment to the UI
+ */
 function loadPost(eventId, postId) {
   initDatabase();
   var postPromise = getPostObject(eventId, postId);
@@ -411,21 +439,21 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
     success: function(response) {
       addCommentObject(response, eventId, postId);
       let post =
-      "<div class='comment'>" +
-      "<img src='" +
-      response.avatar +
-      "' class='ps-avatar' />" +
-      "<div class='ps-text'>" +
-      "<span class='ps-username'><b>" +
-      response.author +
-      " </b> " +
-      response.text +
-      "</span>" +
-      "<p class='ps-date'>" +
-      response.date +
-      "</p>" +
-      "</div>" +
-      "</div>";
+        "<div class='comment'>" +
+        "<img src='" +
+        response.avatar +
+        "' class='ps-avatar' />" +
+        "<div class='ps-text'>" +
+        "<span class='ps-username'><b>" +
+        response.author +
+        " </b> " +
+        response.text +
+        "</span>" +
+        "<p class='ps-date'>" +
+        response.date +
+        "</p>" +
+        "</div>" +
+        "</div>";
       console.log(post);
       $("#posts").append(post);
       if (document.getElementById("offline_div") != null)
@@ -444,8 +472,8 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
 }
 
 function newComment(eventId, postId, msg) {
-  console.log(msg)
-  var data = {text: msg};
+  console.log(msg);
+  var data = { text: msg };
   console.log(data);
   sendAjaxCommentQuery("/create_comment", data, eventId, postId);
 }
@@ -573,6 +601,13 @@ function addToSearch(data) {
   }
 }
 
+/**
+ * Checks in the localStorage to see if a user has logged in
+ * if admin is true it shows the admins info
+ * if user is true, it shows the users info
+ * if either of them is logged in, it also shows a logout button
+ * if none of them is logged in, it shows a form to login
+ */
 const handleProfile = () => {
   let admin = JSON.parse(localStorage.getItem("admin"));
   let loggedin = JSON.parse(localStorage.getItem("login"));
@@ -603,12 +638,19 @@ const handleProfile = () => {
   }
 };
 
+// Handles the logout by changing the values in the localStorage
 const handleLogout = () => {
   localStorage.setItem("admin", false);
   localStorage.setItem("login", false);
   location.reload();
 };
 
+/**
+ * Checks for the username to be the correct one and if so changes localStorage
+ * Really fake authentication but once we have a proper server and external mongo DB
+ * we'll have a proper authentication, this is enough to show how the app will work
+ * in terms of UX (User Experience)
+ */
 const handleLogin = () => {
   const user = $("#user").val();
   console.log(user);
