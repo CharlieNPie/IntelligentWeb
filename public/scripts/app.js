@@ -184,31 +184,6 @@ const handleLike = id => {
   }
 };
 
-/* send request to server */
-function sendAjaxQuery(url, data) {
-  $.ajax({
-    url: url,
-    data: data,
-    dataType: "json",
-    type: "POST",
-    success: function(response) {
-      storeCachedEventData(response);
-      location.reload();
-      if (document.getElementById("offline_div") != null)
-        document.getElementById("offline_div").style.display = "none";
-    },
-    error: function(xhr, status, error) {
-      showOfflineWarning();
-      var offlineEventList = JSON.parse(localStorage.getItem("offline_events"));
-      offlineEventList.push(data);
-      newEventList = offlineEventList;
-      localStorage.setItem("offline_events", JSON.stringify(newEventList));
-      const dvv = document.getElementById("offline_div");
-      if (dvv != null) dvv.style.display = "block";
-    }
-  });
-}
-
 /* function for when new event entry is made */
 function newEvent() {
   var formArray = $("form").serializeArray();
@@ -233,13 +208,20 @@ function sendNewEventQuery(url, data) {
         document.getElementById("offline_div").style.display = "none";
     },
     error: function(xhr, status, error) {
+      console.log(data);
       showOfflineWarning();
-      var offlineEventList = JSON.parse(localStorage.getItem("offline_events"));
-      offlineEventList.push(data);
-      newEventList = offlineEventList;
-      localStorage.setItem("offline_events", JSON.stringify(newEventList));
-      const dvv = document.getElementById("offline_div");
-      if (dvv != null) dvv.style.display = "block";
+      var cache_data = getEvent(
+        data.name,
+        data.date,
+        data.image,
+        data.description,
+        data.location
+      );
+      console.log(cache_data);
+      storeCachedEventData(cache_data);
+      window.location.replace("/");
+      if (document.getElementById("offline_div") != null)
+        document.getElementById("offline_div").style.display = "none";
     }
   });
 }
@@ -249,41 +231,7 @@ function sendNewEventQuery(url, data) {
  * ADDING POSTS TO EVENTS
  */
 
-/* send request to server */
-function sendAjaxPostQuery(url, data, id) {
-  $.ajax({
-    url: url,
-    data: data,
-    dataType: "json",
-    type: "POST",
-    success: function(response) {
-      addPostObject(response, id);
-      //location.reload();
-      if (document.getElementById("offline_div") != null)
-        document.getElementById("offline_div").style.display = "none";
-    },
-    error: function(xhr, status, error) {
-      showOfflineWarning();
-      var offlineEventList = JSON.parse(localStorage.getItem("offline_events"));
-      offlineEventList.push(data);
-      newEventList = offlineEventList;
-      localStorage.setItem("offline_events", JSON.stringify(newEventList));
-      const dvv = document.getElementById("offline_div");
-      if (dvv != null) dvv.style.display = "block";
-    }
-  });
-}
-function newPost(id) {
-  var formArray = $("form").serializeArray();
-  var data = {};
-  for (index in formArray) {
-    data[formArray[index].name] = formArray[index].value;
-  }
-  sendAjaxPostQuery("/create_post", data, id);
-}
-
 /* LOADING POST PAGE WITH IMAGES */
-
 function addPhotoPost(eventId) {
   canvas = document.getElementById("canvas");
   var formArray = $("form").serializeArray();
@@ -312,6 +260,20 @@ function postWithImageQuery(data, eventId) {
     },
     error: function(err) {
       alert("Error: " + err.status + ":" + err.statusText);
+      var cache_data = getPost(
+        data.id,
+        data.author,
+        data.avatar,
+        data.comments,
+        data.image,
+        data.location,
+        data.text
+      );
+      console.log(cache_data);
+      addPostObject(cache_data, eventId);
+      window.location.replace("/");
+      if (document.getElementById("offline_div") != null)
+        document.getElementById("offline_div").style.display = "none";
     }
   });
 }
@@ -365,32 +327,21 @@ function sendUpdateEventQuery(url, data, id) {
   });
 }
 
+
+
 /* DELETE ITEM FROM DATABASE */
 function deleteEvent(id) {
   deleteObject(id);
 }
 
+
+/* LOAD POST INTO VIEW */
 function loadPost(eventId, postId) {
   initDatabase();
   var postPromise = getPostObject(eventId, postId);
   postPromise.then(function({ comments }) {
     comments.map(comment => {
-      let post =
-        "<div class='comment'>" +
-        "<img src='" +
-        comment.avatar +
-        "' class='ps-avatar' />" +
-        "<div class='ps-text'>" +
-        "<span class='ps-username'><b>" +
-        comment.author +
-        " </b> " +
-        comment.text +
-        "</span>" +
-        "<p class='ps-date'>" +
-        comment.date +
-        "</p>" +
-        "</div>" +
-        "</div>";
+      let post = addCommentView(comment);
       $("#posts").append(post);
     });
   });
@@ -407,43 +358,41 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
     type: "POST",
     success: function(response) {
       addCommentObject(response, eventId, postId);
-      let post =
-      "<div class='comment'>" +
-      "<img src='" +
-      response.avatar +
-      "' class='ps-avatar' />" +
-      "<div class='ps-text'>" +
-      "<span class='ps-username'><b>" +
-      response.author +
-      " </b> " +
-      response.text +
-      "</span>" +
-      "<p class='ps-date'>" +
-      response.date +
-      "</p>" +
-      "</div>" +
-      "</div>";
-      console.log(post);
+      let post = addCommentView(response);
       $("#posts").append(post);
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
     error: function(xhr, status, error) {
       showOfflineWarning();
-      var offlineEventList = JSON.parse(localStorage.getItem("offline_events"));
-      offlineEventList.push(data);
-      newEventList = offlineEventList;
-      localStorage.setItem("offline_events", JSON.stringify(newEventList));
-      const dvv = document.getElementById("offline_div");
-      if (dvv != null) dvv.style.display = "block";
+      
     }
   });
 }
 
+/* ADD COMMENT CODE TO EJS VIEW */
+function addCommentView(comment) {
+  let post =
+  "<div class='comment'>" +
+  "<img src='" +
+  response.avatar +
+  "' class='ps-avatar' />" +
+  "<div class='ps-text'>" +
+  "<span class='ps-username'><b>" +
+  response.author +
+  " </b> " +
+  response.text +
+  "</span>" +
+  "<p class='ps-date'>" +
+  response.date +
+  "</p>" +
+  "</div>" +
+  "</div>";
+  return post;
+}
+
 function newComment(eventId, postId, msg) {
-  console.log(msg)
   var data = {text: msg};
-  console.log(data);
   sendAjaxCommentQuery("/create_comment", data, eventId, postId);
 }
 
@@ -467,11 +416,7 @@ window.addEventListener(
     // Resync data with server.
     console.log("You are online");
     hideOfflineWarning();
-    var offlineEventList = JSON.parse(localStorage.getItem("offline_events"));
-    for (index in offlineEventList) {
-      sendNewEventQuery("create_event", offlineEventList[index]);
-    }
-    localStorage.clear();
+    pullFromDatabase();
     loadData();
   },
   false
@@ -502,6 +447,8 @@ function refreshEventList() {
   if (document.getElementById("results") != null)
     document.getElementById("results").innerHTML = "";
 }
+
+/* EXPLORE */
 function initExplore() {
   initDatabase();
   $(function() {
@@ -570,49 +517,91 @@ function addToSearch(data) {
   }
 }
 
-const handleProfile = () => {
-  let admin = JSON.parse(localStorage.getItem("admin"));
-  let loggedin = JSON.parse(localStorage.getItem("login"));
-  if (admin || loggedin) {
-    $("#title").html("Profile");
-    const logout =
-      "<img src='https://image.flaticon.com/icons/svg/126/126467.svg' onclick='handleLogout()' class='back-button' />";
-    $("#logout").html(logout);
-    const ubox =
-      "<div class='profile-box'><img src='https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg' /><p>Name: Borja Leiva</p><p>Location: Sheffield</p></div>";
-    const abox =
-      "<div class='profile-box'><img src='https://pixel.nymag.com/imgs/daily/intelligencer/2018/11/21/21-mark-zuckerberg-cnn.w700.h700.jpg' /><p>Name: Mark Suckerborg</p><p>Location: SF, California</p></div>";
-    if (admin) {
-      $("#content").append(abox);
-    } else {
-      $("#content").append(ubox);
-    }
-  } else {
-    $("#title").html("Login");
-    const box =
-      "<div class='profile-box'><p>Username: </p>" +
-      "<form id='login' onsubmit='handleLogin()'>" +
-      "<input id='user' type='text' name='user' />" +
-      "<span class='share'><input type='submit' class='submit' value='Login' form='login'/></span>" +
-      "</form>" +
-      "</div>";
-    $("#content").append(box);
+/** RETURN CLASSES */
+class Event {
+  constructor(name, date, image, description, organiser, location, posts) {
+    this.name = name;
+    this.date = date;
+    this.image = image;
+    this.description = description;
+    this.organiser = organiser;
+    this.location = location;
+    this.posts = posts;
   }
-};
+}
+function getEvent(name, date, image, description, location) {
+  return new Event(
+    name,
+    date,
+    image,
+    description,
+    "maniOrganisers",
+    location,
+    []
+  );
+}
 
-const handleLogout = () => {
-  localStorage.setItem("admin", false);
-  localStorage.setItem("login", false);
-  location.reload();
-};
-
-const handleLogin = () => {
-  const user = $("#user").val();
-  console.log(user);
-  if (user == "admin") {
-    localStorage.setItem("admin", true);
-  } else if (user == "user") {
-    localStorage.setItem("login", true);
+class Post {
+  constructor(id, author, comments, date, image, location, text) {
+    this.author = author;
+    this.avatar =
+      "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg";
+    this.comments = comments;
+    this.image = image;
+    this.location = location;
+    this.text = text;
+    this.id = id;
+    var months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    this.date = date.getDate() + " " + months[date.getMonth()];
   }
-  location.reload();
-};
+}
+function getPost(text, image) {
+  return new Post(uuidv1(), "username", [], new Date(), image, null, text);
+}
+
+class Comment {
+  constructor(id, author, text, avatar) {
+    this.id = id;
+    this.author = author;
+    this.text = text;
+    this.avatar = avatar;
+    var months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    var d = new Date();
+    this.date = d.getDate() + " " + months[d.getMonth()];
+  }
+}
+
+function getComment(text) {
+  return new Comment(
+    uuidv1(),
+    "borjadotai",
+    text,
+    "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
+  );
+}
