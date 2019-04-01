@@ -277,6 +277,7 @@ function postWithImageQuery(data, eventId) {
     type: "POST",
     data: data,
     success: function(data) {
+      console.log(data);
       window.location.replace("/events/" + eventId);
       addPostObject(data, eventId);
       if (document.getElementById("offline_div") != null)

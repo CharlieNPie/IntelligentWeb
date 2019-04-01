@@ -294,6 +294,7 @@ function addPostObject(postObject, id) {
       })
       .then(function(eventObject) {
         var event = eventObject[0];
+        console.log(postObject);
         event.posts.push(postObject);
         return dbPromise.then(function(db) {
           var tx = db.transaction(db.objectStoreNames, "readwrite");
