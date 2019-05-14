@@ -66,7 +66,10 @@ function pullFromDatabase() {
       })
       .then(function(allData) {
         if (allData && allData.length > 0) {
-          for (var elem of allData) addToResults(elem);
+          for (var elem of allData){
+            addToResults(elem);
+          }
+          addToSearch(allData);
         }
       });
   } else {
