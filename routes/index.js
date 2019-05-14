@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 const uuidv1 = require("uuid/v1");
+const mongoose = require("mongoose");
+const Event = require("../models/event");
 
 /** GET home page. */
 router.get("/", function(req, res, next) {
@@ -55,15 +57,24 @@ router.get("/events/:eventId/posts/:postId", function(req, res) {
  *
  */
 router.post("/create_event", function(req, res, next) {
-  const event = getEvent(
-    req.body.name,
-    req.body.date,
-    req.body.image,
-    req.body.description,
-    req.body.location
-  );
-  res.setHeader("Content-Type", "application/json");
-  res.send(JSON.stringify(event));
+  // Creating event object using mongo Model
+  const newEvent = new Event({
+    _id: new mongoose.Types.ObjectId(),
+    name: req.body.name,
+    date: req.body.date,
+    image: req.body.image,
+    description: req.body.description,
+    location: req.body.location,
+    organiser: "borja"
+  });
+  // Saving object into mongoDB & responding to client
+  newEvent
+    .save()
+    .then(() => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(newEvent);
+    })
+    .catch(() => res.status(500).json({ error: "Could not create event" }));
 });
 
 /**
@@ -112,11 +123,11 @@ router.post("/create_comment", function(req, res, next) {
   res.send(JSON.stringify(comment));
 });
 
-class Event {
+class LocalEvent {
   constructor(name, date, image, description, organiser, location, posts) {
     this.name = name;
     this.date = date;
-    //new Date((date.substring(5,7)+"/"+date.substring(8)+"/"+date.substring(0,4))); 
+    //new Date((date.substring(5,7)+"/"+date.substring(8)+"/"+date.substring(0,4)));
     this.image = image;
     this.description = description;
     this.organiser = organiser;
@@ -125,7 +136,7 @@ class Event {
   }
 }
 function getEvent(name, date, image, description, location) {
-  return new Event(
+  return new LocalEvent(
     name,
     date,
     image,

@@ -139,7 +139,8 @@ function addToEvent(data) {
   } else {
     $("#new-post").remove();
     $("#edit-event").remove();
-    let post = "<div class='login-box'><h2>Sorry, you need to be logged in to fully view events.</h2><a href='/profile'><button class='login-button'>Login</button></a></div>";
+    let post =
+      "<div class='login-box'><h2>Sorry, you need to be logged in to fully view events.</h2><a href='/profile'><button class='login-button'>Login</button></a></div>";
     $("#posts").append(post);
   }
 }
@@ -216,7 +217,13 @@ function newEvent() {
   for (index in formArray) {
     data[formArray[index].name] = formArray[index].value;
   }
-  data.date = new Date((data.date.substring(5,7)+"/"+data.date.substring(8)+"/"+data.date.substring(0,4))); 
+  data.date = new Date(
+    data.date.substring(5, 7) +
+      "/" +
+      data.date.substring(8) +
+      "/" +
+      data.date.substring(0, 4)
+  );
   sendNewEventQuery("/create_event", data);
 }
 
@@ -267,7 +274,7 @@ function addPhotoPost(eventId) {
   for (index in formArray) {
     postData[formArray[index].name] = formArray[index].value;
   }
-  console.log("help",postData);
+  console.log("help", postData);
   var picData = canvas.toDataURL();
   postData["imageBlob"] = picData;
 
@@ -356,8 +363,6 @@ function sendUpdateEventQuery(url, data, id) {
   });
 }
 
-
-
 /* DELETE ITEM FROM DATABASE */
 function deleteEvent(id) {
   deleteObject(id);
@@ -376,21 +381,21 @@ function loadPost(eventId, postId) {
   postPromise.then(function({ comments }) {
     comments.map(comment => {
       let post =
-      "<div class='comment'>" +
-      "<img src='" +
-      comment.avatar +
-      "' class='ps-avatar' />" +
-      "<div class='ps-text'>" +
-      "<span class='ps-username'><b>" +
-      comment.author +
-      " </b> " +
-      comment.text +
-      "</span>" +
-      "<p class='ps-date'>" +
-      comment.date +
-      "</p>" +
-      "</div>" +
-      "</div>";      
+        "<div class='comment'>" +
+        "<img src='" +
+        comment.avatar +
+        "' class='ps-avatar' />" +
+        "<div class='ps-text'>" +
+        "<span class='ps-username'><b>" +
+        comment.author +
+        " </b> " +
+        comment.text +
+        "</span>" +
+        "<p class='ps-date'>" +
+        comment.date +
+        "</p>" +
+        "</div>" +
+        "</div>";
       $("#posts").append(post);
     });
   });
@@ -408,34 +413,33 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
     success: function(response) {
       addCommentObject(response, eventId, postId);
       let post =
-      "<div class='comment'>" +
-      "<img src='" +
-      response.avatar +
-      "' class='ps-avatar' />" +
-      "<div class='ps-text'>" +
-      "<span class='ps-username'><b>" +
-      response.author +
-      " </b> " +
-      response.text +
-      "</span>" +
-      "<p class='ps-date'>" +
-      response.date +
-      "</p>" +
-      "</div>" +
-      "</div>";
+        "<div class='comment'>" +
+        "<img src='" +
+        response.avatar +
+        "' class='ps-avatar' />" +
+        "<div class='ps-text'>" +
+        "<span class='ps-username'><b>" +
+        response.author +
+        " </b> " +
+        response.text +
+        "</span>" +
+        "<p class='ps-date'>" +
+        response.date +
+        "</p>" +
+        "</div>" +
+        "</div>";
       $("#posts").append(post);
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
     error: function(xhr, status, error) {
       showOfflineWarning();
-      
     }
   });
 }
 
 function newComment(eventId, postId, msg) {
-  var data = {text: msg};
+  var data = { text: msg };
   sendAjaxCommentQuery("/create_comment", data, eventId, postId);
 }
 
@@ -494,10 +498,7 @@ function refreshEventList() {
 /* EXPLORE */
 function initExplore() {
   initDatabase();
-  var myLatlng = new google.maps.LatLng(
-    53.38108855193859,
-    -1.4801287651062012
-  );
+  var myLatlng = new google.maps.LatLng(53.38108855193859, -1.4801287651062012);
   var mapOptions = {
     zoom: 18,
     center: myLatlng
@@ -544,22 +545,19 @@ function initExplore() {
   });
 }
 
-function addToSearch(data){
-  var map = new google.maps.Map(document.getElementById('map_canvas'), {
+function addToSearch(data) {
+  var map = new google.maps.Map(document.getElementById("map_canvas"), {
     zoom: 8,
-    center: new google.maps.LatLng(
-      53.38108855193859,
-      -1.4801287651062012
-    )
-  }); 
-  for (i=0;i<data.length;i++){
+    center: new google.maps.LatLng(53.38108855193859, -1.4801287651062012)
+  });
+  for (i = 0; i < data.length; i++) {
     var geocoder = new google.maps.Geocoder();
     var address = data[i].location;
-    geocoder.geocode({'address': address}, geocodeCallback(data[i]));
-    function geocodeCallback(data){
+    geocoder.geocode({ address: address }, geocodeCallback(data[i]));
+    function geocodeCallback(data) {
       var callback = function(results, status) {
         var event = data;
-        if (status === 'OK') {
+        if (status === "OK") {
           map.setZoom(3);
           map.setCenter(results[0].geometry.location);
           var marker = new google.maps.Marker({
@@ -567,32 +565,37 @@ function addToSearch(data){
             position: results[0].geometry.location
           });
           var infowindow = new google.maps.InfoWindow({
-            content: "<a href=/events/" +
-                      event.id +
-                      ">" +
-                      "<span class='sti-title'>" +
-                      event.name +
-                      '<div id="eventImage" class="row">'+
-                      "<img" + " src='" + event.image + "'" + " class='e-image'" + "/>"+
-                      '</div>'+
-                      "</span>" +
-                      "</a>"                   
+            content:
+              "<a href=/events/" +
+              event.id +
+              ">" +
+              "<span class='sti-title'>" +
+              event.name +
+              '<div id="eventImage" class="row">' +
+              "<img" +
+              " src='" +
+              event.image +
+              "'" +
+              " class='e-image'" +
+              "/>" +
+              "</div>" +
+              "</span>" +
+              "</a>"
           });
-          marker.addListener('click', function() {
+          marker.addListener("click", function() {
             infowindow.open(map, marker);
           });
           google.maps.event.addListener(map, "click", function(event) {
             infowindow.close();
-        });
+          });
         } else {
-            console.log("Error in geocoder ");
+          console.log("Error in geocoder ");
         }
       };
       return callback;
-    }  
+    }
+  }
 }
-}
-
 
 /** RETURN CLASSES */
 class Event {
