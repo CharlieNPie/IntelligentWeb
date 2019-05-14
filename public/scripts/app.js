@@ -498,15 +498,28 @@ function refreshEventList() {
 /* EXPLORE */
 function initExplore() {
   initDatabase();
-  var myLatlng = new google.maps.LatLng(53.38108855193859, -1.4801287651062012);
-  var mapOptions = {
-    zoom: 18,
-    center: myLatlng
-  };
-  var map = new google.maps.Map(
-    document.getElementById("map_canvas"),
-    mapOptions
-  );
+  // var myLatlng = new google.maps.LatLng(53.38108855193859, -1.4801287651062012);
+  // var mapOptions = {
+  //   zoom: 18,
+  //   center: myLatlng
+  // };
+  // var map = new google.maps.Map(
+  //   document.getElementById("map_canvas"),
+  //   mapOptions
+  // );
+  pullFromDatabase();
+  // var myLatlng = new google.maps.LatLng(
+  //   53.38108855193859,
+  //   -1.4801287651062012
+  // );
+  // var mapOptions = {
+  //   zoom: 7,
+  //   center: myLatlng
+  // };
+  // var map = new google.maps.Map(
+  //   document.getElementById("map_canvas"),
+  //   mapOptions
+  // );
   var geocoder = new google.maps.Geocoder();
   $(function() {
     $('input[name="datefilter"]').daterangepicker({
@@ -540,16 +553,14 @@ function initExplore() {
     var keycode = event.keyCode ? event.keyCode : event.which;
     if (keycode == "13") {
       getDataByName($("#search").val());
+      getDataByLocation($("#search").val());
     }
     event.stopPropagation();
   });
 }
 
 function addToSearch(data) {
-  var map = new google.maps.Map(document.getElementById("map_canvas"), {
-    zoom: 8,
-    center: new google.maps.LatLng(53.38108855193859, -1.4801287651062012)
-  });
+  var map = new google.maps.Map(document.getElementById("map_canvas"), {});
   for (i = 0; i < data.length; i++) {
     var geocoder = new google.maps.Geocoder();
     var address = data[i].location;
@@ -558,7 +569,7 @@ function addToSearch(data) {
       var callback = function(results, status) {
         var event = data;
         if (status === "OK") {
-          map.setZoom(3);
+          map.setZoom(6);
           map.setCenter(results[0].geometry.location);
           var marker = new google.maps.Marker({
             map: map,
