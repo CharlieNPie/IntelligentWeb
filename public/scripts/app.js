@@ -25,6 +25,7 @@ function loadData() {
 }
 
 function loadEvent(id) {
+  
   initDatabase();
   getDataById(id);
   $(function() {
@@ -539,6 +540,7 @@ function initExplore() {
     var keycode = event.keyCode ? event.keyCode : event.which;
     if (keycode == "13") {
       getDataByName($("#search").val());
+      getDataByLocation($("#search").val());
     }
     event.stopPropagation();
   });
