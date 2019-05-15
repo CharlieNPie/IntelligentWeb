@@ -1,5 +1,4 @@
 function initEvents() {
-  console.log(new Date("05/12/2019"));
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("./service-worker.js")
@@ -45,10 +44,12 @@ function addToResults(data) {
     if (!loggedin) {
       $("#new-event").remove();
     }
+
+    console.log(data.image);
     const element =
       "<div>" +
       "<a href=/events/" +
-      data.id +
+      data._id +
       ">" +
       "<img src='" +
       data.image +
@@ -235,7 +236,7 @@ function sendNewEventQuery(url, data) {
     dataType: "json",
     type: "POST",
     success: function(response) {
-      console.log(response.date);
+      console.log(response._id)
       response.date = new Date(response.date);
       storeCachedEventData(response);
       window.location.replace("/");
@@ -282,6 +283,8 @@ function addPhotoPost(eventId) {
 }
 
 function postWithImageQuery(data, eventId) {
+  console.log(eventId);
+  data["eventId"] = eventId;
   $.ajax({
     dataType: "json",
     url: "/upload_picture",

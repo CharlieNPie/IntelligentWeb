@@ -31,7 +31,7 @@ var filesToCache = [
     '/fonts/glyphicons-halflings-regular.ttf',
     '/scripts/camera.js',
     '/scripts/profile.js',
-    'seedData.js'
+    '/scripts/seedData.js'
 ];
 
 

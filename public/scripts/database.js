@@ -10,8 +10,7 @@ function initDatabase() {
   dbPromise = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
     if (!upgradeDb.objectStoreNames.contains(MANIFEST_STORE_NAME)) {
       var events = upgradeDb.createObjectStore(MANIFEST_STORE_NAME, {
-        keyPath: "id",
-        autoIncrement: true
+        keyPath: "_id",
       });
       events.createIndex("name", "name", { unique: false, multiEntry: true });
       events.createIndex("location", "location", {
@@ -82,6 +81,7 @@ function pullFromDatabase() {
  * @param id is an int with the key ID of the event object. 
  */
 function getDataById(id) {
+  console.log(id);
   if (dbPromise) {
     dbPromise
       .then(function(db) {
@@ -89,7 +89,7 @@ function getDataById(id) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
         var index = store.index("name");
-        return store.getAll(IDBKeyRange.only(parseInt(id)));
+        return store.getAll(IDBKeyRange.only(id));
       })
       .then(function(readingsList) {
         if (readingsList && readingsList.length > 0) {

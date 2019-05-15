@@ -3,6 +3,7 @@ var router = express.Router();
 const uuidv1 = require("uuid/v1");
 const mongoose = require("mongoose");
 const Event = require("../models/event");
+const makePost = require("../models/post")
 
 /** GET home page. */
 router.get("/", function(req, res, next) {
@@ -26,7 +27,7 @@ router.get("/events/:eventId", function(req, res) {
   res.render("event", { id: req.params.eventId });
 });
 
-/* GET event page */
+/* GET event map page */
 router.get("/events/:eventId/map", function(req, res) {
   res.render("eventMap", { id: req.params.eventId });
 });
@@ -82,6 +83,16 @@ router.post("/create_event", function(req, res, next) {
  */
 router.post("/create_post", function(req, res, next) {
   const post = getPost(req.body.text);
+  const newPost = new Post({
+    _id: new mongoose.Types.ObjectId(),
+    author: req.body.author,
+    avatar: req.body.avatar,
+    comments: req.body.comments,
+    date: req.body.date,
+    image: req.body.image,
+    location: req.body.location,
+    text: req.body.text
+  });  
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(post));
 });
