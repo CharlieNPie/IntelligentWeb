@@ -8,7 +8,7 @@ function seedData() {
       image:
         "https://www.readingfestival.com/wp-content/uploads/2018/01/LeedsFestival2017_MattEachus_25082017_003-4-800x650.jpg",
       organiser: "93729347234",
-      location: "Los Angeles",
+      location: "Los Angeles, CA, USA",
       posts: [
         {
           id: "1",
