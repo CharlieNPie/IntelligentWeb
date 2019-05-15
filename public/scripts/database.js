@@ -234,7 +234,7 @@ function getEventObject(id) {
       var objectStores = db.transaction(db.objectStoreNames);
       var selectId = objectStores
         .objectStore(MANIFEST_STORE_NAME)
-        .getAll(IDBKeyRange.only(parseInt(id)));
+        .getAll(IDBKeyRange.only(id));
       return selectId;
     });
   }
@@ -273,7 +273,7 @@ function setDataObject(data, id) {
       .then(function(db) {
         var objectStores = db.transaction(db.objectStoreNames);
         var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
-        var oldData = selectId.getAll(IDBKeyRange.only(parseInt(id)));
+        var oldData = selectId.getAll(IDBKeyRange.only(id));
         return oldData;
       })
       .then(function(oldData) {
@@ -299,7 +299,7 @@ function deleteObject(id) {
     return dbPromise.then(function(db) {
       var objectStores = db.transaction(db.objectStoreNames, "readwrite");
       var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
-      selectId.delete(IDBKeyRange.only(parseInt(id)));
+      selectId.delete(IDBKeyRange.only(id));
     });
   }
 }
@@ -319,16 +319,18 @@ function getEventName(dataR) {
  * @param {*} id 
  */
 function addPostObject(postObject, id) {
+  console.log(id);
   if (dbPromise) {
     return dbPromise
       .then(function(db) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
-        var eventObject = store.getAll(parseInt(id));
+        var eventObject = store.getAll(id);
         return eventObject;
       })
       .then(function(eventObject) {
         var event = eventObject[0];
+        console.log(event)
         console.log(postObject);
         event.posts.push(postObject);
         return dbPromise.then(function(db) {
@@ -352,7 +354,7 @@ function addCommentObject(commentObject, eventId, postId) {
       .then(function(db) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
-        var eventObject = store.getAll(parseInt(eventId));
+        var eventObject = store.getAll(eventId);
         return eventObject;
       })
       .then(function(eventObject) {
