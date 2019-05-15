@@ -3,7 +3,7 @@ var router = express.Router();
 const uuidv1 = require("uuid/v1");
 const mongoose = require("mongoose");
 const Event = require("../models/event");
-const makePost = require("../models/post")
+const PostObject = require("../models/post");
 
 /** GET home page. */
 router.get("/", function(req, res, next) {
@@ -79,32 +79,33 @@ router.post("/create_event", function(req, res, next) {
 });
 
 /**
- * POST data used to add posts to an event
- */
-router.post("/create_post", function(req, res, next) {
-  const post = getPost(req.body.text);
-  const newPost = new Post({
-    _id: new mongoose.Types.ObjectId(),
-    author: req.body.author,
-    avatar: req.body.avatar,
-    comments: req.body.comments,
-    date: req.body.date,
-    image: req.body.image,
-    location: req.body.location,
-    text: req.body.text
-  });  
-  res.setHeader("Content-Type", "application/json");
-  res.send(JSON.stringify(post));
-});
-
-/**
  * POST data used to add a new post with image attached
  */
 router.post("/upload_picture", function(req, res, next) {
   var picData = req.body.imageBlob;
   var text = req.body.text;
+  var eventId = req.body.eventId;
 
-  var data = getPost(text, picData);
+  var data = getPost(text, picData); 
+
+  const newPost = new PostObject({
+    _id: data.id,
+    author: data.author,
+    avatar: data.avatar,
+    comments: data.comments,
+    date: data.date,
+    image: data.image,
+    location: data.location,
+    text: data.text
+  });
+
+  var query = {_id: eventId};
+  var newVal = {$push: {posts: newPost}};
+  Event.updateMany(query, newVal, function(err, res) {
+    console.log(res);
+  });
+
+  console.log("Success2");
 
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(data));
@@ -186,7 +187,7 @@ class Post {
   }
 }
 function getPost(text, image) {
-  return new Post(uuidv1(), "username", [], new Date(), image, null, text);
+  return new Post(new mongoose.Types.ObjectId(), "username", [], new Date(), image, null, text);
 }
 
 class Comment {

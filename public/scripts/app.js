@@ -45,7 +45,6 @@ function addToResults(data) {
       $("#new-event").remove();
     }
 
-    console.log(data.image);
     const element =
       "<div>" +
       "<a href=/events/" +
@@ -283,7 +282,6 @@ function addPhotoPost(eventId) {
 }
 
 function postWithImageQuery(data, eventId) {
-  console.log(eventId);
   data["eventId"] = eventId;
   $.ajax({
     dataType: "json",

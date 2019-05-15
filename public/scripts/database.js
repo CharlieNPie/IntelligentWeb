@@ -81,7 +81,6 @@ function pullFromDatabase() {
  * @param id is an int with the key ID of the event object. 
  */
 function getDataById(id) {
-  console.log(id);
   if (dbPromise) {
     dbPromise
       .then(function(db) {

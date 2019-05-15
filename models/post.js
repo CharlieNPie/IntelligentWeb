@@ -12,4 +12,4 @@ const postSchema = new Schema({
   text: String
 });
 
-module.exports = mongoose.model("Post", postSchema);
+module.exports = mongoose.model("PostObject", postSchema);

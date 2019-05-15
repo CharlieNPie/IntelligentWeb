@@ -28,10 +28,7 @@ var filesToCache = [
     '/scripts/database.js',
     '/fonts/glyphicons-halflings-regular.woff2',
     '/fonts/glyphicons-halflings-regular.woff',
-    '/fonts/glyphicons-halflings-regular.ttf',
-    '/scripts/camera.js',
-    '/scripts/profile.js',
-    '/scripts/seedData.js'
+    '/fonts/glyphicons-halflings-regular.ttf'
 ];
 
 
@@ -121,7 +118,9 @@ self.addEventListener('fetch', function (event) {
 
             event.waitUntil(async function () {
                 const networkResponse = await networkResponsePromise;
-                await cache.put(event.request, networkResponse.clone());
+                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                    await cache.put(event.request, networkResponse.clone());
+                }
                 //console.log(event.request);
             }());
 
