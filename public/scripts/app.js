@@ -406,6 +406,8 @@ function loadPost(eventId, postId) {
 }
 
 function sendAjaxCommentQuery(url, data, eventId, postId) {
+  data["eventId"] = eventId;
+  data["postId"] = postId;
   $.ajax({
     url: url,
     data: data,

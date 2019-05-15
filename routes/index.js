@@ -4,6 +4,7 @@ const uuidv1 = require("uuid/v1");
 const mongoose = require("mongoose");
 const Event = require("../models/event");
 const PostObject = require("../models/post");
+const CommentObject = require("../models/comment")
 
 /** GET home page. */
 router.get("/", function(req, res, next) {
@@ -102,10 +103,7 @@ router.post("/upload_picture", function(req, res, next) {
   var query = {_id: eventId};
   var newVal = {$push: {posts: newPost}};
   Event.updateMany(query, newVal, function(err, res) {
-    console.log(res);
   });
-
-  console.log("Success2");
 
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(data));
@@ -131,6 +129,33 @@ router.post("/update_event", function(req, res, next) {
  */
 router.post("/create_comment", function(req, res, next) {
   const comment = getComment(req.body.text);
+
+  const eventId = req.body.eventId;
+  const postId = req.body.postId;
+
+  const newComment = new CommentObject({
+    _id: comment.id,
+    author: comment.author,
+    text: comment.text,
+    avatar: comment.avatar,
+    date: comment.date,
+  });
+
+  var postQuery = {_id: postId};
+  var newVal = {$push: {comments: newComment}};
+
+  Event.findOne({_id: eventId}, function(err, res) {
+    res.posts.find(function(element) {
+      return element._id == postId;
+    }).comments.push(newComment);
+
+    Event.replaceOne({_id: eventId}, res, function(err, res) {
+      console.log(res);
+    })
+
+  });
+
+
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(comment));
 });
@@ -217,7 +242,7 @@ class Comment {
 
 function getComment(text) {
   return new Comment(
-    uuidv1(),
+    new mongoose.Types.ObjectId(),
     "borjadotai",
     text,
     "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
