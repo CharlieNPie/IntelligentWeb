@@ -14,6 +14,7 @@
 
 var dataCacheName = 'weatherData-v1';
 var cacheName = 'weatherPWA-step-8-1';
+// be careful to not add duplicates in this variable 
 var filesToCache = [
     '/',
     '/scripts/app.js',
@@ -28,10 +29,7 @@ var filesToCache = [
     '/scripts/database.js',
     '/fonts/glyphicons-halflings-regular.woff2',
     '/fonts/glyphicons-halflings-regular.woff',
-    '/fonts/glyphicons-halflings-regular.ttf',
-    '/scripts/camera.js',
-    '/scripts/profile.js',
-    '/scripts/seedData.js'
+    '/fonts/glyphicons-halflings-regular.ttf'
 ];
 
 
