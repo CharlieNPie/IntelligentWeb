@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+  <% include ./partials/head.ejs %>
+  <body class="d-flex flex-column h-100 center-ui">
+    <div class="nav">
+      <span></span>
+      <span>Manifest</span>
+      <a href="./events/new"
+        ><img
+          src="https://image.flaticon.com/icons/svg/149/149156.svg"
+          class="small-image"
+          id="new-event"
+      /></a>
+    </div>
+
+    <main role="main" class="flex-shrink-0">
+            <div class="empty"></div>
+                <div id="content"><div class="profile-box"><p>Login</p>
+                    <form id="login" onsubmit="handleLogin()">
+                        <input id="user" type="text" name="user">
+                        <span class="share">
+                            <input type="submit" class="submit" value="Login" form="login">
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+    <% include ./partials/footer.ejs %>
+  </body>
+</html>

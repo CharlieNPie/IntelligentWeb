@@ -11,6 +11,7 @@ router.get("/", function(req, res, next) {
   res.render("index");
 });
 
+/** PROFILE */
 router.get("/profile", function(req, res, next) {
   res.render("profile");
 });
