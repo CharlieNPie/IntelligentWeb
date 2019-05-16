@@ -8,9 +8,9 @@ const CommentObject = require("../models/comment")
 
 /** GET home page. */
 router.get("/", function(req, res, next) {
+  //grab the events from mongodb
   Event.find(function(err, mongoRes) {
-    events = mongoRes;
-    res.render("index", { events: JSON.stringify(events) });
+    res.render("index", { events: JSON.stringify(mongoRes) });
   });
   
 });
@@ -30,7 +30,11 @@ router.get("/events/new", function(req, res) {
 
 /* GET event page */
 router.get("/events/:eventId", function(req, res) {
-  res.render("event", { id: req.params.eventId });
+  Event.findOne({_id: req.params.eventId},function(err,mongoRes){
+    res.render("event", { 
+      id: req.params.eventId,
+      event: JSON.stringify(mongoRes)});
+  });
 });
 
 /* GET event map page */

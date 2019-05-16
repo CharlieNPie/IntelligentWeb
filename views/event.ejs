@@ -2,7 +2,7 @@
 <html lang="en" class="h-100">
   <% include partials/head.ejs %>
   <body
-    onload='loadEvent("<%= id %>")'
+    onload="mongoGetEvent('<%= event %>')"
     class="d-flex flex-column h-100 center-ui"
   >
     <div class="nav">

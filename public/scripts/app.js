@@ -35,9 +35,6 @@ function loadEvent(id) {
  * that will be added into the front-end
  */
 function addToResults(data) {
-  console.log("HERE WE ARE");
-  console.log(typeof(data));
-  console.log(data._id);
   if (document.getElementById("events") != null) {
     let loggedin = JSON.parse(localStorage.getItem("admin"));
     if (!loggedin) {
