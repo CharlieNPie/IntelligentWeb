@@ -16,7 +16,8 @@ function initDatabase() {
       events.createIndex("location", "location", { unique: false, multiEntry: true });
       events.createIndex("date", "date", { unique: false, multiEntry: true });
       seedDatabase();
-      loadData();
+      refreshEventList();
+      pullFromDatabase();
     }
   });
 }
