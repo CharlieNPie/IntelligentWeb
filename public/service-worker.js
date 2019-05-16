@@ -86,7 +86,7 @@ self.addEventListener('activate', function (e) {
  * all the other pages are searched for in the cache. If not found, they are returned
  */
 self.addEventListener('fetch', function (event) {
-    console.log('[Service Worker] Fetch', event.request.url);
+    //console.log('[Service Worker] Fetch', event.request.url);
     var dataUrls = ['/create_event', '/upload_picture', '/create_comment'];
     //if the request is '/create_event', post to the server
     if (event.request.url.indexOf(dataUrls) > -1) {

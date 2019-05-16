@@ -35,6 +35,9 @@ function loadEvent(id) {
  * that will be added into the front-end
  */
 function addToResults(data) {
+  console.log("HERE WE ARE");
+  console.log(typeof(data));
+  console.log(data._id);
   if (document.getElementById("events") != null) {
     let loggedin = JSON.parse(localStorage.getItem("admin"));
     if (!loggedin) {
@@ -675,3 +678,5 @@ function getComment(text) {
     "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
   );
 }
+
+

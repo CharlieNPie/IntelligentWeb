@@ -8,7 +8,11 @@ const CommentObject = require("../models/comment")
 
 /** GET home page. */
 router.get("/", function(req, res, next) {
-  res.render("index");
+  Event.find(function(err, mongoRes) {
+    events = mongoRes;
+    res.render("index", { events: JSON.stringify(events) });
+  });
+  
 });
 
 /** PROFILE */
@@ -155,7 +159,6 @@ router.post("/create_comment", function(req, res, next) {
     })
 
   });
-
 
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(comment));
