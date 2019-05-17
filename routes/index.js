@@ -52,13 +52,25 @@ router.get("/events/:eventId/posts/new", function(req, res) {
     eventId: req.params.eventId
   });
 });
-
+//, posts: {_id:req.params.postId}
+//db.users.find( { name: "John"}, { items: { $elemMatch: { item_id: "1234" } } })
 /* GET post page */
 router.get("/events/:eventId/posts/:postId", function(req, res) {
-  res.render("post", {
-    eventId: req.params.eventId,
-    postId: req.params.postId
+  // Event.find({_id: req.params.eventId}, {posts: {$elemMatch: { author: "username"}}} ,
+  //   function(res){
+  //     console.log(res);
+  //   });
+  Event.findOne({_id: req.params.eventId},function(err,event){
+    //console.log(JSON.stringify(event.posts));
+    //console.log(req.params.postId);
+    event.posts.find(function(post){
+      res.render("post",
+      {post:JSON.stringify(post),
+         eventId:req.params.eventId,
+         postId:req.params.postId});
+    });
   });
+  //console.log(p);
 });
 
 /**

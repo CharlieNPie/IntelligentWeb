@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var dataCacheName = 'weatherData-v1';
-var cacheName = 'weatherPWA-step-8-1';
+var dataCacheName = 'manifest-app';
+var cacheName = 'manifest-app';
 // be careful to not add duplicates in this variable 
 var filesToCache = [
     '/',
@@ -27,6 +27,7 @@ var filesToCache = [
     '/scripts/seedData.js',
     '/scripts/jquery.min.js',
     '/scripts/database.js',
+    '/scripts/mongo.js',
     '/fonts/glyphicons-halflings-regular.woff2',
     '/fonts/glyphicons-halflings-regular.woff',
     '/fonts/glyphicons-halflings-regular.ttf'
@@ -86,10 +87,11 @@ self.addEventListener('activate', function (e) {
  * all the other pages are searched for in the cache. If not found, they are returned
  */
 self.addEventListener('fetch', function (event) {
-    //console.log('[Service Worker] Fetch', event.request.url);
-    var dataUrls = ['/create_event', '/upload_picture', '/create_comment'];
+    console.log("HELP");
+    console.log('[Service Worker] Fetch', event.request.url);
+    var dataUrls = ['/','/index','/create_event', '/upload_picture', '/create_comment'];
     //if the request is '/create_event', post to the server
-    if (event.request.url.indexOf(dataUrls) > -1) {
+    if (event.request.url.indexOf(dataUrls) > -1|| (dataUrl.includes(event.request.url))) {
         console.log("HEre");
         /*
          * When the request URL contains dataUrl, the app is asking for fresh
@@ -120,9 +122,9 @@ self.addEventListener('fetch', function (event) {
             event.waitUntil(async function () {
                 const networkResponse = await networkResponsePromise;
                 // if statement to make sure service worker doesnt run on POSTs
-                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                    await cache.put(event.request, networkResponse.clone());
-                }
+                //if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                await cache.put(event.request, networkResponse.clone());
+               // }
             }());
 
             // Returned the cached response if we have one, otherwise return the network response.

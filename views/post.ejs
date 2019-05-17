@@ -19,7 +19,7 @@
   <% include partials/head.ejs %>
   <body
     class="d-flex flex-column h-100 center-ui"
-    onload='loadPost("<%=eventId %>", "<%= postId %>")'
+    onload='mongoGetPost("<%=post %>")'
   >
     <div class="nav">
       <a href="/events/<%=eventId %>"

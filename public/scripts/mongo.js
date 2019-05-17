@@ -4,6 +4,22 @@
  * @param {*} events events pulled from mongoDB in JSON
  */
 function mongoGetAllEvents(events){
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("./service-worker.js")
+        .then(function() {
+          console.log("Service Worker Registered");
+        })
+        .catch(function(error) {
+          console.log("Service Worker NOT Registered " + error.message);
+        });
+    }
+    //check for support
+    if ("indexedDB" in window) {
+      initDatabase();
+    } else {
+      console.log("This browser doesn't support IndexedDB");
+    }
     events = JSON.parse(events);
     for (i=0;i<events.length;i++){
       if (document.getElementById("events") != null) {
@@ -69,11 +85,11 @@ function mongoGetAllEvents(events){
           "'>" + "<img src='" +
           heart +
           "' onClick='handleLike(" +
-          post.id +
+          post._id +
           ")' class='psm-button' />" + "</div>" + "<a href='" +
           window.location.href +
           "/posts/" +
-          post.id +
+          post._id +
           "'>" + "<img src='https://img.icons8.com/ios/50/000000/topic.png' class='psm-button' />" +
           "</a>" + "</div>" +"<div class='ps-content'>" +"<b>" +
           post.author +
@@ -94,4 +110,31 @@ function mongoGetAllEvents(events){
         "<div class='login-box'><h2>Sorry, you need to be logged in to fully view events.</h2><a href='/profile'><button class='login-button'>Login</button></a></div>";
       $("#posts").append(post);
     }
+  }
+  function mongoGetPost(post){
+    var postPromise = JSON.parse(post);
+    postPromise.then(function({ comments }) {
+      comments.map(comment => {
+        let post =
+          "<div class='comment'>" +
+          "<img src='" +
+          comment.avatar +
+          "' class='ps-avatar' />" +
+          "<div class='ps-text'>" +
+          "<span class='ps-username'><b>" +
+          comment.author +
+          " </b> " +
+          comment.text +
+          "</span>" +
+          "<p class='ps-date'>" +
+          comment.date +
+          "</p>" +
+          "</div>" +
+          "</div>";
+        $("#posts").append(post);
+      });
+    });
+    $(".addComment").on("submit", function(event) {
+      event.preventDefault();
+    });
   }
