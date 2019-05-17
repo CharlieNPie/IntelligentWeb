@@ -128,9 +128,6 @@ function addToEvent(data) {
         "</div>" +
         "</div>";
       $("#posts").append(post);
-      if (!admin) {
-        $("#edit-event").remove();
-      }
     });
   } else {
     $("#new-post").remove();

@@ -64,7 +64,9 @@ router.get("/events/:eventId/map", function (req, res) {
 /* GET edit event page */
 router.get("/events/:eventId/edit", function (req, res) {
   var loggedInBool = checkLoggedIn(req.user);
-  res.render("editEvent", { id: req.params.eventId, loggedIn: loggedInBool });
+  Event.find({ _id: req.params.eventId }, function (err, event) {
+    res.render("editEvent", { event: JSON.stringify(event), id: req.params.eventId, loggedIn: loggedInBool });
+  });
 });
 
 /* Get add new post page */
@@ -174,13 +176,20 @@ router.post("/update_event", function (req, res, next) {
     location: event.location
   });
   // update in mongo
-  Event.replaceOne({ _id: req.body.eventId }, newEvent, function (err, res) {
+  Event.findByIdAndUpdate({ _id: req.body.eventId }, {
+    $set: {
+      name: event.name,
+      date: event.date,
+      image: event.image,
+      description: event.description,
+      location: event.location,
+      returnNewDocument: true
+    }
+  }, function (err, updatedEvent) {
     if (err) throw err;
+    res.setHeader("Content-Type", "application/json");
+    res.send(JSON.stringify(updatedEvent));
   });
-
-
-  res.setHeader("Content-Type", "application/json");
-  res.send(JSON.stringify(event));
 });
 
 /**
