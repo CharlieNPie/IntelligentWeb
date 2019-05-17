@@ -54,7 +54,7 @@ function mongoGetAllEvents(events){
  * @param {*} event event pulled from mongodb 
  */
   function mongoGetEvent(event){
-    event = JSON.parse(event);
+    var event = JSON.parse(event);
     $("#eventName").html(event.name);
     $("#eventDescription").html(event.description);
     var image = "<img" + " src='" + event.image + "'" + " class='e-image'" + "/>";

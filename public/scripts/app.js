@@ -557,7 +557,7 @@ function addToSearch(data) {
           var infowindow = new google.maps.InfoWindow({
             content:
               "<a href=/events/" +
-              event.id +
+              event._id +
               ">" +
               "<span class='sti-title'>" +
               event.name +
