@@ -14,11 +14,13 @@
       </a>
       <span id="eventName"></span>
       <a href="/events/<%= id %>/posts/new">
+        <% if (loggedIn) {%>
         <img
           src="https://image.flaticon.com/icons/svg/159/159719.svg"
           class="back-button"
           id="new-post"
         />
+        <% } %>
       </a>
     </div>
 

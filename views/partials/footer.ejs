@@ -12,11 +12,18 @@
         class="menu-button"
       />
     </a>
-    <a href="/profile">
+    <% if (loggedIn) { %>
+      <a href="/users/logout">
+        <img
+          src="https://image.flaticon.com/icons/svg/126/126467.svg"
+          class="menu-button"></a>
+    <% } else { %>
+      <a href="/users/login">
       <img
-        src="https://image.flaticon.com/icons/svg/149/149452.svg"
+        src="https://image.flaticon.com/icons/svg/1000/1000997.svg"
         class="menu-button"
       />
     </a>
+    <% } %>
   </div>
 </footer>

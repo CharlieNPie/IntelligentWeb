@@ -8,12 +8,14 @@
     <div class="nav">
       <span></span>
       <span>Manifest</span>
-      <a href="./events/new"
-        ><img
+      <a href="./events/new"> 
+        <% if (loggedIn) { %>
+          <img
           src="https://image.flaticon.com/icons/svg/149/149156.svg"
           class="small-image"
-          id="new-event"
-      /></a>
+          id="new-event"/>
+        <% } %>
+      </a>
     </div>
 
     <main role="main" class="flex-shrink-0">

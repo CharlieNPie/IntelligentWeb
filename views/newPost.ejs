@@ -22,11 +22,11 @@
       <canvas id="canvas" style="display: none;"></canvas>
       <div class="pt-comment">
         <img
-          src="https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
+          src="<%= avatar %>"
           class="ps-avatar"
         />
         <div class="pt-username">
-          borjadotai
+          <%= username %>
         </div>
       </div>
       <form id="addPost" onsubmit="addPhotoPost('<%= eventId %>')">

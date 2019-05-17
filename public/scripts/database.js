@@ -48,7 +48,7 @@ function storeCachedEventData(eventObject) {
       .catch(function(error) {
         console.log("Could not add item to store.");
       });
-  } else localStorage.setItem(eventObject.name, JSON.stringify(eventObject));
+  }
 }
 
 /* pulls all objects from database and adds them to the homepage */
