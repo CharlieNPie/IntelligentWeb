@@ -72,7 +72,7 @@ function addToEvent(data) {
   $("#eventDescription").html(data.description);
   var image = "<img" + " src='" + data.image + "'" + " class='e-image'" + "/>";
   $("#eventImage").html(image);
-  let loggedin = JSON.parse(localStorage.getItem("login"));
+  //let loggedin = JSON.parse(localStorage.getItem("login"));
   let admin = JSON.parse(localStorage.getItem("admin"));
   if (true == true) {
     data.posts.map(post => {

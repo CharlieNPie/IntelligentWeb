@@ -98,17 +98,8 @@ function mongoGetEvent(event) {
         post.date +
         "</span>" + "</div>" + "</div>";
       $("#posts").append(post);
-      if (!admin) {
-        $("#edit-event").remove();
-      }
     });
-  } else {
-    $("#new-post").remove();
-    $("#edit-event").remove();
-    let post =
-      "<div class='login-box'><h2>Sorry, you need to be logged in to fully view events.</h2><a href='/profile'><button class='login-button'>Login</button></a></div>";
-    $("#posts").append(post);
-  }
+  } 
 }
 function mongoGetPost(post) {
   var post = JSON.parse(post);
