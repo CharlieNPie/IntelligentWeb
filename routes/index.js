@@ -82,15 +82,16 @@ router.get("/events/:eventId/posts/:postId", function (req, res) {
   var loggedInBool = checkLoggedIn(req.user);
   Event.findOne({ _id: req.params.eventId }, function (err, event) {
     if (err) throw err;
-    event.posts.find(function (post) {
-      res.render("post",
-        {
-          post: JSON.stringify(post),
-          eventId: req.params.eventId,
-          postId: req.params.postId,
-          loggedIn: loggedInBool
-        });
+    var post = event.posts.find(function (element) {
+      return element._id == req.params.postId;
     });
+    res.render("post",
+      {
+        post: JSON.stringify(post),
+        eventId: req.params.eventId,
+        postId: req.params.postId,
+        loggedIn: loggedInBool
+      });
   });
 });
 
