@@ -118,10 +118,10 @@ self.addEventListener('fetch', function (event) {
 
             event.waitUntil(async function () {
                 const networkResponse = await networkResponsePromise;
+                // if statement to make sure service worker doesnt run on POSTs
                 if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
                     await cache.put(event.request, networkResponse.clone());
                 }
-                //console.log(event.request);
             }());
 
             // Returned the cached response if we have one, otherwise return the network response.

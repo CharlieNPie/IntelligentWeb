@@ -15,10 +15,6 @@ function initEvents() {
   } else {
     console.log("This browser doesn't support IndexedDB");
   }
-  loadData();
-}
-
-function loadData() {
   refreshEventList();
   pullFromDatabase();
 }
@@ -467,7 +463,8 @@ window.addEventListener(
     console.log("You are online");
     hideOfflineWarning();
     pullFromDatabase();
-    loadData();
+    refreshEventList();
+    pullFromDatabase();
   },
   false
 );
@@ -501,28 +498,7 @@ function refreshEventList() {
 /* EXPLORE */
 function initExplore() {
   initDatabase();
-  // var myLatlng = new google.maps.LatLng(53.38108855193859, -1.4801287651062012);
-  // var mapOptions = {
-  //   zoom: 18,
-  //   center: myLatlng
-  // };
-  // var map = new google.maps.Map(
-  //   document.getElementById("map_canvas"),
-  //   mapOptions
-  // );
   pullFromDatabase();
-  // var myLatlng = new google.maps.LatLng(
-  //   53.38108855193859,
-  //   -1.4801287651062012
-  // );
-  // var mapOptions = {
-  //   zoom: 7,
-  //   center: myLatlng
-  // };
-  // var map = new google.maps.Map(
-  //   document.getElementById("map_canvas"),
-  //   mapOptions
-  // );
   var geocoder = new google.maps.Geocoder();
   $(function() {
     $('input[name="datefilter"]').daterangepicker({
@@ -539,7 +515,6 @@ function initExplore() {
       var start = picker.startDate.format("MM/DD/YYYY");
       var end = picker.endDate.format("MM/DD/YYYY");
       $(this).val(start + " - " + end);
-      console.log(start);
       var startDate = new Date(start);
       var endDate = new Date(end);
       getDataByDate(startDate, endDate);
@@ -561,7 +536,9 @@ function initExplore() {
     event.stopPropagation();
   });
 }
-
+/**
+ * @param {a} data data to be added to the search results 
+ */
 function addToSearch(data) {
   var map = new google.maps.Map(document.getElementById("map_canvas"), {});
   for (i = 0; i < data.length; i++) {

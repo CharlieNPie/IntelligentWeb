@@ -4,7 +4,7 @@ const MANIFEST_DB_NAME = "manifest_db";
 const MANIFEST_STORE_NAME = "store_manifest";
 
 /**
- * it inits the database
+ * Initialize the database
  */
 function initDatabase() {
   dbPromise = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
@@ -13,13 +13,11 @@ function initDatabase() {
         keyPath: "_id",
       });
       events.createIndex("name", "name", { unique: false, multiEntry: true });
-      events.createIndex("location", "location", {
-        unique: false,
-        multiEntry: true
-      });
+      events.createIndex("location", "location", { unique: false, multiEntry: true });
       events.createIndex("date", "date", { unique: false, multiEntry: true });
       seedDatabase();
-      loadData();
+      refreshEventList();
+      pullFromDatabase();
     }
   });
 }
@@ -103,11 +101,6 @@ function getDataById(id) {
           else addToResults(value);
         }
       });
-  } else {
-    const value = localStorage.getItem(event);
-    console.log(value);
-    if (value == null) addToResults({ city: city, date: date });
-    else addToResults(value);
   }
 }
 
@@ -140,11 +133,6 @@ function getDataByName(name) {
           }
         }
       });
-  } else {
-    const value = localStorage.getItem(event);
-    console.log(value);
-    if (value == null) addToResults({ city: city, date: date });
-    else addToResults(value);
   }
 }
 /**
@@ -159,7 +147,6 @@ function getDataByLocation(location) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
         var index = store.index("location");
-        console.log(name);
         return index.getAll(IDBKeyRange.only(location));
       })
       .then(function(readingsList) {
@@ -169,18 +156,11 @@ function getDataByLocation(location) {
             addToSearch(readingsList);
         } else {
           const value = localStorage.getItem(event);
-          console.log(readingsList);
-          console.log(value);
           if (value != null) {
             addToSearch(value);
           }
         }
       });
-  } else {
-    const value = localStorage.getItem(event);
-    console.log(value);
-    if (value == null) addToResults({ city: city, date: date });
-    else addToResults(value);
   }
 }
 
@@ -213,12 +193,6 @@ function getDataByDate(startDate, endDate) {
           }
         }
       });
-  } else {
-    addToSearch(null);
-    const value = localStorage.getItem(event);
-    console.log(value);
-    if (value == null) addToResults({ city: city, date: date });
-    else addToResults(value);
   }
 }
 
