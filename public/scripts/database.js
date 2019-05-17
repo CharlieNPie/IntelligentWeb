@@ -10,7 +10,7 @@ function initDatabase() {
   dbPromise = idb.openDb(MANIFEST_DB_NAME, 1, function(upgradeDb) {
     if (!upgradeDb.objectStoreNames.contains(MANIFEST_STORE_NAME)) {
       var events = upgradeDb.createObjectStore(MANIFEST_STORE_NAME, {
-        keyPath: "_id",
+        keyPath: "id", autoIncrement: true
       });
       events.createIndex("name", "name", { unique: false, multiEntry: true });
       events.createIndex("location", "location", { unique: false, multiEntry: true });
@@ -46,6 +46,7 @@ function storeCachedEventData(eventObject) {
         console.log("added item to the store! " + JSON.stringify(eventObject));
       })
       .catch(function(error) {
+        console.log(error);
         console.log("Could not add item to store.");
       });
   }
@@ -86,7 +87,7 @@ function getDataById(id) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
         var index = store.index("name");
-        return store.getAll(IDBKeyRange.only(id));
+        return store.getAll(IDBKeyRange.only(parseInt(id)));
       })
       .then(function(readingsList) {
         if (readingsList && readingsList.length > 0) {
@@ -207,7 +208,7 @@ function getEventObject(id) {
       var objectStores = db.transaction(db.objectStoreNames);
       var selectId = objectStores
         .objectStore(MANIFEST_STORE_NAME)
-        .getAll(IDBKeyRange.only(id));
+        .getAll(IDBKeyRange.only(parseInt(id)));
       return selectId;
     });
   }
@@ -246,7 +247,7 @@ function setDataObject(data, id) {
       .then(function(db) {
         var objectStores = db.transaction(db.objectStoreNames);
         var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
-        var oldData = selectId.getAll(IDBKeyRange.only(id));
+        var oldData = selectId.getAll(IDBKeyRange.only(parseInt(id)));
         return oldData;
       })
       .then(function(oldData) {
@@ -272,7 +273,7 @@ function deleteObject(id) {
     return dbPromise.then(function(db) {
       var objectStores = db.transaction(db.objectStoreNames, "readwrite");
       var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
-      selectId.delete(IDBKeyRange.only(id));
+      selectId.delete(IDBKeyRange.only(parseInt(id)));
     });
   }
 }
@@ -298,7 +299,7 @@ function addPostObject(postObject, id) {
       .then(function(db) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
-        var eventObject = store.getAll(id);
+        var eventObject = store.getAll(parseInt(id));
         return eventObject;
       })
       .then(function(eventObject) {
@@ -327,7 +328,7 @@ function addCommentObject(commentObject, eventId, postId) {
       .then(function(db) {
         var tx = db.transaction(db.objectStoreNames);
         var store = tx.objectStore(MANIFEST_STORE_NAME);
-        var eventObject = store.getAll(eventId);
+        var eventObject = store.getAll(parseInt(id));
         return eventObject;
       })
       .then(function(eventObject) {
@@ -344,5 +345,20 @@ function addCommentObject(commentObject, eventId, postId) {
           store.put(event);
         });
       });
+  }
+}
+
+function updateMongo() {
+  console.log("Works")
+  if (dbPromise) {
+    return dbPromise.then(function(db) {
+      var objectStores = db.transaction(db.objectStoreNames);
+      var selectId = objectStores
+        .objectStore(MANIFEST_STORE_NAME)
+        .getAll();
+      return selectId;
+    }).then(function(selectId) {
+      console.log(selectId);
+    });
   }
 }

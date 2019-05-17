@@ -17,6 +17,7 @@ var cacheName = 'manifest-app';
 // be careful to not add duplicates in this variable 
 var filesToCache = [
     '/',
+    '/events/new.ejs',
     '/scripts/app.js',
     '/styles/inline.css',
     '/styles/bootstrap.min.css',

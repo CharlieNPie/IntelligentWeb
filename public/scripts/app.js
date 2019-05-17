@@ -213,6 +213,8 @@ function newEvent() {
   for (index in formArray) {
     data[formArray[index].name] = formArray[index].value;
   }
+  data["posts"] = [];
+  data["_id"] = "";
   data.date = new Date(
     data.date.substring(5, 7) +
       "/" +
@@ -220,7 +222,12 @@ function newEvent() {
       "/" +
       data.date.substring(0, 4)
   );
-  sendNewEventQuery("/create_event", data);
+  if (navigator.onLine) {
+    sendNewEventQuery("/create_event", data);
+  } else {
+    console.log("Offline");
+    storeCachedEventData(data)
+  }
 }
 
 /* send request to server */
@@ -239,20 +246,8 @@ function sendNewEventQuery(url, data) {
         document.getElementById("offline_div").style.display = "none";
     },
     error: function(xhr, status, error) {
-      console.log(data);
       showOfflineWarning();
-      var cache_data = getEvent(
-        data.name,
-        data.date,
-        data.image,
-        data.description,
-        data.location
-      );
-      console.log(cache_data);
-      storeCachedEventData(cache_data);
-      window.location.replace("/");
-      if (document.getElementById("offline_div") != null)
-        document.getElementById("offline_div").style.display = "none";
+      console.log(error);
     }
   });
 }
@@ -273,8 +268,9 @@ function addPhotoPost(eventId) {
   console.log("help", postData);
   var picData = canvas.toDataURL();
   postData["imageBlob"] = picData;
-
-  postWithImageQuery(postData, eventId);
+  if (navigator.onLine) {
+    postWithImageQuery(postData, eventId);
+  }
 }
 
 function postWithImageQuery(data, eventId) {
@@ -293,20 +289,6 @@ function postWithImageQuery(data, eventId) {
     },
     error: function(err) {
       alert("Error: " + err.status + ":" + err.statusText);
-      var cache_data = getPost(
-        data.id,
-        data.author,
-        data.avatar,
-        data.comments,
-        data.image,
-        data.location,
-        data.text
-      );
-      console.log(cache_data);
-      addPostObject(cache_data, eventId);
-      window.location.replace("/");
-      if (document.getElementById("offline_div") != null)
-        document.getElementById("offline_div").style.display = "none";
     }
   });
 }
@@ -462,23 +444,12 @@ window.addEventListener(
   function(e) {
     // Resync data with server.
     console.log("You are online");
-    hideOfflineWarning();
-    pullFromDatabase();
     refreshEventList();
     pullFromDatabase();
+    updateMongo();
   },
   false
 );
-
-function showOfflineWarning() {
-  if (document.getElementById("offline_div") != null)
-    document.getElementById("offline_div").style.display = "block";
-}
-
-function hideOfflineWarning() {
-  if (document.getElementById("offline_div") != null)
-    document.getElementById("offline_div").style.display = "none";
-}
 
 /**
  * it shows the city list in the browser
