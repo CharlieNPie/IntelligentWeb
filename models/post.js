@@ -6,7 +6,7 @@ const postSchema = new Schema({
   author: String,
   avatar: String,
   comments: Array,
-  date: Date,
+  date: String,
   image: String,
   location: String,
   text: String

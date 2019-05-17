@@ -58,8 +58,10 @@ function mongoGetEvent(event) {
   $("#eventImage").html(image);
   let loggedin = JSON.parse(localStorage.getItem("login"));
   let admin = JSON.parse(localStorage.getItem("admin"));
+  console.log(event.posts);
   if (true == true) {
     event.posts.map(post => {
+      console.log(post.date);
       if (checkForLike(post._id)) {
         var heart = "/images/like.png";
       } else {

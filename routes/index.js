@@ -133,10 +133,8 @@ router.post("/upload_picture", function (req, res, next) {
   var author = req.user.username;
   var avatar = req.user.avatar;
 
-  console.log(author);
-  console.log(avatar);
-
   var data = getPost(text, picData, author, avatar);
+  console.log(data.date);
 
   const newPost = new PostObject({
     _id: data.id,
