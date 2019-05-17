@@ -40,10 +40,10 @@ function loadEvent(id) {
  */
 function addToResults(data) {
   if (document.getElementById("events") != null) {
-    let loggedin = JSON.parse(localStorage.getItem("admin"));
-    if (!loggedin) {
-      $("#new-event").remove();
-    }
+    //let loggedin = JSON.parse(localStorage.getItem("admin"));
+    //if (!loggedin) {
+    //  $("#new-event").remove();
+    //}
 
     const element =
       "<div>" +
@@ -78,7 +78,7 @@ function addToEvent(data) {
   $("#eventImage").html(image);
   let loggedin = JSON.parse(localStorage.getItem("login"));
   let admin = JSON.parse(localStorage.getItem("admin"));
-  if (loggedin || admin) {
+  if (true == true) {
     data.posts.map(post => {
       if (checkForLike(post.id)) {
         var heart = "/images/like.png";
@@ -405,6 +405,11 @@ function loadPost(eventId, postId) {
   });
 }
 
+function newComment(eventId, postId, msg) {
+  var data = { text: msg };
+  sendAjaxCommentQuery("/create_comment", data, eventId, postId);
+}
+
 function sendAjaxCommentQuery(url, data, eventId, postId) {
   data["eventId"] = eventId;
   data["postId"] = postId;
@@ -439,11 +444,6 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
       showOfflineWarning();
     }
   });
-}
-
-function newComment(eventId, postId, msg) {
-  var data = { text: msg };
-  sendAjaxCommentQuery("/create_comment", data, eventId, postId);
 }
 
 window.addEventListener(

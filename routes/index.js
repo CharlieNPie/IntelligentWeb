@@ -1,14 +1,23 @@
 var express = require("express");
 var router = express.Router();
-const uuidv1 = require("uuid/v1");
 const mongoose = require("mongoose");
 const Event = require("../models/event");
 const PostObject = require("../models/post");
 const CommentObject = require("../models/comment")
 
+/** Function to check if user has logged in */
+function checkLoggedIn(req) {
+  if (req) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 /** GET home page. */
 router.get("/", function(req, res, next) {
-  res.render("index");
+  var loggedInBool = checkLoggedIn(req.user);
+  res.render("index", {loggedIn: loggedInBool});
 });
 
 /** PROFILE */
@@ -17,39 +26,54 @@ router.get("/profile", function(req, res, next) {
 });
 
 router.get("/explore", function(req, res, next) {
-  res.render("explore");
+  var loggedInBool = checkLoggedIn(req.user);
+  res.render("explore", {loggedIn: loggedInBool});
 });
 
 router.get("/events/new", function(req, res) {
-  res.render("newEvent");
+  if (req.user) {
+    console.log(req.user);
+    res.render("newEvent", {loggedIn: true});
+  } else {
+    console.log("Not logged in.")
+    res.redirect("/users/login");
+  }
 });
 
 /* GET event page */
 router.get("/events/:eventId", function(req, res) {
-  res.render("event", { id: req.params.eventId });
+  var loggedInBool = checkLoggedIn(req.user);
+  res.render("event", { id: req.params.eventId, loggedIn: loggedInBool });
 });
 
 /* GET event map page */
 router.get("/events/:eventId/map", function(req, res) {
-  res.render("eventMap", { id: req.params.eventId });
+  var loggedInBool = checkLoggedIn(req.user);
+  res.render("eventMap", { id: req.params.eventId, loggedIn: loggedInBool });
 });
 
 /* GET edit event page */
 router.get("/events/:eventId/edit", function(req, res) {
-  res.render("editEvent", { id: req.params.eventId });
+  var loggedInBool = checkLoggedIn(req.user);
+  res.render("editEvent", { id: req.params.eventId, loggedIn: loggedInBool });
 });
 
 router.get("/events/:eventId/posts/new", function(req, res) {
-  res.render("newPost", {
-    eventId: req.params.eventId
-  });
+  var loggedInBool = checkLoggedIn(req.user);
+  if (loggedInBool) {
+    res.render("newPost", { eventId: req.params.eventId, loggedIn: true, username: req.user._id, avatar: req.user.avatar });
+  } else {
+    res.redirect("/users/login");
+  }
 });
 
 /* GET post page */
 router.get("/events/:eventId/posts/:postId", function(req, res) {
+  var loggedInBool = checkLoggedIn(req.user);
   res.render("post", {
     eventId: req.params.eventId,
-    postId: req.params.postId
+    postId: req.params.postId,
+    loggedIn: loggedInBool
   });
 });
 
@@ -87,8 +111,13 @@ router.post("/upload_picture", function(req, res, next) {
   var picData = req.body.imageBlob;
   var text = req.body.text;
   var eventId = req.body.eventId;
+  var author = req.user.username;
+  var avatar = req.user.avatar;
 
-  var data = getPost(text, picData); 
+  console.log(author);
+  console.log(avatar);
+
+  var data = getPost(text, picData, author, avatar); 
 
   const newPost = new PostObject({
     _id: data.id,
@@ -129,7 +158,8 @@ router.post("/update_event", function(req, res, next) {
  * POST data to add comments to an event
  */
 router.post("/create_comment", function(req, res, next) {
-  const comment = getComment(req.body.text);
+  console.log(req.user.avatar, req.user.username);
+  const comment = getComment(req.user.username, req.body.text, req.user.avatar);
 
   const eventId = req.body.eventId;
   const postId = req.body.postId;
@@ -151,7 +181,7 @@ router.post("/create_comment", function(req, res, next) {
     }).comments.push(newComment);
 
     Event.replaceOne({_id: eventId}, res, function(err, res) {
-      console.log(res);
+      //console.log(res);
     })
 
   });
@@ -186,10 +216,9 @@ function getEvent(name, date, image, description, location) {
 }
 
 class Post {
-  constructor(id, author, comments, date, image, location, text) {
+  constructor(id, author, avatar, comments, date, image, location, text) {
     this.author = author;
-    this.avatar =
-      "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg";
+    this.avatar = avatar;
     this.comments = comments;
     this.image = image;
     this.location = location;
@@ -212,8 +241,9 @@ class Post {
     this.date = date.getDate() + " " + months[date.getMonth()];
   }
 }
-function getPost(text, image) {
-  return new Post(new mongoose.Types.ObjectId(), "username", [], new Date(), image, null, text);
+
+function getPost(text, image, author, avatar) {
+  return new Post(new mongoose.Types.ObjectId(), author, avatar, [], new Date(), image, null, text);
 }
 
 class Comment {
@@ -241,13 +271,14 @@ class Comment {
   }
 }
 
-function getComment(text) {
+function getComment(author, text, avatar) {
   return new Comment(
     new mongoose.Types.ObjectId(),
-    "borjadotai",
+    author,
     text,
-    "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
+    avatar
   );
 }
 
 module.exports = router;
+
