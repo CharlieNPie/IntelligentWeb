@@ -160,6 +160,21 @@ function mongoGetPost(post) {
   });
 }
 
+function mongoEventDetails(event){
+  console.log("im  a here");
+  var dataObject = JSON.parse(event)[0];
+  $("#eventName").html(dataObject.name);
+  document.getElementById("name").value = String(dataObject.name);
+  document.getElementById("location").value = String(dataObject.location);
+  document.getElementById("image").value = String(dataObject.image);
+  document.getElementById("description").value = String(dataObject.description);
+  //document.getElementById("date").value = String(dataObject.date);
+}
+
+
+/**
+ * Function used to seed the app
+ */
 function seedMongo() {
   const data = seedData();
   for (var i = 0; i < 5; i++) {
