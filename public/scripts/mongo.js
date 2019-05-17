@@ -63,7 +63,7 @@ function mongoGetEvent(event){
   let admin = JSON.parse(localStorage.getItem("admin"));
   if (true == true) {
     event.posts.map(post => {
-      if (checkForLike(post.id)) {
+      if (checkForLike(post._id)) {
         var heart = "/images/like.png";
       } else {
         var heart = "https://image.flaticon.com/icons/svg/126/126471.svg";
@@ -81,7 +81,7 @@ function mongoGetEvent(event){
         "</span>" + "</div>" +
         image +
         "<div class='ps-menu'>" + "<div id='heart-" +
-        post.id +
+        post._id +
         "'>" + "<img src='" +
         heart +
         "' onClick='handleLike(" +

@@ -337,6 +337,7 @@ function updateEvent(id) {
 
 /* AJAX QUERY FOR UPDATING EVENT */
 function sendUpdateEventQuery(url, data, id) {
+  data["eventId"] = id;
   $.ajax({
     url: url,
     data: data,

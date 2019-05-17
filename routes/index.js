@@ -170,6 +170,17 @@ router.post("/update_event", function(req, res, next) {
     req.body.description,
     req.body.location
   );
+  const newEvent = new Event({
+    name: event.name,
+    date: event.date,
+    image: event.image,
+    description: event.description,
+    location: event.location
+  });
+  // update in mongo
+  Event.replaceOne({_id: req.body.eventId}, newEvent, function(err,res){});
+
+
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(event));
 });
