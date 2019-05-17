@@ -20,6 +20,7 @@ function mongoGetAllEvents(events) {
   } else {
     console.log("This browser doesn't support IndexedDB");
   }
+  updateMongoEvents();
   var events = JSON.parse(events);
   for (i = 0; i < events.length; i++) {
     if (document.getElementById("events") != null) {
@@ -109,6 +110,7 @@ function mongoGetEvent(event) {
 }
 function mongoGetPost(post) {
   var post = JSON.parse(post);
+  console.log(post);
   var comments = post.comments;
   console.log(comments);
   for (i = 0; i < comments.length; i++) {
@@ -154,4 +156,12 @@ function mongoGetPost(post) {
   $(".addComment").on("submit", function (event) {
     event.preventDefault();
   });
+}
+
+function seedMongo() {
+  const data = seedData();
+  for (var i = 0; i < 5; i++) {
+    console.log(data[i])
+    sendNewEventQuery("/create_event", data[i]);
+  }
 }

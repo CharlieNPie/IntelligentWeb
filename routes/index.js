@@ -109,7 +109,8 @@ router.post("/create_event", function (req, res, next) {
     image: req.body.image,
     description: req.body.description,
     location: req.body.location,
-    organiser: "borja"
+    organiser: "borja",
+    posts: req.body.posts
   });
   // Saving object into mongoDB & responding to client
   newEvent

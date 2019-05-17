@@ -226,7 +226,7 @@ function newEvent() {
     sendNewEventQuery("/create_event", data);
   } else {
     console.log("Offline");
-    storeCachedEventData(data)
+    storeCachedEventData(data);
   }
 }
 
@@ -246,7 +246,6 @@ function sendNewEventQuery(url, data) {
         document.getElementById("offline_div").style.display = "none";
     },
     error: function (xhr, status, error) {
-      showOfflineWarning();
       console.log(error);
     }
   });
@@ -420,7 +419,6 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
         document.getElementById("offline_div").style.display = "none";
     },
     error: function (xhr, status, error) {
-      showOfflineWarning();
     }
   });
 }
@@ -431,7 +429,6 @@ window.addEventListener(
     // Queue up events for server.
     localStorage.setItem("offline_events", JSON.stringify([]));
     console.log("You are offline");
-    showOfflineWarning();
   },
   false
 );
@@ -558,95 +555,6 @@ function addToSearch(data) {
       return callback;
     }
   }
-}
-
-/** RETURN CLASSES */
-class Event {
-  constructor(name, date, image, description, organiser, location, posts) {
-    this.name = name;
-    this.date = date;
-    this.image = image;
-    this.description = description;
-    this.organiser = organiser;
-    this.location = location;
-    this.posts = posts;
-  }
-}
-function getEvent(name, date, image, description, location) {
-  return new Event(
-    name,
-    date,
-    image,
-    description,
-    "maniOrganisers",
-    location,
-    []
-  );
-}
-
-class Post {
-  constructor(id, author, comments, date, image, location, text) {
-    this.author = author;
-    this.avatar =
-      "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg";
-    this.comments = comments;
-    this.image = image;
-    this.location = location;
-    this.text = text;
-    this.id = id;
-    var months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-    this.date = date.getDate() + " " + months[date.getMonth()];
-  }
-}
-function getPost(text, image) {
-  return new Post(uuidv1(), "username", [], new Date(), image, null, text);
-}
-
-class Comment {
-  constructor(id, author, text, avatar) {
-    this.id = id;
-    this.author = author;
-    this.text = text;
-    this.avatar = avatar;
-    var months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-    var d = new Date();
-    this.date = d.getDate() + " " + months[d.getMonth()];
-  }
-}
-
-function getComment(text) {
-  return new Comment(
-    uuidv1(),
-    "borjadotai",
-    text,
-    "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
-  );
 }
 
 

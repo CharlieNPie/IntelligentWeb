@@ -28,7 +28,9 @@
       <a href="/events/<%= id %>/map"><img src="https://image.flaticon.com/icons/svg/263/263072.svg"
           class="menu-button" /></a>
       <a href="/events/<%= id %>/edit">
+        <% if (loggedIn) {%>
         <img src="https://image.flaticon.com/icons/svg/1159/1159633.svg" class="menu-button" id="edit-event" />
+        <% } %>
       </a>
     </div>
     <div id="posts"></div>

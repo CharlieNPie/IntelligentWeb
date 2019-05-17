@@ -11,7 +11,7 @@ function newUser() {
     type: "POST",
     success: function (response) {
       console.log(response["newUser"]);
-      location.replace('/')
+      location.replace('/users/login')
     },
     error: function (xhr, status, error) {
       alert("Cannot create users when offline.");

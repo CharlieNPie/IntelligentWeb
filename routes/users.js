@@ -36,7 +36,6 @@ router.post("/create_user", function (req, res, next) {
   newUser
     .save()
     .then(() => {
-      res.setHeader("Content-Type", "application/json");
       res.send(JSON.stringify({ newUser }));
     })
     .catch(() => res.status(500).json({ error: "Could not create user" }));

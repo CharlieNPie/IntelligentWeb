@@ -15,8 +15,8 @@ function initDatabase() {
       events.createIndex("name", "name", { unique: false, multiEntry: true });
       events.createIndex("location", "location", { unique: false, multiEntry: true });
       events.createIndex("date", "date", { unique: false, multiEntry: true });
-      seedDatabase();
-      refreshEventList();ƒ
+      seedMongo();
+      refreshEventList();
       pullFromDatabase();
     }
   });
@@ -269,8 +269,10 @@ function setDataObject(data, id) {
  * @param {} id 
  */
 function deleteObject(id) {
+  console.log("Deleting object...", id);
   if (dbPromise) {
     return dbPromise.then(function(db) {
+      console.log("Here");
       var objectStores = db.transaction(db.objectStoreNames, "readwrite");
       var selectId = objectStores.objectStore(MANIFEST_STORE_NAME);
       selectId.delete(IDBKeyRange.only(parseInt(id)));
@@ -348,8 +350,7 @@ function addCommentObject(commentObject, eventId, postId) {
   }
 }
 
-function updateMongo() {
-  console.log("Works")
+function updateMongoEvents() {
   if (dbPromise) {
     return dbPromise.then(function(db) {
       var objectStores = db.transaction(db.objectStoreNames);
@@ -358,7 +359,13 @@ function updateMongo() {
         .getAll();
       return selectId;
     }).then(function(selectId) {
-      console.log(selectId);
+      for (obj = 0; obj < selectId.length; obj++) {
+        if (selectId[obj]._id == "") {
+          console.log(selectId[obj].id);
+          sendNewEventQuery("/create_event", selectId[obj])
+          deleteObject(selectId[obj].id);
+        }
+      }
     });
   }
 }
