@@ -15,29 +15,29 @@ function checkLoggedIn(req) {
 }
 
 /** GET home page. */
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   var loggedInBool = checkLoggedIn(req.user);
   //grab the events from mongodb
-  Event.find(function(err, mongoRes) {
-    res.render("index", { events: JSON.stringify(mongoRes), loggedIn:loggedInBool});
+  Event.find(function (err, mongoRes) {
+    if (err) throw err;
+    res.render("index", { events: JSON.stringify(mongoRes), loggedIn: loggedInBool });
   });
-  
+
 });
 
-/** PROFILE */
-router.get("/profile", function(req, res, next) {
+router.get("/profile", function (req, res, next) {
   res.render("profile");
 });
 
-router.get("/explore", function(req, res, next) {
+router.get("/explore", function (req, res, next) {
   var loggedInBool = checkLoggedIn(req.user);
-  res.render("explore", {loggedIn: loggedInBool});
+  res.render("explore", { loggedIn: loggedInBool });
 });
 
-router.get("/events/new", function(req, res) {
+router.get("/events/new", function (req, res) {
   if (req.user) {
     console.log(req.user);
-    res.render("newEvent", {loggedIn: true});
+    res.render("newEvent", { loggedIn: true });
   } else {
     console.log("Not logged in.")
     res.redirect("/users/login");
@@ -45,28 +45,30 @@ router.get("/events/new", function(req, res) {
 });
 
 /* GET event page */
-router.get("/events/:eventId", function(req, res) {
+router.get("/events/:eventId", function (req, res) {
   var loggedInBool = checkLoggedIn(req.user);
-  Event.findOne({_id: req.params.eventId},function(err,mongoRes){
-    res.render("event", { 
+  Event.findOne({ _id: req.params.eventId }, function (err, mongoRes) {
+    res.render("event", {
       id: req.params.eventId,
       event: JSON.stringify(mongoRes),
-      loggedIn: loggedInBool});
+      loggedIn: loggedInBool
+    });
   });
 });
 /* GET event map page */
-router.get("/events/:eventId/map", function(req, res) {
+router.get("/events/:eventId/map", function (req, res) {
   var loggedInBool = checkLoggedIn(req.user);
   res.render("eventMap", { id: req.params.eventId, loggedIn: loggedInBool });
 });
 
 /* GET edit event page */
-router.get("/events/:eventId/edit", function(req, res) {
+router.get("/events/:eventId/edit", function (req, res) {
   var loggedInBool = checkLoggedIn(req.user);
   res.render("editEvent", { id: req.params.eventId, loggedIn: loggedInBool });
 });
 
-router.get("/events/:eventId/posts/new", function(req, res) {
+/* Get add new post page */
+router.get("/events/:eventId/posts/new", function (req, res) {
   var loggedInBool = checkLoggedIn(req.user);
   if (loggedInBool) {
     res.render("newPost", { eventId: req.params.eventId, loggedIn: true, username: req.user._id, avatar: req.user.avatar });
@@ -74,27 +76,22 @@ router.get("/events/:eventId/posts/new", function(req, res) {
     res.redirect("/users/login");
   }
 });
-//, posts: {_id:req.params.postId}
-//db.users.find( { name: "John"}, { items: { $elemMatch: { item_id: "1234" } } })
+
 /* GET post page */
-router.get("/events/:eventId/posts/:postId", function(req, res) {
+router.get("/events/:eventId/posts/:postId", function (req, res) {
   var loggedInBool = checkLoggedIn(req.user);
-  // Event.find({_id: req.params.eventId}, {posts: {$elemMatch: { author: "username"}}} ,
-  //   function(res){
-  //     console.log(res);
-  //   });
-  Event.findOne({_id: req.params.eventId},function(err,event){
-    //console.log(JSON.stringify(event.posts));
-    //console.log(req.params.postId);
-    event.posts.find(function(post){
+  Event.findOne({ _id: req.params.eventId }, function (err, event) {
+    if (err) throw err;
+    event.posts.find(function (post) {
       res.render("post",
-      {post:JSON.stringify(post),
-         eventId:req.params.eventId,
-         postId:req.params.postId,
-        loggedIn: loggedInBool});
+        {
+          post: JSON.stringify(post),
+          eventId: req.params.eventId,
+          postId: req.params.postId,
+          loggedIn: loggedInBool
+        });
     });
   });
-  //console.log(p);
 });
 
 /**
@@ -103,7 +100,7 @@ router.get("/events/:eventId/posts/:postId", function(req, res) {
  *    name : name of the event
  *
  */
-router.post("/create_event", function(req, res, next) {
+router.post("/create_event", function (req, res, next) {
   // Creating event object using mongo Model
   const newEvent = new Event({
     _id: new mongoose.Types.ObjectId(),
@@ -127,7 +124,7 @@ router.post("/create_event", function(req, res, next) {
 /**
  * POST data used to add a new post with image attached
  */
-router.post("/upload_picture", function(req, res, next) {
+router.post("/upload_picture", function (req, res, next) {
   var picData = req.body.imageBlob;
   var text = req.body.text;
   var eventId = req.body.eventId;
@@ -137,7 +134,7 @@ router.post("/upload_picture", function(req, res, next) {
   console.log(author);
   console.log(avatar);
 
-  var data = getPost(text, picData, author, avatar); 
+  var data = getPost(text, picData, author, avatar);
 
   const newPost = new PostObject({
     _id: data.id,
@@ -150,11 +147,10 @@ router.post("/upload_picture", function(req, res, next) {
     text: data.text
   });
 
-  var query = {_id: eventId};
-  var newVal = {$push: {posts: newPost}};
-  Event.updateMany(query, newVal, function(err, res) {
+  var query = { _id: eventId };
+  var newVal = { $push: { posts: newPost } };
+  Event.updateMany(query, newVal, function (err, res) {
   });
-
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(data));
 });
@@ -162,7 +158,7 @@ router.post("/upload_picture", function(req, res, next) {
 /**
  * POST data that updates the event details
  */
-router.post("/update_event", function(req, res, next) {
+router.post("/update_event", function (req, res, next) {
   const event = getEvent(
     req.body.name,
     req.body.date,
@@ -178,7 +174,9 @@ router.post("/update_event", function(req, res, next) {
     location: event.location
   });
   // update in mongo
-  Event.replaceOne({_id: req.body.eventId}, newEvent, function(err,res){});
+  Event.replaceOne({ _id: req.body.eventId }, newEvent, function (err, res) {
+    if (err) throw err;
+  });
 
 
   res.setHeader("Content-Type", "application/json");
@@ -188,7 +186,7 @@ router.post("/update_event", function(req, res, next) {
 /**
  * POST data to add comments to an event
  */
-router.post("/create_comment", function(req, res, next) {
+router.post("/create_comment", function (req, res, next) {
   console.log(req.user.avatar, req.user.username);
   const comment = getComment(req.user.username, req.body.text, req.user.avatar);
 
@@ -203,16 +201,17 @@ router.post("/create_comment", function(req, res, next) {
     date: comment.date,
   });
 
-  var postQuery = {_id: postId};
-  var newVal = {$push: {comments: newComment}};
+  var postQuery = { _id: postId };
+  var newVal = { $push: { comments: newComment } };
 
-  Event.findOne({_id: eventId}, function(err, res) {
-    res.posts.find(function(element) {
+  Event.findOne({ _id: eventId }, function (err, res) {
+    if (err) throw err;
+    res.posts.find(function (element) {
       return element._id == postId;
     }).comments.push(newComment);
 
-    Event.replaceOne({_id: eventId}, res, function(err, res) {
-      //console.log(res);
+    Event.replaceOne({ _id: eventId }, res, function (err, res) {
+      if (err) throw err;
     })
 
   });

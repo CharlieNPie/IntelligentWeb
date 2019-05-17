@@ -14,17 +14,17 @@ function checkLoggedIn(req) {
 }
 
 /** USERS */
-router.get("/login", function(req, res, next){
+router.get("/login", function (req, res, next) {
   loggedInBool = checkLoggedIn(req.user)
-  res.render("login", {loggedIn: loggedInBool});
+  res.render("login", { loggedIn: loggedInBool });
 })
 
-router.get("/register", function(req, res, next){
+router.get("/register", function (req, res, next) {
   loggedInBool = checkLoggedIn(req.user)
-  res.render("register", {loggedIn: loggedInBool});
+  res.render("register", { loggedIn: loggedInBool });
 })
 
-router.post("/create_user", function(req, res, next){
+router.post("/create_user", function (req, res, next) {
   const newUser = new UserObject({
     _id: req.body._id,
     username: req.body._id,
@@ -34,23 +34,22 @@ router.post("/create_user", function(req, res, next){
     rank: req.body.status
   });
   newUser
-  .save()
-  .then(() => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(JSON.stringify({newUser}));
-  })
-  .catch(() => res.status(500).json({ error: "Could not create user" }));
+    .save()
+    .then(() => {
+      res.setHeader("Content-Type", "application/json");
+      res.send(JSON.stringify({ newUser }));
+    })
+    .catch(() => res.status(500).json({ error: "Could not create user" }));
 })
 
 router.post('/login', passport.authenticate('local', { failureRedirect: '/users/login' }),
-    function(req, res) 
-    { 
-      // If this function gets called, authentication was successful. 
-      // `req.user` contains the authenticated user. 
-      res.redirect('/');
-   });
+  function (req, res) {
+    // If this function gets called, authentication was successful. 
+    // `req.user` contains the authenticated user. 
+    res.redirect('/');
+  });
 
-router.get('/logout', function(req, res){
+router.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });

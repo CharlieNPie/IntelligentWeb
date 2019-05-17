@@ -1,67 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-  <% include ./partials/head.ejs %>
-  <script src="/scripts/users.js"></script>
-  <body class="d-flex flex-column h-100 center-ui">
-    <div class="nav">
-      <span></span>
-      <span>Register</span>
-      <a href="../events/new"
-        ><img
-          src="https://image.flaticon.com/icons/svg/149/149156.svg"
-          class="small-image"
-          id="new-event"
-      /></a>
+<% include ./partials/head.ejs %>
+<script src="/scripts/users.js"></script>
+
+<body class="d-flex flex-column h-100 center-ui">
+  <div class="nav">
+    <span></span>
+    <span>Register</span>
+    <a href="../events/new"><img src="https://image.flaticon.com/icons/svg/149/149156.svg" class="small-image"
+        id="new-event" /></a>
+  </div>
+
+  <main role="main" class="flex-shrink-0">
+    <div class="empty"></div>
+    <div id="content">
+      <div class="profile-box">
+        <form id="new-user" onsubmit="newUser()" class="event-form">
+          <div class="pairs">
+            <span class="">Username</span>
+            <input type="text" name="_id" id="username" value="" class="inputs" />
+          </div>
+          <div class="pairs">
+            <span class="">Email</span>
+            <input type="text" name="email" id="email" value="" class="inputs" />
+          </div>
+          <div class="pairs">
+            <span class="">Password</span>
+            <input type="password" name="password" id="password" value="" class="inputs" />
+          </div>
+          <div class="pairs">
+            <span class="">Profile Picture (URL)</span>
+            <input type="text" name="avatar" id="avatar" value="" class="inputs" />
+          </div>
+          <span class="">Type of Account</span><br>
+          <input type="radio" name="status" id="status1" value="User" class="inputs" />User<br>
+          <input type="radio" name="status" id="status2" value="Admin" class="inputs" />Admin<br>
+        </form>
+        <span class="share"><input type="submit" class="submit" value="Create" id="g" form="new-user" /></span>
+      </div>
     </div>
+  </main>
 
-    <main role="main" class="flex-shrink-0">
-        <div class="empty"></div>
-            <div id="content"><div class="profile-box">
-                <form id="new-user" onsubmit="newUser()" class="event-form">
-                  <div class="pairs">
-                    <span class="">Username</span>
-                    <input type="text" name="_id" id="username" value="" class="inputs" />
-                  </div>
-                  <div class="pairs">
-                    <span class="">Email</span>
-                    <input type="text" name="email" id="email" value="" class="inputs" />
-                  </div>
-                  <div class="pairs">
-                    <span class="">Password</span>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      value=""
-                      class="inputs"
-                    />
-                  </div>
-                  <div class="pairs">
-                    <span class="">Profile Picture (URL)</span>
-                    <input
-                      type="text"
-                      name="avatar"
-                      id="avatar"
-                      value=""
-                      class="inputs"
-                    />
-                  </div>
-                  <span class="">Type of Account</span><br>
-                  <input type="radio" name="status" id="status1" value="User" class="inputs" />User<br>
-                  <input type="radio" name="status" id="status2" value="Admin" class="inputs" />Admin<br>
-                </form>
-                <span class="share"
-                ><input
-                  type="submit"
-                  class="submit"
-                  value="Create"
-                  id="g"
-                  form="new-user"
-              /></span>
-            </div>
-        </div>
-    </main>
+  <% include ./partials/footer.ejs %>
+</body>
 
-    <% include ./partials/footer.ejs %>
-  </body>
 </html>

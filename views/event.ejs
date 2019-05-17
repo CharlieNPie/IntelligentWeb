@@ -1,59 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-  <% include partials/head.ejs %>
-  <body
-    onload="mongoGetEvent('<%= event %>')"
-    class="d-flex flex-column h-100 center-ui"
-  >
-    <div class="nav">
-      <a href="/">
-        <img
-          src="https://image.flaticon.com/icons/svg/271/271220.svg"
-          class="back-button"
-        />
-      </a>
-      <span id="eventName"></span>
-      <a href="/events/<%= id %>/posts/new">
-        <% if (loggedIn) {%>
-        <img
-          src="https://image.flaticon.com/icons/svg/159/159719.svg"
-          class="back-button"
-          id="new-post"
-        />
-        <% } %>
-      </a>
+<% include partials/head.ejs %>
+
+<body onload="mongoGetEvent('<%= event %>')" class="d-flex flex-column h-100 center-ui">
+  <div class="nav">
+    <a href="/">
+      <img src="https://image.flaticon.com/icons/svg/271/271220.svg" class="back-button" />
+    </a>
+    <span id="eventName"></span>
+    <a href="/events/<%= id %>/posts/new">
+      <% if (loggedIn) {%>
+      <img src="https://image.flaticon.com/icons/svg/159/159719.svg" class="back-button" id="new-post" />
+      <% } %>
+    </a>
+  </div>
+
+  <main role="main" class="flex-shrink-0">
+    <div class="top-container">
+      <div id="eventImage" class="row"></div>
+      <div class="row text-center">
+        <p class="e-details" id="eventDescription"></p>
+      </div>
     </div>
 
-    <main role="main" class="flex-shrink-0">
-      <div class="top-container">
-        <div id="eventImage" class="row"></div>
-        <div class="row text-center">
-          <p class="e-details" id="eventDescription"></p>
-        </div>
-      </div>
+    <div class="menu">
+      <img src="https://image.flaticon.com/icons/svg/151/151917.svg" class="menu-button" />
+      <a href="/events/<%= id %>/map"><img src="https://image.flaticon.com/icons/svg/263/263072.svg"
+          class="menu-button" /></a>
+      <a href="/events/<%= id %>/edit">
+        <img src="https://image.flaticon.com/icons/svg/1159/1159633.svg" class="menu-button" id="edit-event" />
+      </a>
+    </div>
+    <div id="posts"></div>
+    <div class="empty"></div>
+  </main>
 
-      <div class="menu">
-        <img
-          src="https://image.flaticon.com/icons/svg/151/151917.svg"
-          class="menu-button"
-        />
-        <a href="/events/<%= id %>/map"
-          ><img
-            src="https://image.flaticon.com/icons/svg/263/263072.svg"
-            class="menu-button"
-        /></a>
-        <a href="/events/<%= id %>/edit">
-          <img
-            src="https://image.flaticon.com/icons/svg/1159/1159633.svg"
-            class="menu-button"
-            id="edit-event"
-          />
-        </a>
-      </div>
-      <div id="posts"></div>
-      <div class="empty"></div>
-    </main>
+  <% include partials/footer.ejs %>
+</body>
 
-    <% include partials/footer.ejs %>
-  </body>
 </html>

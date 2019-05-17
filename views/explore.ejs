@@ -1,41 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATXNPRdHfVZng3m4PTz6-4a82YAq6Z48E&libraries=places"></script>
-    <script>
-      function initialize() {
-        var input = document.getElementById('search');
-        new google.maps.places.Autocomplete(input);
-      }
-      
-      google.maps.event.addDomListener(window, 'load', initialize);
-  </script>
-  <% include ./partials/head.ejs %>
-  <body class="d-flex flex-column h-100" onload="initExplore()">
-    <div class="nav">
-      <input type ="text" value="" placeholder="Enter location or event name " list="results" class="search" id="search" />
-      <input type="text" name="datefilter" placeholder="Date" class="date" />
-    </div>
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATXNPRdHfVZng3m4PTz6-4a82YAq6Z48E&libraries=places"></script>
+<script>
+  function initialize() {
+    var input = document.getElementById('search');
+    new google.maps.places.Autocomplete(input);
+  }
 
-    <main role="main">
-      <div class="map" id="map_canvas"></div>
-    </main>
-    <% include ./partials/footer.ejs %>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
-    ></script>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
-    />
-  </body>
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<% include ./partials/head.ejs %>
+
+<body class="d-flex flex-column h-100" onload="initExplore()">
+  <div class="nav">
+    <input type="text" value="" placeholder="Enter location or event name " list="results" class="search" id="search" />
+    <input type="text" name="datefilter" placeholder="Date" class="date" />
+  </div>
+
+  <main role="main">
+    <div class="map" id="map_canvas"></div>
+  </main>
+  <% include ./partials/footer.ejs %>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+</body>
+
 </html>

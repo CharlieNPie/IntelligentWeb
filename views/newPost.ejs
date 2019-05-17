@@ -1,47 +1,39 @@
 <!DOCTYPE html>
 <html>
-  <% include partials/head.ejs %>
-  <body class="d-flex flex-column h-100 center-ui" onload="setupCamera()">
-    <div class="nav">
-      <a href="/events/<%= eventId %>"><span class="cancel">Cancel</span></a>
-      <span>New post</span>
-      <span class="share"
-        ><input type="submit" class="submit" value="Share" id="g" form="addPost"
-      /></span>
+<% include partials/head.ejs %>
+
+<body class="d-flex flex-column h-100 center-ui" onload="setupCamera()">
+  <div class="nav">
+    <a href="/events/<%= eventId %>"><span class="cancel">Cancel</span></a>
+    <span>New post</span>
+    <span class="share"><input type="submit" class="submit" value="Share" id="g" form="addPost" /></span>
+  </div>
+
+  <main role="main" class="flex-shrink-0">
+    <div class="empty"></div>
+    <div class="camera">
+      <div hidden id="output">
+        <img id="photo" alt="The screen capture will appear in this box." />
+      </div>
+      <video id="video">Video stream not available.</video>
+      <button id="startbutton">Take photo</button>
     </div>
-
-    <main role="main" class="flex-shrink-0">
-      <div class="empty"></div>
-      <div class="camera">
-        <div hidden id="output">
-          <img id="photo" alt="The screen capture will appear in this box." />
-        </div>
-        <video id="video">Video stream not available.</video>
-        <button id="startbutton">Take photo</button>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <div class="pt-comment">
+      <img src="<%= avatar %>" class="ps-avatar" />
+      <div class="pt-username">
+        <%= username %>
       </div>
-      <canvas id="canvas" style="display: none;"></canvas>
-      <div class="pt-comment">
-        <img
-          src="<%= avatar %>"
-          class="ps-avatar"
-        />
-        <div class="pt-username">
-          <%= username %>
-        </div>
-      </div>
-      <form id="addPost" onsubmit="addPhotoPost('<%= eventId %>')">
-        <textarea
-          type="text"
-          name="text"
-          id="text"
-          class="pt-text"
-          placeholder="Write enything you want to share here! You can also attach images or videos in your posts!"
-        ></textarea>
-      </form>
-      <div class="empty"></div>
-    </main>
+    </div>
+    <form id="addPost" onsubmit="addPhotoPost('<%= eventId %>')">
+      <textarea type="text" name="text" id="text" class="pt-text"
+        placeholder="Write enything you want to share here! You can also attach images or videos in your posts!"></textarea>
+    </form>
+    <div class="empty"></div>
+  </main>
 
-    <% include partials/footer.ejs %>
-    <script src="/scripts/camera.js"></script>
-  </body>
+  <% include partials/footer.ejs %>
+  <script src="/scripts/camera.js"></script>
+</body>
+
 </html>

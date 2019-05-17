@@ -2,10 +2,10 @@ function initEvents() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("./service-worker.js")
-      .then(function() {
+      .then(function () {
         console.log("Service Worker Registered");
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("Service Worker NOT Registered " + error.message);
       });
   }
@@ -22,8 +22,8 @@ function initEvents() {
 function loadEvent(id) {
   initDatabase();
   getDataById(id);
-  $(function() {
-    $(".addPost").on("submit", function(event) {
+  $(function () {
+    $(".addPost").on("submit", function (event) {
       event.preventDefault();
     });
   });
@@ -217,10 +217,10 @@ function newEvent() {
   data["_id"] = "";
   data.date = new Date(
     data.date.substring(5, 7) +
-      "/" +
-      data.date.substring(8) +
-      "/" +
-      data.date.substring(0, 4)
+    "/" +
+    data.date.substring(8) +
+    "/" +
+    data.date.substring(0, 4)
   );
   if (navigator.onLine) {
     sendNewEventQuery("/create_event", data);
@@ -237,7 +237,7 @@ function sendNewEventQuery(url, data) {
     data: data,
     dataType: "json",
     type: "POST",
-    success: function(response) {
+    success: function (response) {
       console.log(response._id)
       response.date = new Date(response.date);
       storeCachedEventData(response);
@@ -245,7 +245,7 @@ function sendNewEventQuery(url, data) {
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       showOfflineWarning();
       console.log(error);
     }
@@ -280,14 +280,14 @@ function postWithImageQuery(data, eventId) {
     url: "/upload_picture",
     type: "POST",
     data: data,
-    success: function(data) {
+    success: function (data) {
       console.log(data);
       window.location.replace("/events/" + eventId);
       addPostObject(data, eventId);
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
-    error: function(err) {
+    error: function (err) {
       alert("Error: " + err.status + ":" + err.statusText);
     }
   });
@@ -297,7 +297,7 @@ function postWithImageQuery(data, eventId) {
 function listEventDetails(id) {
   initDatabase();
   var retrievedEvent = getEventObject(id);
-  retrievedEvent.then(function(data) {
+  retrievedEvent.then(function (data) {
     dataObject = data[0];
     $("#eventName").html(dataObject.name);
     document.getElementById("name").value = String(dataObject.name);
@@ -325,13 +325,13 @@ function sendUpdateEventQuery(url, data, id) {
     data: data,
     dataType: "json",
     type: "POST",
-    success: function(response) {
+    success: function (response) {
       setDataObject(response, id);
       window.location.replace("/events/" + id);
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       showOfflineWarning();
       var offlineEventList = JSON.parse(localStorage.getItem("offline_events"));
       offlineEventList.push(data);
@@ -358,7 +358,7 @@ function deleteEvent(id) {
 function loadPost(eventId, postId) {
   initDatabase();
   var postPromise = getPostObject(eventId, postId);
-  postPromise.then(function({ comments }) {
+  postPromise.then(function ({ comments }) {
     comments.map(comment => {
       let post =
         "<div class='comment'>" +
@@ -379,7 +379,7 @@ function loadPost(eventId, postId) {
       $("#posts").append(post);
     });
   });
-  $(".addComment").on("submit", function(event) {
+  $(".addComment").on("submit", function (event) {
     event.preventDefault();
   });
 }
@@ -397,7 +397,7 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
     data: data,
     dataType: "json",
     type: "POST",
-    success: function(response) {
+    success: function (response) {
       addCommentObject(response, eventId, postId);
       let post =
         "<div class='comment'>" +
@@ -419,7 +419,7 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
       if (document.getElementById("offline_div") != null)
         document.getElementById("offline_div").style.display = "none";
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       showOfflineWarning();
     }
   });
@@ -427,7 +427,7 @@ function sendAjaxCommentQuery(url, data, eventId, postId) {
 
 window.addEventListener(
   "offline",
-  function(e) {
+  function (e) {
     // Queue up events for server.
     localStorage.setItem("offline_events", JSON.stringify([]));
     console.log("You are offline");
@@ -441,7 +441,7 @@ window.addEventListener(
  */
 window.addEventListener(
   "online",
-  function(e) {
+  function (e) {
     // Resync data with server.
     console.log("You are online");
     refreshEventList();
@@ -472,7 +472,7 @@ function initExplore() {
   initDatabase();
   pullFromDatabase();
   var geocoder = new google.maps.Geocoder();
-  $(function() {
+  $(function () {
     $('input[name="datefilter"]').daterangepicker({
       autoUpdateInput: false,
       locale: {
@@ -480,7 +480,7 @@ function initExplore() {
       }
     });
 
-    $('input[name="datefilter"]').on("apply.daterangepicker", function(
+    $('input[name="datefilter"]').on("apply.daterangepicker", function (
       ev,
       picker
     ) {
@@ -492,14 +492,14 @@ function initExplore() {
       getDataByDate(startDate, endDate);
       event.stopPropagation();
     });
-    $('input[name="datefilter"]').on("cancel.daterangepicker", function(
+    $('input[name="datefilter"]').on("cancel.daterangepicker", function (
       ev,
       picker
     ) {
       $(this).val("");
     });
   });
-  $(".search").keypress(function(event) {
+  $(".search").keypress(function (event) {
     var keycode = event.keyCode ? event.keyCode : event.which;
     if (keycode == "13") {
       getDataByName($("#search").val());
@@ -518,7 +518,7 @@ function addToSearch(data) {
     var address = data[i].location;
     geocoder.geocode({ address: address }, geocodeCallback(data[i]));
     function geocodeCallback(data) {
-      var callback = function(results, status) {
+      var callback = function (results, status) {
         var event = data;
         if (status === "OK") {
           map.setZoom(6);
@@ -545,10 +545,10 @@ function addToSearch(data) {
               "</span>" +
               "</a>"
           });
-          marker.addListener("click", function() {
+          marker.addListener("click", function () {
             infowindow.open(map, marker);
           });
-          google.maps.event.addListener(map, "click", function(event) {
+          google.maps.event.addListener(map, "click", function (event) {
             infowindow.close();
           });
         } else {

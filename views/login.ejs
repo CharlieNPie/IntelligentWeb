@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-  <% include ./partials/head.ejs %>
-  <body class="d-flex flex-column h-100 center-ui">
-    <div class="nav">
-      <span></span>
-      <span>Manifest</span>
-      <a href="../events/new"
-        ><img
-          src="https://image.flaticon.com/icons/svg/149/149156.svg"
-          class="small-image"
-          id="new-event"
-      /></a>
+<% include ./partials/head.ejs %>
+
+<body class="d-flex flex-column h-100 center-ui">
+  <div class="nav">
+    <span></span>
+    <span>Manifest</span>
+    <a href="../events/new"><img src="https://image.flaticon.com/icons/svg/149/149156.svg" class="small-image"
+        id="new-event" /></a>
+  </div>
+
+  <main role="main" class="flex-shrink-0">
+    <div class="empty"></div>
+    <div id="content">
+      <div class="profile-box">
+        <p>Login</p>
+        <form action="/users/login" method="post">
+          <div>
+            <label>Username:</label>
+            <input type="text" name="username" />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input type="password" name="password" />
+          </div>
+          <div>
+            <input type="submit" value="Log In" />
+          </div>
+        </form>
+        <br>
+        <p>No account? <a href="/users/register">Register</a></p>
+      </div>
     </div>
+  </main>
 
-    <main role="main" class="flex-shrink-0">
-            <div class="empty"></div>
-                <div id="content"><div class="profile-box"><p>Login</p>
-                  <form action="/users/login" method="post">
-                    <div>
-                         <label>Username:</label>
-                         <input type="text" name="username"/>
-                    </div>    
-                    <div>
-                         <label>Password:</label>
-                         <input type="password" name="password"/>
-                    </div>
-                    <div>
-                         <input type="submit" value="Log In"/>
-                    </div>
-                  </form>
-                    <br>
-                    <p>No account? <a href="/users/register">Register</a></p>
-                </div>
-            </div>
-    </main>
+  <% include ./partials/footer.ejs %>
+</body>
 
-    <% include ./partials/footer.ejs %>
-  </body>
 </html>

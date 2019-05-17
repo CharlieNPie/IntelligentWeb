@@ -1,48 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-  <script>
-    $(function () {
-      var socket = io();
-      $('form').submit(function(e){
-        e.preventDefault(); // prevents page reloading
-        socket.emit('chat message', $('#text').val());
-        $('#text').val('');
-        return false;
-      });
-      socket.on('chat message', function(msg){
-        newComment('<%= eventId %>','<%= postId %>', msg)
-      });
-    }); 
-  </script>
-  <% include partials/head.ejs %>
-  <body
-    class="d-flex flex-column h-100 center-ui"
-    onload="mongoGetPost('<%= post %>')">
-    <div class="nav">
-      <a href="/events/<%=eventId %>"
-        ><img
-          src="https://image.flaticon.com/icons/svg/271/271220.svg"
-          class="back-button"
-      /></a>
-      <span>Comments</span>
-      <p></p>
-    </div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  $(function () {
+    var socket = io();
+    $('form').submit(function (e) {
+      e.preventDefault(); // prevents page reloading
+      socket.emit('chat message', $('#text').val());
+      $('#text').val('');
+      return false;
+    });
+    socket.on('chat message', function (msg) {
+      newComment('<%= eventId %>', '<%= postId %>', msg)
+    });
+  }); 
+</script>
+<% include partials/head.ejs %>
 
-    <main role="main" class="flex-shrink-0" id="posts">
-      <div class="empty"></div>
-    </main>
+<body class="d-flex flex-column h-100 center-ui" onload="mongoGetPost('<%= post %>')">
+  <div class="nav">
+    <a href="/events/<%=eventId %>"><img src="https://image.flaticon.com/icons/svg/271/271220.svg"
+        class="back-button" /></a>
+    <span>Comments</span>
+    <p></p>
+  </div>
 
-    <footer class="footer mt-auto py-3 ft-color ft-stick">
-      <form
-        id="addComment"
-      >
-        <div class="postInLine">
-          <input type="text" name="text" id="text" class="box" />
-          <input type="submit" name="g" value="Post" id="g" />
-        </div>
-      </form>
-    </footer>
-  </body>
+  <main role="main" class="flex-shrink-0" id="posts">
+    <div class="empty"></div>
+  </main>
+
+  <footer class="footer mt-auto py-3 ft-color ft-stick">
+    <form id="addComment">
+      <div class="postInLine">
+        <input type="text" name="text" id="text" class="box" />
+        <input type="submit" name="g" value="Post" id="g" />
+      </div>
+    </form>
+  </footer>
+</body>
+
 </html>

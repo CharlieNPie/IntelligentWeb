@@ -1,76 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-  <% include ./partials/head.ejs %>
-  <body
-    onload='listEventDetails("<%= id %>")'
-    class="d-flex flex-column h-100 center-ui"
-  >
-    <div class="nav">
-      <a href="/events/<%= id %>"><span class="cancel">Cancel</span></a>
-      <span id="eventName"></span>
-      <span class="share"
-        ><input
-          type="submit"
-          class="submit"
-          value="Edit"
-          id="g"
-          form="new-event"
-      /></span>
-    </div>
+<% include ./partials/head.ejs %>
 
-    <main role="main" class="flex-shrink-0">
-      <div class="empty"></div>
-      <form
-        id="new-event"
-        onsubmit='updateEvent("<%= id %>")'
-        class="event-form"
-      >
-        <div class="pairs">
-          <span class="">Name</span>
-          <input type="text" name="name" id="name" value="" class="inputs" />
-        </div>
-        <div class="pairs">
-          <span class="">Image url</span>
-          <input type="text" name="image" id="image" value="" class="inputs" />
-        </div>
-        <div class="pairs">
-          <span class="">Location</span>
-          <input
-            type="text"
-            name="location"
-            id="location"
-            value=""
-            class="inputs"
-          />
-        </div>
-        <div class="pairs">
-          <span class="">Date</span>
-          <input type="date" name="date" id="date" value="" class="inputs" />
-        </div>
-        <div class="pairs">
-          <span class="">Description</span>
-          <textarea
-            type="text"
-            name="description"
-            id="description"
-            value=""
-            class="inputs"
-          ></textarea>
-        </div>
-      </form>
-      <div style="padding: 0 1rem;">
-        <form action="/">
-          <input
-            type="submit"
-            onclick="deleteEvent('<%= id %>')"
-            value="Delete"
-            style="color: red;"
-          />
-        </form>
+<body onload='listEventDetails("<%= id %>")' class="d-flex flex-column h-100 center-ui">
+  <div class="nav">
+    <a href="/events/<%= id %>"><span class="cancel">Cancel</span></a>
+    <span id="eventName"></span>
+    <span class="share"><input type="submit" class="submit" value="Edit" id="g" form="new-event" /></span>
+  </div>
+
+  <main role="main" class="flex-shrink-0">
+    <div class="empty"></div>
+    <form id="new-event" onsubmit='updateEvent("<%= id %>")' class="event-form">
+      <div class="pairs">
+        <span class="">Name</span>
+        <input type="text" name="name" id="name" value="" class="inputs" />
       </div>
-      <div class="empty"></div>
-    </main>
+      <div class="pairs">
+        <span class="">Image url</span>
+        <input type="text" name="image" id="image" value="" class="inputs" />
+      </div>
+      <div class="pairs">
+        <span class="">Location</span>
+        <input type="text" name="location" id="location" value="" class="inputs" />
+      </div>
+      <div class="pairs">
+        <span class="">Date</span>
+        <input type="date" name="date" id="date" value="" class="inputs" />
+      </div>
+      <div class="pairs">
+        <span class="">Description</span>
+        <textarea type="text" name="description" id="description" value="" class="inputs"></textarea>
+      </div>
+    </form>
+    <div style="padding: 0 1rem;">
+      <form action="/">
+        <input type="submit" onclick="deleteEvent('<%= id %>')" value="Delete" style="color: red;" />
+      </form>
+    </div>
+    <div class="empty"></div>
+  </main>
 
-    <% include ./partials/footer.ejs %>
-  </body>
+  <% include ./partials/footer.ejs %>
+</body>
+
 </html>

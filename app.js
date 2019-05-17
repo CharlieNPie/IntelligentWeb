@@ -29,7 +29,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 //Passport configuration
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
- 
+
 
 
 // view engine setup
@@ -51,29 +51,27 @@ app.use("/", index);
 app.use("/users", users);
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
-    UserObject.findOne({username: username}, function(err, user) {
-    if (err) { return done(err); }
-      if (!user)
-      {
-              return done(null, false, { message: 'Incorrect username.' });
+  function (username, password, done) {
+    UserObject.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
       }
-          if (!user.validPassword(password))
-    {
-            return done(null, false, { message: 'Incorrect password.' });
-          }
-    return done(null, user);
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
     });
-    }
+  }
 ));
 
 //serialization
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  UserObject.findById(id, function(err, user) {
+passport.deserializeUser(function (id, done) {
+  UserObject.findById(id, function (err, user) {
     done(err, user);
   });
 });
@@ -86,14 +84,14 @@ app.use(function (req, res, next) {
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};

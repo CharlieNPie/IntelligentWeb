@@ -3,57 +3,53 @@
  * Pulls events from mongoDB to populate the index page
  * @param {*} events events pulled from mongoDB in JSON
  */
-function mongoGetAllEvents(events){
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("./service-worker.js")
-        .then(function() {
-          console.log("Service Worker Registered");
-        })
-        .catch(function(error) {
-          console.log("Service Worker NOT Registered " + error.message);
-        });
-    }
-    //check for support
-    if ("indexedDB" in window) {
-      initDatabase();
-    } else {
-      console.log("This browser doesn't support IndexedDB");
-    }
-    events = JSON.parse(events);
-    for (i=0;i<events.length;i++){
-      if (document.getElementById("events") != null) {
-        let loggedin = JSON.parse(localStorage.getItem("admin"));
-        if (!loggedin) {
-          $("#new-event").remove();
-        }
-        // element for each event tile
-        const element =
-          "<div>" +
-          "<a href=/events/" +
-          events[i]._id +
-          ">" +
-          "<img src='" +
-          events[i].image +
-          "' " +
-          "class='st-image' />" +
-          "<span class='sti-title'>" +
-          events[i].name +
-          "</span>" +
-          "</a>" +
-          "</div>";
-        $("#events").append(element);
-        // Adding them to near and past too since it's all fake data anyway
-        $("#near-events").append(element);
-        $("#past-events").append(element);
-      }
+function mongoGetAllEvents(events) {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(function () {
+        console.log("Service Worker Registered");
+      })
+      .catch(function (error) {
+        console.log("Service Worker NOT Registered " + error.message);
+      });
+  }
+  //check for support
+  if ("indexedDB" in window) {
+    initDatabase();
+  } else {
+    console.log("This browser doesn't support IndexedDB");
+  }
+  var events = JSON.parse(events);
+  for (i = 0; i < events.length; i++) {
+    if (document.getElementById("events") != null) {
+      // element for each event tile
+      const element =
+        "<div>" +
+        "<a href=/events/" +
+        events[i]._id +
+        ">" +
+        "<img src='" +
+        events[i].image +
+        "' " +
+        "class='st-image' />" +
+        "<span class='sti-title'>" +
+        events[i].name +
+        "</span>" +
+        "</a>" +
+        "</div>";
+      $("#events").append(element);
+      // Adding them to near and past too since it's all fake data anyway
+      $("#near-events").append(element);
+      $("#past-events").append(element);
     }
   }
+}
 /**
  * display a single event pulled from mongodb for the individual event page
  * @param {*} event event pulled from mongodb 
  */
-function mongoGetEvent(event){
+function mongoGetEvent(event) {
   var event = JSON.parse(event);
   $("#eventName").html(event.name);
   $("#eventDescription").html(event.description);
@@ -74,7 +70,7 @@ function mongoGetEvent(event){
         var image;
       }
       var post =
-        "<div class='post'>" +"<div class='ps-user'>" +"<img src='" +
+        "<div class='post'>" + "<div class='ps-user'>" + "<img src='" +
         post.avatar +
         "' class='ps-avatar' />" + "<span class='ps-username'>" +
         post.author +
@@ -91,13 +87,13 @@ function mongoGetEvent(event){
         "/posts/" +
         post._id +
         "'>" + "<img src='https://img.icons8.com/ios/50/000000/topic.png' class='psm-button' />" +
-        "</a>" + "</div>" +"<div class='ps-content'>" +"<b>" +
+        "</a>" + "</div>" + "<div class='ps-content'>" + "<b>" +
         post.author +
         ": </b>" +
         post.text +
         "</div>" + "<div class='ps-details'><span></span>" + "<span>" +
         post.date +
-        "</span>" + "</div>" +"</div>";
+        "</span>" + "</div>" + "</div>";
       $("#posts").append(post);
       if (!admin) {
         $("#edit-event").remove();
@@ -111,28 +107,28 @@ function mongoGetEvent(event){
     $("#posts").append(post);
   }
 }
-function mongoGetPost(post){
+function mongoGetPost(post) {
   var post = JSON.parse(post);
   var comments = post.comments;
   console.log(comments);
-  for (i=0;i<comments.length;i++){
+  for (i = 0; i < comments.length; i++) {
     comment =
-        "<div class='comment'>" +
-        "<img src='" +
-        comments[i].avatar +
-        "' class='ps-avatar' />" +
-        "<div class='ps-text'>" +
-        "<span class='ps-username'><b>" +
-        comments[i].author +
-        " </b> " +
-        comments[i].text +
-        "</span>" +
-        "<p class='ps-date'>" +
-        comments[i].date +
-        "</p>" +
-        "</div>" +
-        "</div>";
-      $("#posts").append(comment);
+      "<div class='comment'>" +
+      "<img src='" +
+      comments[i].avatar +
+      "' class='ps-avatar' />" +
+      "<div class='ps-text'>" +
+      "<span class='ps-username'><b>" +
+      comments[i].author +
+      " </b> " +
+      comments[i].text +
+      "</span>" +
+      "<p class='ps-date'>" +
+      comments[i].date +
+      "</p>" +
+      "</div>" +
+      "</div>";
+    $("#posts").append(comment);
   };
   // postPromise.then(function({ comments }) {
   //   comments.map(comment => {
@@ -155,7 +151,7 @@ function mongoGetPost(post){
   //     $("#posts").append(post);
   //   });
   // });
-  $(".addComment").on("submit", function(event) {
+  $(".addComment").on("submit", function (event) {
     event.preventDefault();
   });
 }
