@@ -647,3 +647,5 @@ function getComment(text) {
     "https://pbs.twimg.com/profile_images/1059400736054935552/adJ8r021_400x400.jpg"
   );
 }
+
+

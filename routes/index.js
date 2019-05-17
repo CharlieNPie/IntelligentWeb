@@ -17,7 +17,11 @@ function checkLoggedIn(req) {
 /** GET home page. */
 router.get("/", function(req, res, next) {
   var loggedInBool = checkLoggedIn(req.user);
-  res.render("index", {loggedIn: loggedInBool});
+  //grab the events from mongodb
+  Event.find(function(err, mongoRes) {
+    res.render("index", { events: JSON.stringify(mongoRes), loggedIn:loggedInBool});
+  });
+  
 });
 
 /** PROFILE */
@@ -43,9 +47,13 @@ router.get("/events/new", function(req, res) {
 /* GET event page */
 router.get("/events/:eventId", function(req, res) {
   var loggedInBool = checkLoggedIn(req.user);
-  res.render("event", { id: req.params.eventId, loggedIn: loggedInBool });
+  Event.findOne({_id: req.params.eventId},function(err,mongoRes){
+    res.render("event", { 
+      id: req.params.eventId,
+      event: JSON.stringify(mongoRes),
+      loggedIn: loggedInBool});
+  });
 });
-
 /* GET event map page */
 router.get("/events/:eventId/map", function(req, res) {
   var loggedInBool = checkLoggedIn(req.user);
@@ -66,15 +74,27 @@ router.get("/events/:eventId/posts/new", function(req, res) {
     res.redirect("/users/login");
   }
 });
-
+//, posts: {_id:req.params.postId}
+//db.users.find( { name: "John"}, { items: { $elemMatch: { item_id: "1234" } } })
 /* GET post page */
 router.get("/events/:eventId/posts/:postId", function(req, res) {
   var loggedInBool = checkLoggedIn(req.user);
-  res.render("post", {
-    eventId: req.params.eventId,
-    postId: req.params.postId,
-    loggedIn: loggedInBool
+  // Event.find({_id: req.params.eventId}, {posts: {$elemMatch: { author: "username"}}} ,
+  //   function(res){
+  //     console.log(res);
+  //   });
+  Event.findOne({_id: req.params.eventId},function(err,event){
+    //console.log(JSON.stringify(event.posts));
+    //console.log(req.params.postId);
+    event.posts.find(function(post){
+      res.render("post",
+      {post:JSON.stringify(post),
+         eventId:req.params.eventId,
+         postId:req.params.postId,
+        loggedIn: loggedInBool});
+    });
   });
+  //console.log(p);
 });
 
 /**
@@ -185,7 +205,6 @@ router.post("/create_comment", function(req, res, next) {
     })
 
   });
-
 
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify(comment));
